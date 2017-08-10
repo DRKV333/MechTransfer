@@ -1,0 +1,27 @@
+MechTransfer is a small mod, that adds various wire controlled devices to interact with items and move them between containers.
+
+The mod contains the following features:
+- Transferring items from one chest to another
+- Dropping and picking up items
+- Item sorting and detection
+- Automatic crafting
+
+See the linked forum post for a list of added items.
+
+Changelog:
+
+v1.1
+- Recolored Transfer relay to reflect function better
+- Logic sensor like bounding box for assembler
+- Assembler status message
+- Assembler code cleanup
+- Various smaller fixes
+WARNING: AFTER UPGRADING FROM v1.0 YOU WILL HAVE TO BREAK AND REPLACE ALL ASSEMBLERS
+
+v1.1.1
+- Fixed a crash involving the Inlet
+
+v1.2
+- Manual item loading
+- Added container adapters for mod interoperability
+- Support for item frames
