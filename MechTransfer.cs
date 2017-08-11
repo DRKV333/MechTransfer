@@ -140,6 +140,10 @@ namespace MechTransfer
             //Crystal stand
             CrystalStandAdapter crystalStandAdapter = new CrystalStandAdapter();
             Call("RegisterAdapter", new InjectItemDelegate(crystalStandAdapter.InjectItem), new EnumerateItemsDelegate(crystalStandAdapter.EnumerateItems), new TakeItemDelegate(crystalStandAdapter.TakeItem), new int[] { TileID.ElderCrystalStand });
+
+            //Weapon rack
+            WeaponRackAdapter weaponRackAdapter = new WeaponRackAdapter();
+            Call("RegisterAdapter", new InjectItemDelegate(weaponRackAdapter.InjectItem), new EnumerateItemsDelegate(weaponRackAdapter.EnumerateItems), new TakeItemDelegate(weaponRackAdapter.TakeItem), new int[] { TileID.WeaponsRack });
         }
 
         public override void AddRecipes()
