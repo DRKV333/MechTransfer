@@ -98,19 +98,32 @@ namespace MechTransfer
 
         public void LoadAdapters()
         {
-            //Chest
-            ChestAdapter chestAdapter = new ChestAdapter();
-            List<int> chestTypes = new List<int>();
-            for (int i = 0; i < TileID.Sets.BasicChest.Length; i++)
-            {
-                if (TileID.Sets.BasicChest[i] || TileID.Sets.BasicChestFake[i])
-                    chestTypes.Add(i);
-            }
-            Call("RegisterAdapter", new InjectItemDelegate(chestAdapter.InjectItem), new EnumerateItemsDelegate(chestAdapter.EnumerateItems), new TakeItemDelegate(chestAdapter.TakeItem), chestTypes.ToArray());
-
             //Item frame
             ItemFrameAdapter itemFrameAdapter = new ItemFrameAdapter();
             Call("RegisterAdapter", new InjectItemDelegate(itemFrameAdapter.InjectItem), new EnumerateItemsDelegate(itemFrameAdapter.EnumerateItems), new TakeItemDelegate(itemFrameAdapter.TakeItem), new int[] { TileID.ItemFrame });
+        }
+
+        public override void PostSetupContent()
+        {
+            ChestAdapter chestAdapter = new ChestAdapter();
+            List<int> chestTypes = new List<int>();
+            for (int i = 0; i < TileLoader.TileCount; i++)
+            {
+                if (TileID.Sets.BasicChest[i] || TileID.Sets.BasicChestFake[i])
+                {
+                    chestTypes.Add(i);
+                    continue;
+                }
+
+                ModTile modTile = TileLoader.GetTile(i);
+                if (modTile != null && modTile.chestDrop != 0)
+                {
+                    chestTypes.Add(i);
+                }
+
+            }
+            
+            Call("RegisterAdapter", new InjectItemDelegate(chestAdapter.InjectItem), new EnumerateItemsDelegate(chestAdapter.EnumerateItems), new TakeItemDelegate(chestAdapter.TakeItem), chestTypes.ToArray());
         }
 
         public override void AddRecipes()
@@ -239,7 +252,7 @@ namespace MechTransfer
 
             //Outlet
             i = new SimplePlaceableItem();
-            i.placeType = TileType<TransferInletTile>();
+            i.placeType = TileType<TransferOutletTile>();
             AddItem("TransferOutletItem", i);
             i.DisplayName.AddTranslation(LangID.English, "Transfer outlet");
             i.Tooltip.AddTranslation(LangID.English, "Drops item");

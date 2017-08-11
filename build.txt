@@ -1,5 +1,5 @@
 author = DRKV
-version = 1.2
+version = 1.2.1
 displayName = MechTransfer
 includePDB = false
 homepage = https://forums.terraria.org/index.php?threads/mechtransfer-item-translocation-and-more.60571/

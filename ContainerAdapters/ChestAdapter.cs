@@ -57,6 +57,9 @@ namespace MechTransfer.ContainerAdapters
         {
             int c = FindChest(x, y);
 
+            if (c == -1)
+                return false;
+
             if (item.maxStack > 1)
             {
                 for (int i = 0; i < Main.chest[c].item.Length; i++)
@@ -88,6 +91,9 @@ namespace MechTransfer.ContainerAdapters
         {
             int c = FindChest(x, y);
 
+            if (c == -1)
+                yield break;
+
             for (int i = 0; i < Main.chest[c].item.Length; i++)
             {
                 yield return new Tuple<Item, object>(Main.chest[c].item[i], i);
@@ -97,6 +103,9 @@ namespace MechTransfer.ContainerAdapters
         public void TakeItem(int x, int y, object slot, int amount)
         {
             int c = FindChest(x, y);
+
+            if (c == -1)
+                return;
 
             TransferUtils.EatItem(ref Main.chest[c].item[(int)slot], amount);
         }
