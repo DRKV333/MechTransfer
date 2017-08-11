@@ -16,7 +16,7 @@ namespace MechTransfer.Tiles
         {
             if (Main.netMode == 1)
             {
-                NetMessage.SendTileSquare(Main.myPlayer, i, j, 1, TileChangeType.None);
+                NetMessage.SendTileSquare(Main.myPlayer, i, j, 3, TileChangeType.None);
                 NetMessage.SendData(MessageID.TileEntityPlacement, -1, -1, null, i, j, Type, 0f, 0, 0, 0);
                 return -1;
             }

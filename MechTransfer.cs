@@ -4,6 +4,7 @@ using MechTransfer.Tiles;
 using System.Collections.Generic;
 using System.IO;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using EnumerateItemsDelegate = System.Func<int, int, System.Collections.Generic.IEnumerable<System.Tuple<Terraria.Item, object>>>;
@@ -14,6 +15,8 @@ namespace MechTransfer
 {
     public class MechTransfer : Mod
     {
+        public enum ModMessageID { FilterSyncing }
+
         internal Dictionary<int, ContainerAdapterDefinition> ContainerAdapters = new Dictionary<int, ContainerAdapterDefinition>();
         private const string callErorPrefix = "MechTransfer Call() error: ";
         private const string registerAdapter = "RegisterAdapter";
@@ -88,6 +91,20 @@ namespace MechTransfer
                 Recipe.FindRecipes();
             }
             return false;
+        }
+
+        public override void HandlePacket(BinaryReader reader, int whoAmI)
+        {
+            ModMessageID id = (ModMessageID)reader.ReadInt32();
+            if(id == ModMessageID.FilterSyncing)
+            {
+                if (Main.netMode != 2)
+                    return;
+
+                TransferFilterTileEntity entity = (TransferFilterTileEntity)TileEntity.ByID[reader.ReadInt32()];
+                entity.ItemId = reader.ReadInt32();
+                NetMessage.SendData(MessageID.TileEntitySharing, -1, whoAmI, null, entity.ID, entity.Position.X, entity.Position.Y);
+            }
         }
 
         public override void Load()

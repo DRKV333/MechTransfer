@@ -37,7 +37,11 @@ namespace MechTransfer.Tiles
             {
                 int id = mod.GetTileEntity<TransferFilterTileEntity>().Find(i, j);
                 if (id != -1)
-                    ((TransferFilterTileEntity)TileEntity.ByID[id]).ItemId = Main.LocalPlayer.HeldItem.type;
+                {
+                    TransferFilterTileEntity tileEntity = (TransferFilterTileEntity)TileEntity.ByID[id];
+                    tileEntity.ItemId = Main.LocalPlayer.HeldItem.type;
+                    tileEntity.SyncData();
+                }
             }
         }
 

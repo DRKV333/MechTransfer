@@ -178,7 +178,11 @@ namespace MechTransfer.Tiles
             {
                 int id = mod.GetTileEntity<TransferAssemblerTileEntity>().Find(i, j);
                 if (id != -1)
-                    ((TransferAssemblerTileEntity)TileEntity.ByID[id]).ItemId = Main.LocalPlayer.HeldItem.type;
+                {
+                    TransferAssemblerTileEntity tileEntity = (TransferAssemblerTileEntity)TileEntity.ByID[id];
+                    tileEntity.ItemId = Main.LocalPlayer.HeldItem.type;
+                    tileEntity.SyncData();
+                }
             }
         }
 
