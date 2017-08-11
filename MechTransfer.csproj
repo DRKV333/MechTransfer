@@ -36,6 +36,7 @@
     <Compile Include="ContainerAdapters\ChestAdapter.cs" />
     <Compile Include="ContainerAdapters\ContainerAdapter.cs" />
     <Compile Include="ContainerAdapters\ItemFrameAdapter.cs" />
+    <Compile Include="ContainerAdapters\TurretAdapter.cs" />
     <Compile Include="Items\SimplePlaceableItem.cs" />
     <Compile Include="Tiles\TransferAssemblerTileEntity.cs" />
     <Compile Include="ItemInventory.cs" />

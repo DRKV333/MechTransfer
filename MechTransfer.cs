@@ -111,6 +111,10 @@ namespace MechTransfer
             //Item frame
             ItemFrameAdapter itemFrameAdapter = new ItemFrameAdapter();
             Call("RegisterAdapter", new InjectItemDelegate(itemFrameAdapter.InjectItem), new EnumerateItemsDelegate(itemFrameAdapter.EnumerateItems), new TakeItemDelegate(itemFrameAdapter.TakeItem), new int[] { TileID.ItemFrame });
+
+            //Turrets
+            TurretAdapter turretAdapter = new TurretAdapter();
+            Call("RegisterAdapter", new InjectItemDelegate(turretAdapter.InjectItem), new EnumerateItemsDelegate(turretAdapter.EnumerateItems), new TakeItemDelegate(turretAdapter.TakeItem), new int[] { TileID.SnowballLauncher });
         }
 
         public override void AddRecipes()
