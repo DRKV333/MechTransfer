@@ -22,7 +22,7 @@ namespace MechTransfer.ContainerAdapters
             if (tile.frameY != 0)
                 originY--;
 
-            int id = TEItemFrame.Find(x, y);
+            int id = TEItemFrame.Find(originX, originY);
             if (id == -1)
                 return null;
 
