@@ -36,6 +36,7 @@
     <Compile Include="ContainerAdapters\CannonAdapter.cs" />
     <Compile Include="ContainerAdapters\ChestAdapter.cs" />
     <Compile Include="ContainerAdapters\ContainerAdapter.cs" />
+    <Compile Include="ContainerAdapters\CrystalStandAdapter.cs" />
     <Compile Include="ContainerAdapters\ItemFrameAdapter.cs" />
     <Compile Include="ContainerAdapters\SnowballLauncherAdapter.cs" />
     <Compile Include="Items\SimplePlaceableItem.cs" />

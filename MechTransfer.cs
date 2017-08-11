@@ -119,6 +119,10 @@ namespace MechTransfer
             //Cannon
             CannonAdapter cannonAdapter = new CannonAdapter();
             Call("RegisterAdapter", new InjectItemDelegate(cannonAdapter.InjectItem), new EnumerateItemsDelegate(cannonAdapter.EnumerateItems), new TakeItemDelegate(cannonAdapter.TakeItem), new int[] { TileID.Cannon });
+
+            //Crystal stand
+            CrystalStandAdapter crystalStandAdapter = new CrystalStandAdapter();
+            Call("RegisterAdapter", new InjectItemDelegate(crystalStandAdapter.InjectItem), new EnumerateItemsDelegate(crystalStandAdapter.EnumerateItems), new TakeItemDelegate(crystalStandAdapter.TakeItem), new int[] { TileID.ElderCrystalStand });
         }
 
         public override void AddRecipes()

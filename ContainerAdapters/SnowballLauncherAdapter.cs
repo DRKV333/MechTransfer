@@ -20,6 +20,9 @@ namespace MechTransfer.ContainerAdapters
 
         public bool InjectItem(int x, int y, Item item)
         {
+            if (item.type != ItemID.Snowball)
+                return false;
+
             Tile tile = Main.tile[x, y];
             if (tile == null || !tile.active())
                 return false;
