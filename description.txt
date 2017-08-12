@@ -25,3 +25,7 @@ v1.2
 - Manual item loading
 - Added container adapters for mod interoperability
 - Support for item frames
+
+v1.2.1
+- Fixed outlet item placing inlet tile
+- Fixed compatibility with modded chests
