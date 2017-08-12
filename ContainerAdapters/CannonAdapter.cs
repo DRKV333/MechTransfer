@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.ID;
 
 namespace MechTransfer.ContainerAdapters
 {
-    class CannonAdapter
+    internal class CannonAdapter
     {
-        public void TakeItem(int x, int y, object slot, int amount) { }
+        public void TakeItem(int x, int y, object slot, int amount)
+        {
+        }
 
         public IEnumerable<Tuple<Item, object>> EnumerateItems(int x, int y)
         {
@@ -35,7 +34,7 @@ namespace MechTransfer.ContainerAdapters
                 expectedType = ItemID.ExplosiveBunny;
                 ammotype = 2;
             }
-            else if (Main.tile[x, y].frameX < 288 )
+            else if (Main.tile[x, y].frameX < 288)
             {
                 expectedType = ItemID.Confetti;
                 ammotype = 3;

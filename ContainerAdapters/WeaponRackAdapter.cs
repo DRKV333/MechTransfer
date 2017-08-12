@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 
 namespace MechTransfer.ContainerAdapters
 {
-    class WeaponRackAdapter
+    internal class WeaponRackAdapter
     {
         //By god, this weapon rack thing is a complete mess...
 
@@ -90,12 +87,10 @@ namespace MechTransfer.ContainerAdapters
             bool something;
             Point16 origin = FindOrigin(x, y, out something);
 
-
             if (Main.tile[origin.X, origin.Y].frameX >= 5000)
                 return false; //Already has item
-           
 
-            if(something)
+            if (something)
             {
                 Main.tile[origin.X, origin.Y].frameX = (short)(item.netID + 20100);
                 Main.tile[origin.X + 1, origin.Y].frameX = (short)(item.prefix + 25000);

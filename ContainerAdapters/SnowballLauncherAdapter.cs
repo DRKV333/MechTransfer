@@ -1,17 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.ID;
 
 namespace MechTransfer.ContainerAdapters
 {
-    class SnowballLauncherAdapter
+    internal class SnowballLauncherAdapter
     {
-        public void TakeItem(int x, int y, object slot, int amount) {  }
+        public void TakeItem(int x, int y, object slot, int amount)
+        {
+        }
 
         public IEnumerable<Tuple<Item, object>> EnumerateItems(int x, int y)
         {
@@ -56,7 +55,6 @@ namespace MechTransfer.ContainerAdapters
 
             Projectile.NewProjectile(position.X, position.Y, velocityX, velocityY, ProjectileID.SnowBallFriendly, 35, 3.5f, Main.myPlayer, 0, 0);
             return true;
-
         }
     }
 }

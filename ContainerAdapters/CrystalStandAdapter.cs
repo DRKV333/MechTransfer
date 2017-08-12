@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.GameContent.Events;
 using Terraria.ID;
 
 namespace MechTransfer.ContainerAdapters
 {
-    class CrystalStandAdapter
+    internal class CrystalStandAdapter
     {
-        public void TakeItem(int x, int y, object slot, int amount) { }
+        public void TakeItem(int x, int y, object slot, int amount)
+        {
+        }
 
         public IEnumerable<Tuple<Item, object>> EnumerateItems(int x, int y)
         {
@@ -32,7 +31,7 @@ namespace MechTransfer.ContainerAdapters
 
             int originY = y - tile.frameY % 18;
 
-            if(DD2Event.WouldFailSpawningHere(x,originY))
+            if (DD2Event.WouldFailSpawningHere(x, originY))
             {
                 DD2Event.FailureMessage(-1);
                 return false;

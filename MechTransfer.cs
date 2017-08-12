@@ -97,7 +97,7 @@ namespace MechTransfer
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
             ModMessageID id = (ModMessageID)reader.ReadInt32();
-            if(id == ModMessageID.FilterSyncing)
+            if (id == ModMessageID.FilterSyncing)
             {
                 if (Main.netMode != 2)
                     return;
@@ -113,14 +113,13 @@ namespace MechTransfer
             LoadItems();
         }
 
-
         public override void PostSetupContent()
         {
             LoadAdapters();
             LoadBlacklist();
         }
 
-        public void LoadAdapters()
+        private void LoadAdapters()
         {
             //Item frame
             ItemFrameAdapter itemFrameAdapter = new ItemFrameAdapter();
@@ -237,7 +236,7 @@ namespace MechTransfer
             r.AddRecipe();
         }
 
-        public void LoadItems()
+        private void LoadItems()
         {
             //Assembler
             SimplePlaceableItem i = new SimplePlaceableItem();
