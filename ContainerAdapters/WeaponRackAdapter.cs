@@ -38,32 +38,24 @@ namespace MechTransfer.ContainerAdapters
             return new Point16(originX, originY);
         }
 
+        public void HandleRackItemChange(int x, int y)
+        {
+            if (Main.netMode == 2)
+            {
+                NetMessage.SendTileSquare(-1, x, y, 1, TileChangeType.None);
+                NetMessage.SendTileSquare(-1, x + 1, y, 1, TileChangeType.None);
+            }
+        }
+
         public void TakeItem(int x, int y, object slot, int amount)
         {
             bool something;
             Point16 origin = FindOrigin(x, y, out something);
 
-            Tile tileItemData = Main.tile[origin.X, origin.Y];
-            if (tileItemData == null || !tileItemData.active())
-                return;
+            Main.tile[origin.X, origin.Y].frameX = 0;
+            Main.tile[origin.X + 1, origin.Y].frameX = 18;
 
-            Tile tilePrefixData = Main.tile[origin.X + 1, origin.Y];
-            if (tilePrefixData == null || !tilePrefixData.active())
-                return;
-
-            if (tileItemData.frameX < 5000)
-                return;
-
-
-            tileItemData.frameX = 0;
-            tilePrefixData.frameX = 18;
-
-            if (Main.netMode == 2)
-            {
-                NetMessage.SendTileSquare(-1, origin.X, origin.Y, 1, TileChangeType.None);
-                NetMessage.SendTileSquare(-1, origin.X + 1, origin.Y, 1, TileChangeType.None);
-            }
-
+            HandleRackItemChange(origin.X, origin.Y);
         }
 
         public IEnumerable<Tuple<Item, object>> EnumerateItems(int x, int y)
@@ -71,29 +63,21 @@ namespace MechTransfer.ContainerAdapters
             bool something;
             Point16 origin = FindOrigin(x, y, out something);
 
-            Tile tileItemData = Main.tile[origin.X, origin.Y];
-            if (tileItemData == null || !tileItemData.active())
-                yield break;
-
-            Tile tilePrefixData = Main.tile[origin.X + 1, origin.Y];
-            if (tilePrefixData == null || !tilePrefixData.active())
-                yield break;
-
-            if (tileItemData.frameX < 5000)
-                yield break;
-
-            int magicNumber1 = 5000;
-            int magicNumber2 = 10000;
-            if (something)
-            {
-                magicNumber1 = 20000;
-                magicNumber2 = 25000;
-            }
+            if (Main.tile[origin.X, origin.Y].frameX < 5000)
+                yield break; //Empty
 
             Item item = new Item();
 
-            item.netDefaults(tileItemData.frameX - magicNumber1 - 100);
-            item.prefix = (byte)(tilePrefixData.frameX - magicNumber2);
+            if (something)
+            {
+                item.netDefaults(Main.tile[origin.X, origin.Y].frameX - 20100);
+                item.prefix = (byte)(Main.tile[origin.X + 1, origin.Y].frameX - 25000);
+            }
+            else
+            {
+                item.netDefaults(Main.tile[origin.X, origin.Y].frameX - 5100);
+                item.prefix = (byte)(Main.tile[origin.X + 1, origin.Y].frameX - 10000);
+            }
 
             yield return new Tuple<Item, object>(item, null);
         }
@@ -106,34 +90,23 @@ namespace MechTransfer.ContainerAdapters
             bool something;
             Point16 origin = FindOrigin(x, y, out something);
 
-            Tile tileItemData = Main.tile[origin.X, origin.Y];
-            if (tileItemData == null || !tileItemData.active())
-                return false;
 
-            Tile tilePrefixData = Main.tile[origin.X + 1, origin.Y];
-            if (tilePrefixData == null || !tilePrefixData.active())
-                return false;
-
-            if (tileItemData.frameX >= 5000)
+            if (Main.tile[origin.X, origin.Y].frameX >= 5000)
                 return false; //Already has item
            
 
-            int magicNumber1 = 5000;
-            int magicNumber2 = 10000;
-            if (something)
+            if(something)
             {
-                magicNumber1 = 20000;
-                magicNumber2 = 25000;
+                Main.tile[origin.X, origin.Y].frameX = (short)(item.netID + 20100);
+                Main.tile[origin.X + 1, origin.Y].frameX = (short)(item.prefix + 25000);
+            }
+            else
+            {
+                Main.tile[origin.X, origin.Y].frameX = (short)(item.netID + 5100);
+                Main.tile[origin.X + 1, origin.Y].frameX = (short)(item.prefix + 10000);
             }
 
-            tileItemData.frameX = (short)(item.netID + magicNumber1 + 100);
-            tilePrefixData.frameX = (short)(item.prefix + magicNumber2);
-
-            if (Main.netMode == 2)
-            {
-                NetMessage.SendTileSquare(-1, origin.X, origin.Y, 1, TileChangeType.None);
-                NetMessage.SendTileSquare(-1, origin.X + 1, origin.Y, 1, TileChangeType.None);
-            }
+            HandleRackItemChange(origin.X, origin.Y);
 
             return true;
         }
