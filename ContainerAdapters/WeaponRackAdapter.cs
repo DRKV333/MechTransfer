@@ -58,10 +58,10 @@ namespace MechTransfer.ContainerAdapters
             tileItemData.frameX = 0;
             tilePrefixData.frameX = 18;
 
-            if (Main.netMode == 1)
+            if (Main.netMode == 2)
             {
-                NetMessage.SendTileSquare(-1, x, y, 1, TileChangeType.None);
-                NetMessage.SendTileSquare(-1, x + 1, y, 1, TileChangeType.None);
+                NetMessage.SendTileSquare(-1, origin.X, origin.Y, 1, TileChangeType.None);
+                NetMessage.SendTileSquare(-1, origin.X + 1, origin.Y, 1, TileChangeType.None);
             }
 
         }
@@ -116,13 +116,7 @@ namespace MechTransfer.ContainerAdapters
 
             if (tileItemData.frameX >= 5000)
                 return false; //Already has item
-
-            //WorldGen.KillTile(origin.X, origin.Y, true, false, false);
-            /*if (Main.netMode == 1)
-            {
-                NetMessage.SendData(MessageID.TileChange, -1, -1, null, 0, origin.X, origin.Y, 1f, 0, 0, 0);
-                NetMessage.SendData(MessageID.TileChange, -1, -1, null, 0, origin.X + 1, origin.Y, 1f, 0, 0, 0);
-            }*/
+           
 
             int magicNumber1 = 5000;
             int magicNumber2 = 10000;
@@ -135,10 +129,10 @@ namespace MechTransfer.ContainerAdapters
             tileItemData.frameX = (short)(item.netID + magicNumber1 + 100);
             tilePrefixData.frameX = (short)(item.prefix + magicNumber2);
 
-            if (Main.netMode == 1)
+            if (Main.netMode == 2)
             {
-                NetMessage.SendTileSquare(-1, x, y, 1, TileChangeType.None);
-                NetMessage.SendTileSquare(-1, x + 1, y, 1, TileChangeType.None);
+                NetMessage.SendTileSquare(-1, origin.X, origin.Y, 1, TileChangeType.None);
+                NetMessage.SendTileSquare(-1, origin.X + 1, origin.Y, 1, TileChangeType.None);
             }
 
             return true;
