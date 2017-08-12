@@ -30,7 +30,8 @@ namespace MechTransfer.Tiles
                 if (Main.item[i].active && Main.item[i].noGrabDelay == 0)
                 {
                     Item item = Main.item[i];
-                    if (new Rectangle((Position.X - 1) * 16, (Position.Y - 1) * 16, 48, 16).Intersects(new Rectangle((int)item.position.X, (int)item.position.Y, item.width, item.height)))
+
+                    if (!((MechTransfer)mod).PickupBlacklist.Contains(item.type) && new Rectangle((Position.X - 1) * 16, (Position.Y - 1) * 16, 48, 16).Intersects(item.getRect()))
                     {
                         if (TransferUtils.StartTransfer(Position.X, Position.Y, item))
                         {

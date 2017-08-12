@@ -18,6 +18,7 @@ namespace MechTransfer
         public enum ModMessageID { FilterSyncing }
 
         internal Dictionary<int, ContainerAdapterDefinition> ContainerAdapters = new Dictionary<int, ContainerAdapterDefinition>();
+        internal HashSet<int> PickupBlacklist = new HashSet<int>();
         private const string callErorPrefix = "MechTransfer Call() error: ";
         private const string registerAdapter = "RegisterAdapter";
 
@@ -110,31 +111,13 @@ namespace MechTransfer
         public override void Load()
         {
             LoadItems();
-            LoadAdapters();
         }
 
 
         public override void PostSetupContent()
         {
-            ChestAdapter chestAdapter = new ChestAdapter();
-            List<int> chestTypes = new List<int>();
-            for (int i = 0; i < TileLoader.TileCount; i++)
-            {
-                if (TileID.Sets.BasicChest[i] || TileID.Sets.BasicChestFake[i])
-                {
-                    chestTypes.Add(i);
-                    continue;
-                }
-
-                ModTile modTile = TileLoader.GetTile(i);
-                if (modTile != null && modTile.chestDrop != 0)
-                {
-                    chestTypes.Add(i);
-                }
-
-            }
-
-            Call("RegisterAdapter", new InjectItemDelegate(chestAdapter.InjectItem), new EnumerateItemsDelegate(chestAdapter.EnumerateItems), new TakeItemDelegate(chestAdapter.TakeItem), chestTypes.ToArray());
+            LoadAdapters();
+            LoadBlacklist();
         }
 
         public void LoadAdapters()
@@ -158,6 +141,20 @@ namespace MechTransfer
             //Weapon rack
             WeaponRackAdapter weaponRackAdapter = new WeaponRackAdapter();
             Call("RegisterAdapter", new InjectItemDelegate(weaponRackAdapter.InjectItem), new EnumerateItemsDelegate(weaponRackAdapter.EnumerateItems), new TakeItemDelegate(weaponRackAdapter.TakeItem), new int[] { TileID.WeaponsRack });
+
+            //Chest
+            ChestAdapter chestAdapter = new ChestAdapter();
+            List<int> chestTypes = new List<int>();
+            for (int i = 0; i < TileLoader.TileCount; i++)
+            {
+                if (TileID.Sets.BasicChest[i] || TileID.Sets.BasicChestFake[i])
+                {
+                    chestTypes.Add(i);
+                    continue;
+                }
+            }
+
+            Call("RegisterAdapter", new InjectItemDelegate(chestAdapter.InjectItem), new EnumerateItemsDelegate(chestAdapter.EnumerateItems), new TakeItemDelegate(chestAdapter.TakeItem), chestTypes.ToArray());
         }
 
         public override void AddRecipes()
@@ -304,6 +301,34 @@ namespace MechTransfer
             AddItem("TransferRelayItem", i);
             i.DisplayName.AddTranslation(LangID.English, "Transfer relay");
             i.Tooltip.AddTranslation(LangID.English, "Receives items, and sends them out again");
+        }
+
+        private void LoadBlacklist()
+        {
+            PickupBlacklist.Add(ItemID.Heart);
+            PickupBlacklist.Add(ItemID.CandyApple);
+            PickupBlacklist.Add(ItemID.CandyCane);
+
+            PickupBlacklist.Add(ItemID.Star);
+            PickupBlacklist.Add(ItemID.SugarPlum);
+            PickupBlacklist.Add(ItemID.SoulCake);
+
+            PickupBlacklist.Add(ItemID.NebulaPickup1);
+            PickupBlacklist.Add(ItemID.NebulaPickup2);
+            PickupBlacklist.Add(ItemID.NebulaPickup3);
+
+            PickupBlacklist.Add(ItemID.DD2EnergyCrystal);
+
+            for (int i = 0; i < ItemLoader.ItemCount; i++)
+            {
+                ModItem item = ItemLoader.GetItem(i);
+                if (item != null &&
+                   (item.GetType().GetMethod("ItemSpace").DeclaringType != typeof(ModItem) ||
+                   item.GetType().GetMethod("OnPickup").DeclaringType != typeof(ModItem)))
+                {
+                    PickupBlacklist.Add(item.item.type);
+                }
+            }
         }
     }
 }
