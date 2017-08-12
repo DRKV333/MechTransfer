@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -8,22 +9,17 @@ namespace MechTransfer.Tiles
 {
     public class TransferFilterTileEntity : ModTileEntity
     {
-        private int _ItemId = 0;
+        public int ItemId = 0;
 
-        public int ItemId
+        public void SyncData()
         {
-            get
+            if (Main.netMode == 1)
             {
-                return _ItemId;
-            }
-
-            set
-            {
-                if (value != _ItemId)
-                {
-                    _ItemId = value;
-                    NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Position.X, Position.Y, 0, 0, 0, 0);
-                }
+                ModPacket packet = mod.GetPacket();
+                packet.Write((int)MechTransfer.ModMessageID.FilterSyncing);
+                packet.Write(ID);
+                packet.Write(ItemId);
+                packet.Send();
             }
         }
 
@@ -34,13 +30,13 @@ namespace MechTransfer.Tiles
 
         public override TagCompound Save()
         {
-            return new TagCompound() { { "ID", _ItemId } };
+            return new TagCompound() { { "ID", ItemId } };
         }
 
         public override void Load(TagCompound tag)
         {
             if (tag.ContainsKey("ID"))
-                _ItemId = (int)tag["ID"];
+                ItemId = (int)tag["ID"];
         }
 
         public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction)
@@ -56,12 +52,12 @@ namespace MechTransfer.Tiles
 
         public override void NetSend(BinaryWriter writer, bool lightSend)
         {
-            writer.Write(_ItemId);
+            writer.Write((Int32)ItemId);
         }
 
         public override void NetReceive(BinaryReader reader, bool lightReceive)
         {
-            _ItemId = reader.ReadInt32();
+            ItemId = reader.ReadInt32();
         }
     }
 }

@@ -4,6 +4,7 @@ using MechTransfer.Tiles;
 using System.Collections.Generic;
 using System.IO;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using EnumerateItemsDelegate = System.Func<int, int, System.Collections.Generic.IEnumerable<System.Tuple<Terraria.Item, object>>>;
@@ -14,7 +15,10 @@ namespace MechTransfer
 {
     public class MechTransfer : Mod
     {
+        public enum ModMessageID { FilterSyncing }
+
         internal Dictionary<int, ContainerAdapterDefinition> ContainerAdapters = new Dictionary<int, ContainerAdapterDefinition>();
+        internal HashSet<int> PickupBlacklist = new HashSet<int>();
         private const string callErorPrefix = "MechTransfer Call() error: ";
         private const string registerAdapter = "RegisterAdapter";
 
@@ -90,21 +94,54 @@ namespace MechTransfer
             return false;
         }
 
+        public override void HandlePacket(BinaryReader reader, int whoAmI)
+        {
+            ModMessageID id = (ModMessageID)reader.ReadInt32();
+            if (id == ModMessageID.FilterSyncing)
+            {
+                if (Main.netMode != 2)
+                    return;
+
+                TransferFilterTileEntity entity = (TransferFilterTileEntity)TileEntity.ByID[reader.ReadInt32()];
+                entity.ItemId = reader.ReadInt32();
+                NetMessage.SendData(MessageID.TileEntitySharing, -1, whoAmI, null, entity.ID, entity.Position.X, entity.Position.Y);
+            }
+        }
+
         public override void Load()
         {
             LoadItems();
-            LoadAdapters();
-        }
-
-        public void LoadAdapters()
-        {
-            //Item frame
-            ItemFrameAdapter itemFrameAdapter = new ItemFrameAdapter();
-            Call("RegisterAdapter", new InjectItemDelegate(itemFrameAdapter.InjectItem), new EnumerateItemsDelegate(itemFrameAdapter.EnumerateItems), new TakeItemDelegate(itemFrameAdapter.TakeItem), new int[] { TileID.ItemFrame });
         }
 
         public override void PostSetupContent()
         {
+            LoadAdapters();
+            LoadBlacklist();
+        }
+
+        private void LoadAdapters()
+        {
+            //Item frame
+            ItemFrameAdapter itemFrameAdapter = new ItemFrameAdapter();
+            Call("RegisterAdapter", new InjectItemDelegate(itemFrameAdapter.InjectItem), new EnumerateItemsDelegate(itemFrameAdapter.EnumerateItems), new TakeItemDelegate(itemFrameAdapter.TakeItem), new int[] { TileID.ItemFrame });
+
+            //Snowball launcher
+            SnowballLauncherAdapter snowballLauncherAdapter = new SnowballLauncherAdapter();
+            Call("RegisterAdapter", new InjectItemDelegate(snowballLauncherAdapter.InjectItem), new EnumerateItemsDelegate(snowballLauncherAdapter.EnumerateItems), new TakeItemDelegate(snowballLauncherAdapter.TakeItem), new int[] { TileID.SnowballLauncher });
+
+            //Cannon
+            CannonAdapter cannonAdapter = new CannonAdapter();
+            Call("RegisterAdapter", new InjectItemDelegate(cannonAdapter.InjectItem), new EnumerateItemsDelegate(cannonAdapter.EnumerateItems), new TakeItemDelegate(cannonAdapter.TakeItem), new int[] { TileID.Cannon });
+
+            //Crystal stand
+            CrystalStandAdapter crystalStandAdapter = new CrystalStandAdapter();
+            Call("RegisterAdapter", new InjectItemDelegate(crystalStandAdapter.InjectItem), new EnumerateItemsDelegate(crystalStandAdapter.EnumerateItems), new TakeItemDelegate(crystalStandAdapter.TakeItem), new int[] { TileID.ElderCrystalStand });
+
+            //Weapon rack
+            WeaponRackAdapter weaponRackAdapter = new WeaponRackAdapter();
+            Call("RegisterAdapter", new InjectItemDelegate(weaponRackAdapter.InjectItem), new EnumerateItemsDelegate(weaponRackAdapter.EnumerateItems), new TakeItemDelegate(weaponRackAdapter.TakeItem), new int[] { TileID.WeaponsRack });
+
+            //Chest
             ChestAdapter chestAdapter = new ChestAdapter();
             List<int> chestTypes = new List<int>();
             for (int i = 0; i < TileLoader.TileCount; i++)
@@ -114,15 +151,8 @@ namespace MechTransfer
                     chestTypes.Add(i);
                     continue;
                 }
-
-                ModTile modTile = TileLoader.GetTile(i);
-                if (modTile != null && modTile.chestDrop != 0)
-                {
-                    chestTypes.Add(i);
-                }
-
             }
-            
+
             Call("RegisterAdapter", new InjectItemDelegate(chestAdapter.InjectItem), new EnumerateItemsDelegate(chestAdapter.EnumerateItems), new TakeItemDelegate(chestAdapter.TakeItem), chestTypes.ToArray());
         }
 
@@ -206,7 +236,7 @@ namespace MechTransfer
             r.AddRecipe();
         }
 
-        public void LoadItems()
+        private void LoadItems()
         {
             //Assembler
             SimplePlaceableItem i = new SimplePlaceableItem();
@@ -270,6 +300,34 @@ namespace MechTransfer
             AddItem("TransferRelayItem", i);
             i.DisplayName.AddTranslation(LangID.English, "Transfer relay");
             i.Tooltip.AddTranslation(LangID.English, "Receives items, and sends them out again");
+        }
+
+        private void LoadBlacklist()
+        {
+            PickupBlacklist.Add(ItemID.Heart);
+            PickupBlacklist.Add(ItemID.CandyApple);
+            PickupBlacklist.Add(ItemID.CandyCane);
+
+            PickupBlacklist.Add(ItemID.Star);
+            PickupBlacklist.Add(ItemID.SugarPlum);
+            PickupBlacklist.Add(ItemID.SoulCake);
+
+            PickupBlacklist.Add(ItemID.NebulaPickup1);
+            PickupBlacklist.Add(ItemID.NebulaPickup2);
+            PickupBlacklist.Add(ItemID.NebulaPickup3);
+
+            PickupBlacklist.Add(ItemID.DD2EnergyCrystal);
+
+            for (int i = 0; i < ItemLoader.ItemCount; i++)
+            {
+                ModItem item = ItemLoader.GetItem(i);
+                if (item != null &&
+                   (item.GetType().GetMethod("ItemSpace").DeclaringType != typeof(ModItem) ||
+                   item.GetType().GetMethod("OnPickup").DeclaringType != typeof(ModItem)))
+                {
+                    PickupBlacklist.Add(item.item.type);
+                }
+            }
         }
     }
 }

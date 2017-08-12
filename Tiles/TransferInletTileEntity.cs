@@ -16,7 +16,7 @@ namespace MechTransfer.Tiles
         {
             if (Main.netMode == 1)
             {
-                NetMessage.SendTileSquare(Main.myPlayer, i, j, 1, TileChangeType.None);
+                NetMessage.SendTileSquare(Main.myPlayer, i, j, 3, TileChangeType.None);
                 NetMessage.SendData(MessageID.TileEntityPlacement, -1, -1, null, i, j, Type, 0f, 0, 0, 0);
                 return -1;
             }
@@ -30,7 +30,8 @@ namespace MechTransfer.Tiles
                 if (Main.item[i].active && Main.item[i].noGrabDelay == 0)
                 {
                     Item item = Main.item[i];
-                    if (new Rectangle((Position.X - 1) * 16, (Position.Y - 1) * 16, 48, 16).Intersects(new Rectangle((int)item.position.X, (int)item.position.Y, item.width, item.height)))
+
+                    if (!((MechTransfer)mod).PickupBlacklist.Contains(item.type) && new Rectangle((Position.X - 1) * 16, (Position.Y - 1) * 16, 48, 16).Intersects(item.getRect()))
                     {
                         if (TransferUtils.StartTransfer(Position.X, Position.Y, item))
                         {

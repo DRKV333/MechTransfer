@@ -33,9 +33,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ContainerAdapters\CannonAdapter.cs" />
     <Compile Include="ContainerAdapters\ChestAdapter.cs" />
     <Compile Include="ContainerAdapters\ContainerAdapter.cs" />
+    <Compile Include="ContainerAdapters\CrystalStandAdapter.cs" />
     <Compile Include="ContainerAdapters\ItemFrameAdapter.cs" />
+    <Compile Include="ContainerAdapters\SnowballLauncherAdapter.cs" />
+    <Compile Include="ContainerAdapters\WeaponRackAdapter.cs" />
     <Compile Include="Items\SimplePlaceableItem.cs" />
     <Compile Include="Tiles\TransferAssemblerTileEntity.cs" />
     <Compile Include="ItemInventory.cs" />
@@ -81,7 +85,6 @@
       <HintPath>D:\SteamLibrary\steamapps\common\Terraria\Terraria.exe</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>"D:\SteamLibrary\steamapps\common\Terraria\tModLoaderServer.exe" -build "$(ProjectDir)\" -eac "$(TargetPath)"</PostBuildEvent>
