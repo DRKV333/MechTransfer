@@ -29,3 +29,8 @@ v1.2
 v1.2.1
 - Fixed outlet item placing inlet tile
 - Fixed compatibility with modded chests
+
+v1.3
+- Support for Snowball launcher, Etherian crystal stand, Cannons and Weapon racks
+- Inlet no longer picks up hearts and similar items
+- Multiplayer fixes
