@@ -15,7 +15,7 @@ namespace MechTransfer
 {
     public class MechTransfer : Mod
     {
-        public enum ModMessageID { FilterSyncing }
+        public enum ModMessageID { FilterSyncing, CreateDust }
 
         internal Dictionary<int, ContainerAdapterDefinition> ContainerAdapters = new Dictionary<int, ContainerAdapterDefinition>();
         internal HashSet<int> PickupBlacklist = new HashSet<int>();
@@ -105,6 +105,13 @@ namespace MechTransfer
                 TransferFilterTileEntity entity = (TransferFilterTileEntity)TileEntity.ByID[reader.ReadInt32()];
                 entity.ItemId = reader.ReadInt32();
                 NetMessage.SendData(MessageID.TileEntitySharing, -1, whoAmI, null, entity.ID, entity.Position.X, entity.Position.Y);
+            }
+            else if(id == ModMessageID.CreateDust)
+            {
+                if (Main.netMode != 1)
+                    return;
+
+                Dust.NewDustPerfect(reader.ReadVector2(), DustID.Silver, reader.ReadVector2()).noGravity = true;
             }
         }
 

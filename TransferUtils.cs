@@ -6,6 +6,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.Localization;
+using Terraria.ModLoader;
 
 namespace MechTransfer
 {
@@ -161,7 +162,20 @@ namespace MechTransfer
                     case Direction.stop: return;
                 }
 
-                Dust.NewDustPerfect(new Vector2(p.X * 16 + 8, p.Y * 16 + 8), DustID.Silver, velocity).noGravity = true;
+                Vector2 location = new Vector2(p.X * 16 + 8, p.Y * 16 + 8);
+
+                if (Main.netMode == 0)
+                {
+                    Dust.NewDustPerfect(location, DustID.Silver, velocity).noGravity = true;
+                }
+                else
+                {
+                    ModPacket packet = mod.GetPacket();
+                    packet.Write((int)MechTransfer.ModMessageID.CreateDust);
+                    packet.WriteVector2(location);
+                    packet.WriteVector2(velocity);
+                    packet.Send();
+                }
             }
         }
 
