@@ -1,5 +1,6 @@
 ﻿using MechTransfer.ContainerAdapters;
 using MechTransfer.Tiles;
+using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
@@ -10,6 +11,10 @@ namespace MechTransfer
 {
     public static class TransferUtils
     {
+        public enum Direction { up, down, left, right, stop }
+
+        private const float dustVelocity = 1.5f;
+
         public static MechTransfer mod;
         private static List<Point16> relayTriggered = new List<Point16>(); //stops infinite recursion
 
@@ -44,9 +49,10 @@ namespace MechTransfer
         private static bool SearchForTarget(int startX, int startY, Item IToTransfer)
         {
             Queue<Point16> searchQ = new Queue<Point16>();
-            HashSet<Point16> visited = new HashSet<Point16>();
+            Dictionary<Point16,byte> visited = new Dictionary<Point16, byte>();
 
             searchQ.Enqueue(new Point16(startX, startY));
+            visited.Add(new Point16(startX, startY), (byte)Direction.stop);
 
             while (searchQ.Count > 0)
             {
@@ -55,18 +61,19 @@ namespace MechTransfer
                 for (int i = 0; i < 4; i++)
                 {
                     Point16 searchP = new Point16();
+                    Direction dir = 0;
 
                     switch (i)
                     {
-                        case 0: searchP = new Point16(c.X + 1, c.Y); break;
-                        case 1: searchP = new Point16(c.X - 1, c.Y); break;
-                        case 2: searchP = new Point16(c.X, c.Y + 1); break;
-                        case 3: searchP = new Point16(c.X, c.Y - 1); break;
+                        case 0: searchP = new Point16(c.X + 1, c.Y); dir = Direction.left; break;
+                        case 1: searchP = new Point16(c.X - 1, c.Y); dir = Direction.right; break;
+                        case 2: searchP = new Point16(c.X, c.Y + 1); dir = Direction.up; break;
+                        case 3: searchP = new Point16(c.X, c.Y - 1); dir = Direction.down; break;
                     }
 
-                    if (visited.Contains(searchP))
+                    if (visited.ContainsKey(searchP))
                         continue;
-                    visited.Add(searchP);
+                    visited.Add(searchP, (byte)dir);
 
                     Tile tile = Main.tile[searchP.X, searchP.Y];
                     if (tile == null || !tile.active())
@@ -83,6 +90,7 @@ namespace MechTransfer
                             if (SearchForTarget(searchP.X + 1, searchP.Y, IToTransfer))
                             {
                                 mod.GetModWorld<MechTransferWorld>().TripWireDelayed(searchP.X, searchP.Y, 2, 1);
+                                UnwindVisuals(visited, searchP);
                                 return true;
                             }
                         }
@@ -92,6 +100,7 @@ namespace MechTransfer
                             if (SearchForTarget(searchP.X - 1, searchP.Y, IToTransfer))
                             {
                                 mod.GetModWorld<MechTransferWorld>().TripWireDelayed(searchP.X - 1, searchP.Y, 2, 1);
+                                UnwindVisuals(visited, searchP);
                                 return true;
                             }
                         }
@@ -99,12 +108,14 @@ namespace MechTransfer
                     else if (tile.type == mod.TileType<TransferInjectorTile>() && InjectItem(searchP.X, searchP.Y, IToTransfer))
                     {
                         mod.GetModWorld<MechTransferWorld>().TripWireDelayed(searchP.X, searchP.Y, 1, 1);
+                        UnwindVisuals(visited, searchP);
                         return true;
                     }
                     else if (tile.type == mod.TileType<TransferOutletTile>())
                     {
                         DropItem(searchP.X, searchP.Y, IToTransfer);
                         mod.GetModWorld<MechTransferWorld>().TripWireDelayed(searchP.X, searchP.Y, 1, 1);
+                        UnwindVisuals(visited, searchP);
                         return true;
                     }
 
@@ -127,6 +138,31 @@ namespace MechTransfer
                 }
             }
             return false;
+        }
+
+        private static void UnwindVisuals(Dictionary<Point16, byte> visited, Point16 startPoint)
+        {
+            MechTransferWorld world = mod.GetModWorld<MechTransferWorld>();
+
+            Point16 p = startPoint;
+
+            while (visited.ContainsKey(p))
+            {
+                Direction dir = (Direction)visited[p];
+
+                Vector2 velocity = Vector2.Zero;
+
+                switch (dir)
+                {
+                    case Direction.up: p = new Point16(p.X, p.Y - 1); velocity.Y = dustVelocity; break;
+                    case Direction.down: p = new Point16(p.X, p.Y + 1); velocity.Y = -dustVelocity; break;
+                    case Direction.left: p = new Point16(p.X - 1, p.Y); velocity.X = dustVelocity; break;
+                    case Direction.right: p = new Point16(p.X + 1, p.Y); velocity.X = -dustVelocity; break;
+                    case Direction.stop: return;
+                }
+
+                Dust.NewDustPerfect(new Vector2(p.X * 16 + 8, p.Y * 16 + 8), DustID.Silver, velocity).noGravity = true;
+            }
         }
 
         public static bool InjectItem(int x, int y, Item item)
