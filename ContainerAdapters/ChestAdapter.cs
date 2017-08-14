@@ -47,7 +47,7 @@ namespace MechTransfer.ContainerAdapters
             {
                 if (Main.player[j].chest == i)
                 {
-                    return i;
+                    return j;
                 }
             }
             return -1;
@@ -108,6 +108,7 @@ namespace MechTransfer.ContainerAdapters
                 return;
 
             TransferUtils.EatItem(ref Main.chest[c].item[(int)slot], amount);
+            HandleChestItemChange(c, (int)slot);
         }
     }
 }
