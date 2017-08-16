@@ -1,12 +1,15 @@
 using MechTransfer.ContainerAdapters;
 using MechTransfer.Items;
 using MechTransfer.Tiles;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using System.Reflection;
+using System.Linq.Expressions;
 using EnumerateItemsDelegate = System.Func<int, int, System.Collections.Generic.IEnumerable<System.Tuple<Terraria.Item, object>>>;
 using InjectItemDelegate = System.Func<int, int, Terraria.Item, bool>;
 using TakeItemDelegate = System.Action<int, int, object, int>;
@@ -21,6 +24,7 @@ namespace MechTransfer
         internal HashSet<int> PickupBlacklist = new HashSet<int>();
         private const string callErorPrefix = "MechTransfer Call() error: ";
         private const string registerAdapter = "RegisterAdapter";
+        private const string registerAdapterReflection = "RegisterAdapterReflection";
 
         public MechTransfer()
         {
@@ -77,9 +81,63 @@ namespace MechTransfer
 
                 foreach (var type in (int[])args[4])
                 {
-                    ContainerAdapters.Add(type, definition);
+                    if (!ContainerAdapters.ContainsKey(type))
+                        ContainerAdapters.Add(type, definition);
                 }
                 return definition;
+            }
+            if ((args[0] as string) == registerAdapterReflection)
+            {
+                try
+                {
+                    ContainerAdapterDefinition definition = new ContainerAdapterDefinition();
+
+                    Type type = args[1].GetType();
+
+                    ParameterExpression paramX = Expression.Parameter(typeof(int));
+                    ParameterExpression paramY = Expression.Parameter(typeof(int));
+
+                    MethodInfo inject = type.GetMethod("InjectItem", new Type[] { typeof(int), typeof(int), typeof(Item) });
+                    ParameterExpression paramInjectItem = Expression.Parameter(typeof(Item));
+                    InjectItemDelegate injectLambda = Expression.Lambda<InjectItemDelegate>(
+                        Expression.Call(Expression.Constant(args[1]), inject, paramX, paramY, paramInjectItem),
+                        paramX, paramY, paramInjectItem).Compile();
+
+                    MethodInfo enumerate = type.GetMethod("EnumerateItems", new Type[] { typeof(int), typeof(int) });
+                    EnumerateItemsDelegate enumerateLambda = Expression.Lambda<EnumerateItemsDelegate>(
+                        Expression.Call(Expression.Constant(args[1]), enumerate, paramX, paramY),
+                        paramX, paramY).Compile();
+
+                    MethodInfo take = type.GetMethod("TakeItem", new Type[] { typeof(int), typeof(int), typeof(object), typeof(int) });
+                    ParameterExpression paramTakeIdentifier = Expression.Parameter(typeof(object));
+                    ParameterExpression paramTakeAmount = Expression.Parameter(typeof(int));
+                    TakeItemDelegate takeLambda = Expression.Lambda<TakeItemDelegate>(
+                        Expression.Call(Expression.Constant(args[1]), take, paramX, paramY, paramTakeIdentifier, paramTakeAmount),
+                        paramX, paramY, paramTakeIdentifier, paramTakeAmount).Compile();
+
+                    definition.InjectItem = injectLambda;
+                    definition.EnumerateItems = enumerateLambda;
+                    definition.TakeItem = takeLambda;
+
+                    if (!(args[2] is int[]))
+                    {
+                        ErrorLogger.Log(callErorPrefix + "Invalid argument 5 TileType at " + registerAdapterReflection);
+                        return null;
+                    }
+
+                    foreach (var t in (int[])args[2])
+                    {
+                        if(!ContainerAdapters.ContainsKey(t))
+                            ContainerAdapters.Add(t, definition);
+                    }
+                    return definition;
+                }
+                catch (Exception e)
+                {
+                    ErrorLogger.Log(callErorPrefix + "An exception has occurred while loading adapter at " + registerAdapterReflection);
+                    ErrorLogger.Log(e.Message);
+                    return null;
+                }
             }
             ErrorLogger.Log(callErorPrefix + "Invalid command");
             return null;
@@ -130,23 +188,23 @@ namespace MechTransfer
         {
             //Item frame
             ItemFrameAdapter itemFrameAdapter = new ItemFrameAdapter();
-            Call("RegisterAdapter", new InjectItemDelegate(itemFrameAdapter.InjectItem), new EnumerateItemsDelegate(itemFrameAdapter.EnumerateItems), new TakeItemDelegate(itemFrameAdapter.TakeItem), new int[] { TileID.ItemFrame });
+            Call(registerAdapterReflection, itemFrameAdapter, new int[] { TileID.ItemFrame });
 
             //Snowball launcher
             SnowballLauncherAdapter snowballLauncherAdapter = new SnowballLauncherAdapter();
-            Call("RegisterAdapter", new InjectItemDelegate(snowballLauncherAdapter.InjectItem), new EnumerateItemsDelegate(snowballLauncherAdapter.EnumerateItems), new TakeItemDelegate(snowballLauncherAdapter.TakeItem), new int[] { TileID.SnowballLauncher });
+            Call(registerAdapterReflection, snowballLauncherAdapter, new int[] { TileID.SnowballLauncher });
 
             //Cannon
             CannonAdapter cannonAdapter = new CannonAdapter();
-            Call("RegisterAdapter", new InjectItemDelegate(cannonAdapter.InjectItem), new EnumerateItemsDelegate(cannonAdapter.EnumerateItems), new TakeItemDelegate(cannonAdapter.TakeItem), new int[] { TileID.Cannon });
+            Call(registerAdapterReflection, cannonAdapter, new int[] { TileID.Cannon });
 
             //Crystal stand
             CrystalStandAdapter crystalStandAdapter = new CrystalStandAdapter();
-            Call("RegisterAdapter", new InjectItemDelegate(crystalStandAdapter.InjectItem), new EnumerateItemsDelegate(crystalStandAdapter.EnumerateItems), new TakeItemDelegate(crystalStandAdapter.TakeItem), new int[] { TileID.ElderCrystalStand });
+            Call(registerAdapterReflection, crystalStandAdapter, new int[] { TileID.ElderCrystalStand });
 
             //Weapon rack
             WeaponRackAdapter weaponRackAdapter = new WeaponRackAdapter();
-            Call("RegisterAdapter", new InjectItemDelegate(weaponRackAdapter.InjectItem), new EnumerateItemsDelegate(weaponRackAdapter.EnumerateItems), new TakeItemDelegate(weaponRackAdapter.TakeItem), new int[] { TileID.WeaponsRack });
+            Call(registerAdapterReflection, weaponRackAdapter, new int[] { TileID.WeaponsRack });
 
             //Chest
             ChestAdapter chestAdapter = new ChestAdapter();
@@ -159,8 +217,7 @@ namespace MechTransfer
                     continue;
                 }
             }
-
-            Call("RegisterAdapter", new InjectItemDelegate(chestAdapter.InjectItem), new EnumerateItemsDelegate(chestAdapter.EnumerateItems), new TakeItemDelegate(chestAdapter.TakeItem), chestTypes.ToArray());
+            Call(registerAdapterReflection, chestAdapter, chestTypes.ToArray());
         }
 
         public override void AddRecipes()
