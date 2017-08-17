@@ -38,9 +38,11 @@
     <Compile Include="ContainerAdapters\ContainerAdapter.cs" />
     <Compile Include="ContainerAdapters\CrystalStandAdapter.cs" />
     <Compile Include="ContainerAdapters\ItemFrameAdapter.cs" />
+    <Compile Include="ContainerAdapters\OmniTurretAdapter.cs" />
     <Compile Include="ContainerAdapters\SnowballLauncherAdapter.cs" />
     <Compile Include="ContainerAdapters\WeaponRackAdapter.cs" />
     <Compile Include="Items\SimplePlaceableItem.cs" />
+    <Compile Include="Tiles\OmniTurretTile.cs" />
     <Compile Include="Tiles\TransferAssemblerTileEntity.cs" />
     <Compile Include="ItemInventory.cs" />
     <Compile Include="Items\PneumaticActuatorItem.cs" />
