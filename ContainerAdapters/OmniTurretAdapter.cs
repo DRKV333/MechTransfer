@@ -10,9 +10,9 @@ namespace MechTransfer.ContainerAdapters
 {
     class OmniTurretAdapter
     {
-        private const int baseDamage = 17;
-        private const int fireRate = 11;
-        private const int shootSpeed = 10;
+        private int[] baseDamage = new int[] { 17, 25 };
+        private int[] fireRate = new int[] { 11, 7 };
+        private int[] shootSpeed = new int[] { 10, 10 };
 
         public void TakeItem(int x, int y, object slot, int amount)
         {
@@ -39,6 +39,11 @@ namespace MechTransfer.ContainerAdapters
             if (origin == null || !origin.active())
                 return false;
 
+            int style = origin.frameX / 36;
+           
+            if (fireRate[style] != 0 && !Wiring.CheckMech(originX, originY, fireRate[style]))
+                return false;
+
             Vector2 position = new Vector2((originX + 1) * 16, (originY + 1) * 16);
 
             Vector2 direction = Vector2.Zero;
@@ -53,9 +58,7 @@ namespace MechTransfer.ContainerAdapters
                 case 216: direction = new Vector2(-0.5f, 0.5f); position.Y -= 8; break;
             }
 
-            
-
-            Main.projectile[Projectile.NewProjectile(position, direction * shootSpeed, item.shoot, item.damage, item.knockBack, Main.myPlayer)].hostile = true;
+            Main.projectile[Projectile.NewProjectile(position, direction * shootSpeed[style], item.shoot, baseDamage[style] * (1 + item.damage / 100), item.knockBack, Main.myPlayer)].hostile = true;
 
             return true;
 

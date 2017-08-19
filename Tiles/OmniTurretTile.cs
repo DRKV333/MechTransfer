@@ -20,6 +20,7 @@ namespace MechTransfer.Tiles
 
             TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
             TileObjectData.newTile.LavaDeath = false;
+            TileObjectData.newTile.StyleHorizontal = true;
             TileObjectData.addTile(Type);
 
             AddMapEntry(new Color(200, 200, 200));
@@ -53,7 +54,7 @@ namespace MechTransfer.Tiles
             if (origin == null || !origin.active())
                 return;
 
-            if (tile.frameX == 0)
+            if (tile.frameX % 36 == 0)
             {
                 if (origin.frameY > 0 && origin.frameY < 216)
                 {
@@ -70,7 +71,7 @@ namespace MechTransfer.Tiles
                     Main.tile[originX + 1, originY + 1].frameY = 234;
                 }
             }
-            else if (tile.frameX != 0)
+            else
             {
                 if (origin.frameY < 180)
                 {

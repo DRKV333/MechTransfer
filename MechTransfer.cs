@@ -206,8 +206,10 @@ namespace MechTransfer
             WeaponRackAdapter weaponRackAdapter = new WeaponRackAdapter();
             Call(registerAdapterReflection, weaponRackAdapter, new int[] { TileID.WeaponsRack });
 
+            //Omni turret
             OmniTurretAdapter omniTurretAdapter = new OmniTurretAdapter();
             Call(registerAdapterReflection, omniTurretAdapter, new int[] { TileType<OmniTurretTile>() });
+
 
             //Chest
             ChestAdapter chestAdapter = new ChestAdapter();
@@ -368,10 +370,18 @@ namespace MechTransfer
             i.DisplayName.AddTranslation(LangID.English, "Transfer relay");
             i.Tooltip.AddTranslation(LangID.English, "Receives items, and sends them out again");
 
+            //Omni turret
             i = new SimplePlaceableItem();
             i.placeType = TileType<OmniTurretTile>();
             AddItem("OmniTurretItem", i);
             i.DisplayName.AddTranslation(LangID.English, "Omni turret");
+
+            //Super omni turret
+            i = new SimplePlaceableItem();
+            i.placeType = TileType<OmniTurretTile>();
+            i.style = 1;
+            AddItem("SuperOmniTurretItem", i);
+            i.DisplayName.AddTranslation(LangID.English, "Super omni turret");
         }
 
         private void LoadBlacklist()
