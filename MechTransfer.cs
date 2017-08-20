@@ -210,7 +210,6 @@ namespace MechTransfer
             OmniTurretAdapter omniTurretAdapter = new OmniTurretAdapter();
             Call(registerAdapterReflection, omniTurretAdapter, new int[] { TileType<OmniTurretTile>() });
 
-
             //Chest
             ChestAdapter chestAdapter = new ChestAdapter();
             List<int> chestTypes = new List<int>();
@@ -382,6 +381,13 @@ namespace MechTransfer
             i.style = 1;
             AddItem("SuperOmniTurretItem", i);
             i.DisplayName.AddTranslation(LangID.English, "Super omni turret");
+
+            //Matter projector
+            i = new SimplePlaceableItem();
+            i.placeType = TileType<OmniTurretTile>();
+            i.style = 2;
+            AddItem("MatterProjectorItem", i);
+            i.DisplayName.AddTranslation(LangID.English, "Matter projector");
         }
 
         private void LoadBlacklist()

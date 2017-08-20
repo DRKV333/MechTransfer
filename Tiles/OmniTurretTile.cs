@@ -7,6 +7,7 @@ using Terraria.ModLoader;
 using Terraria;
 using Terraria.ObjectData;
 using Microsoft.Xna.Framework;
+using Terraria.DataStructures;
 
 namespace MechTransfer.Tiles
 {
@@ -21,6 +22,7 @@ namespace MechTransfer.Tiles
             TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.newTile.StyleHorizontal = true;
+            TileObjectData.newTile.CoordinateHeights = new int[] { 16, 18 };
             TileObjectData.addTile(Type);
 
             AddMapEntry(new Color(200, 200, 200));
@@ -28,7 +30,14 @@ namespace MechTransfer.Tiles
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 16, 16, mod.ItemType("OmniTurretItem"));
+            int dropId; 
+            switch(frameX)
+            {
+                case 36: dropId = mod.ItemType("SuperOmniTurretItem"); break;
+                case 72: dropId = mod.ItemType("MatterProjectorItem"); break;
+                default: dropId = mod.ItemType("OmniTurretItem"); break;
+            }
+            Item.NewItem(i * 16, j * 16, 16, 16, dropId);
         }
 
         public override void HitWire(int i, int j)
@@ -56,31 +65,31 @@ namespace MechTransfer.Tiles
 
             if (tile.frameX % 36 == 0)
             {
-                if (origin.frameY > 0 && origin.frameY < 216)
+                if (origin.frameY > 0 && origin.frameY < 228)
                 {
-                    origin.frameY -= 36;
-                    Main.tile[originX + 1, originY].frameY -= 36;
-                    Main.tile[originX, originY + 1].frameY -= 36;
-                    Main.tile[originX + 1, originY + 1].frameY -= 36;
+                    origin.frameY -= 38;
+                    Main.tile[originX + 1, originY].frameY -= 38;
+                    Main.tile[originX, originY + 1].frameY -= 38;
+                    Main.tile[originX + 1, originY + 1].frameY -= 38;
                 }
                 else if(origin.frameY == 0)
                 {
-                    origin.frameY = 216;
-                    Main.tile[originX + 1, originY].frameY = 216;
-                    Main.tile[originX, originY + 1].frameY = 234;
-                    Main.tile[originX + 1, originY + 1].frameY = 234;
+                    origin.frameY = 228;
+                    Main.tile[originX + 1, originY].frameY = 228;
+                    Main.tile[originX, originY + 1].frameY = 246;
+                    Main.tile[originX + 1, originY + 1].frameY = 246;
                 }
             }
             else
             {
-                if (origin.frameY < 180)
+                if (origin.frameY < 190)
                 {
-                    origin.frameY += 36;
-                    Main.tile[originX + 1, originY].frameY += 36;
-                    Main.tile[originX, originY + 1].frameY += 36;
-                    Main.tile[originX + 1, originY + 1].frameY += 36;
+                    origin.frameY += 38;
+                    Main.tile[originX + 1, originY].frameY += 38;
+                    Main.tile[originX, originY + 1].frameY += 38;
+                    Main.tile[originX + 1, originY + 1].frameY += 38;
                 }
-                else if(origin.frameY == 216)
+                else if(origin.frameY == 228)
                 {
                     origin.frameY = 0;
                     Main.tile[originX + 1, originY].frameY = 0;
