@@ -30,14 +30,19 @@ namespace MechTransfer.Tiles
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            int dropId; 
-            switch(frameX)
+            Item.NewItem(i * 16, j * 16, 16, 16, DropType(frameX));
+        }
+
+        public int DropType(int frameX)
+        {
+            int style = frameX / 36;
+            switch(style)
             {
-                case 36: dropId = mod.ItemType("SuperOmniTurretItem"); break;
-                case 72: dropId = mod.ItemType("MatterProjectorItem"); break;
-                default: dropId = mod.ItemType("OmniTurretItem"); break;
+                case 0: return mod.ItemType("OmniTurretItem");
+                case 1: return mod.ItemType("SuperOmniTurretItem");
+                case 2: return mod.ItemType("MatterProjectorItem");
+                default: return 0;
             }
-            Item.NewItem(i * 16, j * 16, 16, 16, dropId);
         }
 
         public override void HitWire(int i, int j)
@@ -105,7 +110,7 @@ namespace MechTransfer.Tiles
             if (tile == null || !tile.active())
                 return;
 
-            Main.LocalPlayer.showItemIcon2 = mod.ItemType("OmniTurretItem");
+            Main.LocalPlayer.showItemIcon2 = DropType(tile.frameX);
             Main.LocalPlayer.showItemIcon = true;
         }
     }
