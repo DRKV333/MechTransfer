@@ -34,3 +34,9 @@ v1.3
 - Support for Snowball launcher, Etherian crystal stand, Cannons and Weapon racks
 - Inlet no longer picks up hearts and similar items
 - Multiplayer fixes
+
+v1.4
+- Added visualization for transfers
+- Added Omni turret, Super omni turret and Matter projector
+- Added support for dressers
+- Added reflection based adapter loading
