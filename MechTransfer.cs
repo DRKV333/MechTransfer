@@ -147,7 +147,10 @@ namespace MechTransfer
         {
             if (Main.netMode == 1 && messageType == MessageID.SyncChestItem && Main.LocalPlayer.chest == reader.ReadInt16())
             {
+                //This a temporary fix for multiplayer item duplication
+                Main.LocalPlayer.chest = -1;
                 Recipe.FindRecipes();
+                Main.PlaySound(SoundID.MenuClose);
             }
             return false;
         }
@@ -310,6 +313,32 @@ namespace MechTransfer
             r.AddTile(TileID.WorkBenches);
             r.SetResult(ItemType("TransferRelayItem"), 1);
             r.AddRecipe();
+
+            //Omni turret
+            r = new ModRecipe(this);
+            r.AddIngredient(ItemType<PneumaticActuatorItem>(), 5);
+            r.AddIngredient(ItemID.IllegalGunParts, 1);
+            r.AddIngredient(ItemID.DartTrap, 1);
+            r.AddTile(TileID.WorkBenches);
+            r.SetResult(ItemType("OmniTurretItem"), 1);
+            r.AddRecipe();
+
+            //Super omni turret
+            r = new ModRecipe(this);
+            r.AddIngredient(ItemType("OmniTurretItem"), 1);
+            r.AddIngredient(ItemID.Cog, 10);
+            r.AddTile(TileID.WorkBenches);
+            r.SetResult(ItemType("SuperOmniTurretItem"), 1);
+            r.AddRecipe();
+
+            //Matter projector
+            r = new ModRecipe(this);
+            r.AddIngredient(ItemType("SuperOmniTurretItem"), 1);
+            r.AddIngredient(ItemID.FragmentVortex, 5);
+            r.AddIngredient(ItemID.LunarBar, 5);
+            r.AddTile(TileID.LunarCraftingStation);
+            r.SetResult(ItemType("MatterProjectorItem"), 1);
+            r.AddRecipe();
         }
 
         private void LoadItems()
@@ -317,6 +346,7 @@ namespace MechTransfer
             //Assembler
             SimplePlaceableItem i = new SimplePlaceableItem();
             i.placeType = TileType<TransferAssemblerTile>();
+            i.value = Item.sellPrice(0, 1, 0, 0);
             AddItem("TransferAssemblerItem", i);
             i.DisplayName.AddTranslation(LangID.English, "Transfer assembler");
             i.Tooltip.AddTranslation(LangID.English, "WIP\nCrafts items automatically\nRight click with item in hand to set filter");
@@ -380,22 +410,28 @@ namespace MechTransfer
             //Omni turret
             i = new SimplePlaceableItem();
             i.placeType = TileType<OmniTurretTile>();
+            i.value = Item.sellPrice(0, 1, 0, 0);
             AddItem("OmniTurretItem", i);
             i.DisplayName.AddTranslation(LangID.English, "Omni turret");
+            i.Tooltip.AddTranslation(LangID.English, "Shoots any standard ammo");
 
             //Super omni turret
             i = new SimplePlaceableItem();
             i.placeType = TileType<OmniTurretTile>();
+            i.value = Item.sellPrice(0, 1, 0, 0);
             i.style = 1;
             AddItem("SuperOmniTurretItem", i);
             i.DisplayName.AddTranslation(LangID.English, "Super omni turret");
+            i.Tooltip.AddTranslation(LangID.English, "Shoots any standard ammo");
 
             //Matter projector
             i = new SimplePlaceableItem();
             i.placeType = TileType<OmniTurretTile>();
+            i.value = Item.sellPrice(0, 1, 0, 0);
             i.style = 2;
             AddItem("MatterProjectorItem", i);
             i.DisplayName.AddTranslation(LangID.English, "Matter projector");
+            i.Tooltip.AddTranslation(LangID.English, "Shoots any standard ammo really, really fast");
         }
 
         private void LoadBlacklist()
