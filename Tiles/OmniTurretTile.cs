@@ -47,15 +47,15 @@ namespace MechTransfer.Tiles
 
         public override void HitWire(int i, int j)
         {
-            Rotate(i, j);
+            Rotate(i, j, true);
         }
 
         public override void RightClick(int i, int j)
         {
-            Rotate(i, j);
+            Rotate(i, j, false);
         }
 
-        public void Rotate(int i, int j)
+        public void Rotate(int i, int j, bool skipWies)
         {
             Tile tile = Main.tile[i, j];
             if (tile == null || !tile.active())
@@ -101,6 +101,14 @@ namespace MechTransfer.Tiles
                     Main.tile[originX, originY + 1].frameY = 18;
                     Main.tile[originX + 1, originY + 1].frameY = 18;
                 }
+            }
+
+            if(skipWies)
+            {
+                Wiring.SkipWire(originX, originY);
+                Wiring.SkipWire(originX + 1, originY);
+                Wiring.SkipWire(originX, originY + 1);
+                Wiring.SkipWire(originX + 1, originY + 1);
             }
         }
 
