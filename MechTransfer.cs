@@ -1,8 +1,11 @@
 using MechTransfer.ContainerAdapters;
 using MechTransfer.Items;
 using MechTransfer.Tiles;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq.Expressions;
+using System.Reflection;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -15,12 +18,13 @@ namespace MechTransfer
 {
     public class MechTransfer : Mod
     {
-        public enum ModMessageID { FilterSyncing }
+        public enum ModMessageID { FilterSyncing, CreateDust, RotateTurret, ProjectileMakeHostile }
 
         internal Dictionary<int, ContainerAdapterDefinition> ContainerAdapters = new Dictionary<int, ContainerAdapterDefinition>();
         internal HashSet<int> PickupBlacklist = new HashSet<int>();
         private const string callErorPrefix = "MechTransfer Call() error: ";
         private const string registerAdapter = "RegisterAdapter";
+        private const string registerAdapterReflection = "RegisterAdapterReflection";
 
         public MechTransfer()
         {
@@ -77,9 +81,63 @@ namespace MechTransfer
 
                 foreach (var type in (int[])args[4])
                 {
-                    ContainerAdapters.Add(type, definition);
+                    if (!ContainerAdapters.ContainsKey(type))
+                        ContainerAdapters.Add(type, definition);
                 }
                 return definition;
+            }
+            if ((args[0] as string) == registerAdapterReflection)
+            {
+                try
+                {
+                    ContainerAdapterDefinition definition = new ContainerAdapterDefinition();
+
+                    Type type = args[1].GetType();
+
+                    ParameterExpression paramX = Expression.Parameter(typeof(int));
+                    ParameterExpression paramY = Expression.Parameter(typeof(int));
+
+                    MethodInfo inject = type.GetMethod("InjectItem", new Type[] { typeof(int), typeof(int), typeof(Item) });
+                    ParameterExpression paramInjectItem = Expression.Parameter(typeof(Item));
+                    InjectItemDelegate injectLambda = Expression.Lambda<InjectItemDelegate>(
+                        Expression.Call(Expression.Constant(args[1]), inject, paramX, paramY, paramInjectItem),
+                        paramX, paramY, paramInjectItem).Compile();
+
+                    MethodInfo enumerate = type.GetMethod("EnumerateItems", new Type[] { typeof(int), typeof(int) });
+                    EnumerateItemsDelegate enumerateLambda = Expression.Lambda<EnumerateItemsDelegate>(
+                        Expression.Call(Expression.Constant(args[1]), enumerate, paramX, paramY),
+                        paramX, paramY).Compile();
+
+                    MethodInfo take = type.GetMethod("TakeItem", new Type[] { typeof(int), typeof(int), typeof(object), typeof(int) });
+                    ParameterExpression paramTakeIdentifier = Expression.Parameter(typeof(object));
+                    ParameterExpression paramTakeAmount = Expression.Parameter(typeof(int));
+                    TakeItemDelegate takeLambda = Expression.Lambda<TakeItemDelegate>(
+                        Expression.Call(Expression.Constant(args[1]), take, paramX, paramY, paramTakeIdentifier, paramTakeAmount),
+                        paramX, paramY, paramTakeIdentifier, paramTakeAmount).Compile();
+
+                    definition.InjectItem = injectLambda;
+                    definition.EnumerateItems = enumerateLambda;
+                    definition.TakeItem = takeLambda;
+
+                    if (!(args[2] is int[]))
+                    {
+                        ErrorLogger.Log(callErorPrefix + "Invalid argument 5 TileType at " + registerAdapterReflection);
+                        return null;
+                    }
+
+                    foreach (var t in (int[])args[2])
+                    {
+                        if (!ContainerAdapters.ContainsKey(t))
+                            ContainerAdapters.Add(t, definition);
+                    }
+                    return definition;
+                }
+                catch (Exception e)
+                {
+                    ErrorLogger.Log(callErorPrefix + "An exception has occurred while loading adapter at " + registerAdapterReflection);
+                    ErrorLogger.Log(e.Message);
+                    return null;
+                }
             }
             ErrorLogger.Log(callErorPrefix + "Invalid command");
             return null;
@@ -89,14 +147,17 @@ namespace MechTransfer
         {
             if (Main.netMode == 1 && messageType == MessageID.SyncChestItem && Main.LocalPlayer.chest == reader.ReadInt16())
             {
+                //This a temporary fix for multiplayer item duplication
+                Main.LocalPlayer.chest = -1;
                 Recipe.FindRecipes();
+                Main.PlaySound(SoundID.MenuClose);
             }
             return false;
         }
 
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
-            ModMessageID id = (ModMessageID)reader.ReadInt32();
+            ModMessageID id = (ModMessageID)reader.ReadByte();
             if (id == ModMessageID.FilterSyncing)
             {
                 if (Main.netMode != 2)
@@ -105,6 +166,21 @@ namespace MechTransfer
                 TransferFilterTileEntity entity = (TransferFilterTileEntity)TileEntity.ByID[reader.ReadInt32()];
                 entity.ItemId = reader.ReadInt32();
                 NetMessage.SendData(MessageID.TileEntitySharing, -1, whoAmI, null, entity.ID, entity.Position.X, entity.Position.Y);
+            }
+            else if (id == ModMessageID.CreateDust)
+            {
+                if (Main.netMode != 1)
+                    return;
+
+                Dust.NewDustPerfect(reader.ReadVector2(), DustID.Silver, reader.ReadVector2()).noGravity = true;
+            }
+            else if (id == ModMessageID.RotateTurret)
+            {
+                GetTile<OmniTurretTile>().Rotate(reader.ReadInt16(), reader.ReadInt16(), false);
+            }
+            else if (id == ModMessageID.ProjectileMakeHostile)
+            {
+                Main.projectile[reader.ReadInt16()].hostile = true;
             }
         }
 
@@ -123,37 +199,40 @@ namespace MechTransfer
         {
             //Item frame
             ItemFrameAdapter itemFrameAdapter = new ItemFrameAdapter();
-            Call("RegisterAdapter", new InjectItemDelegate(itemFrameAdapter.InjectItem), new EnumerateItemsDelegate(itemFrameAdapter.EnumerateItems), new TakeItemDelegate(itemFrameAdapter.TakeItem), new int[] { TileID.ItemFrame });
+            Call(registerAdapterReflection, itemFrameAdapter, new int[] { TileID.ItemFrame });
 
             //Snowball launcher
             SnowballLauncherAdapter snowballLauncherAdapter = new SnowballLauncherAdapter();
-            Call("RegisterAdapter", new InjectItemDelegate(snowballLauncherAdapter.InjectItem), new EnumerateItemsDelegate(snowballLauncherAdapter.EnumerateItems), new TakeItemDelegate(snowballLauncherAdapter.TakeItem), new int[] { TileID.SnowballLauncher });
+            Call(registerAdapterReflection, snowballLauncherAdapter, new int[] { TileID.SnowballLauncher });
 
             //Cannon
             CannonAdapter cannonAdapter = new CannonAdapter();
-            Call("RegisterAdapter", new InjectItemDelegate(cannonAdapter.InjectItem), new EnumerateItemsDelegate(cannonAdapter.EnumerateItems), new TakeItemDelegate(cannonAdapter.TakeItem), new int[] { TileID.Cannon });
+            Call(registerAdapterReflection, cannonAdapter, new int[] { TileID.Cannon });
 
             //Crystal stand
             CrystalStandAdapter crystalStandAdapter = new CrystalStandAdapter();
-            Call("RegisterAdapter", new InjectItemDelegate(crystalStandAdapter.InjectItem), new EnumerateItemsDelegate(crystalStandAdapter.EnumerateItems), new TakeItemDelegate(crystalStandAdapter.TakeItem), new int[] { TileID.ElderCrystalStand });
+            Call(registerAdapterReflection, crystalStandAdapter, new int[] { TileID.ElderCrystalStand });
 
             //Weapon rack
             WeaponRackAdapter weaponRackAdapter = new WeaponRackAdapter();
-            Call("RegisterAdapter", new InjectItemDelegate(weaponRackAdapter.InjectItem), new EnumerateItemsDelegate(weaponRackAdapter.EnumerateItems), new TakeItemDelegate(weaponRackAdapter.TakeItem), new int[] { TileID.WeaponsRack });
+            Call(registerAdapterReflection, weaponRackAdapter, new int[] { TileID.WeaponsRack });
+
+            //Omni turret
+            OmniTurretAdapter omniTurretAdapter = new OmniTurretAdapter(this);
+            Call(registerAdapterReflection, omniTurretAdapter, new int[] { TileType<OmniTurretTile>() });
 
             //Chest
             ChestAdapter chestAdapter = new ChestAdapter();
             List<int> chestTypes = new List<int>();
             for (int i = 0; i < TileLoader.TileCount; i++)
             {
-                if (TileID.Sets.BasicChest[i] || TileID.Sets.BasicChestFake[i])
+                if (TileID.Sets.BasicChest[i] || TileID.Sets.BasicChestFake[i] || TileLoader.IsDresser(i))
                 {
                     chestTypes.Add(i);
                     continue;
                 }
             }
-
-            Call("RegisterAdapter", new InjectItemDelegate(chestAdapter.InjectItem), new EnumerateItemsDelegate(chestAdapter.EnumerateItems), new TakeItemDelegate(chestAdapter.TakeItem), chestTypes.ToArray());
+            Call(registerAdapterReflection, chestAdapter, chestTypes.ToArray());
         }
 
         public override void AddRecipes()
@@ -234,6 +313,32 @@ namespace MechTransfer
             r.AddTile(TileID.WorkBenches);
             r.SetResult(ItemType("TransferRelayItem"), 1);
             r.AddRecipe();
+
+            //Omni turret
+            r = new ModRecipe(this);
+            r.AddIngredient(ItemType<PneumaticActuatorItem>(), 5);
+            r.AddIngredient(ItemID.IllegalGunParts, 1);
+            r.AddIngredient(ItemID.DartTrap, 1);
+            r.AddTile(TileID.WorkBenches);
+            r.SetResult(ItemType("OmniTurretItem"), 1);
+            r.AddRecipe();
+
+            //Super omni turret
+            r = new ModRecipe(this);
+            r.AddIngredient(ItemType("OmniTurretItem"), 1);
+            r.AddIngredient(ItemID.Cog, 10);
+            r.AddTile(TileID.WorkBenches);
+            r.SetResult(ItemType("SuperOmniTurretItem"), 1);
+            r.AddRecipe();
+
+            //Matter projector
+            r = new ModRecipe(this);
+            r.AddIngredient(ItemType("SuperOmniTurretItem"), 1);
+            r.AddIngredient(ItemID.FragmentVortex, 5);
+            r.AddIngredient(ItemID.LunarBar, 5);
+            r.AddTile(TileID.LunarCraftingStation);
+            r.SetResult(ItemType("MatterProjectorItem"), 1);
+            r.AddRecipe();
         }
 
         private void LoadItems()
@@ -241,6 +346,7 @@ namespace MechTransfer
             //Assembler
             SimplePlaceableItem i = new SimplePlaceableItem();
             i.placeType = TileType<TransferAssemblerTile>();
+            i.value = Item.sellPrice(0, 1, 0, 0);
             AddItem("TransferAssemblerItem", i);
             i.DisplayName.AddTranslation(LangID.English, "Transfer assembler");
             i.Tooltip.AddTranslation(LangID.English, "WIP\nCrafts items automatically\nRight click with item in hand to set filter");
@@ -300,6 +406,32 @@ namespace MechTransfer
             AddItem("TransferRelayItem", i);
             i.DisplayName.AddTranslation(LangID.English, "Transfer relay");
             i.Tooltip.AddTranslation(LangID.English, "Receives items, and sends them out again");
+
+            //Omni turret
+            i = new SimplePlaceableItem();
+            i.placeType = TileType<OmniTurretTile>();
+            i.value = Item.sellPrice(0, 1, 0, 0);
+            AddItem("OmniTurretItem", i);
+            i.DisplayName.AddTranslation(LangID.English, "Omni turret");
+            i.Tooltip.AddTranslation(LangID.English, "Shoots any standard ammo");
+
+            //Super omni turret
+            i = new SimplePlaceableItem();
+            i.placeType = TileType<OmniTurretTile>();
+            i.value = Item.sellPrice(0, 1, 0, 0);
+            i.style = 1;
+            AddItem("SuperOmniTurretItem", i);
+            i.DisplayName.AddTranslation(LangID.English, "Super omni turret");
+            i.Tooltip.AddTranslation(LangID.English, "Shoots any standard ammo");
+
+            //Matter projector
+            i = new SimplePlaceableItem();
+            i.placeType = TileType<OmniTurretTile>();
+            i.value = Item.sellPrice(0, 1, 0, 0);
+            i.style = 2;
+            AddItem("MatterProjectorItem", i);
+            i.DisplayName.AddTranslation(LangID.English, "Matter projector");
+            i.Tooltip.AddTranslation(LangID.English, "Shoots any standard ammo really, really fast");
         }
 
         private void LoadBlacklist()

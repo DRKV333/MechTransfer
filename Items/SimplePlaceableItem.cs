@@ -6,6 +6,7 @@ namespace MechTransfer.Items
     public class SimplePlaceableItem : ModItem
     {
         public int placeType;
+        public int style = 0;
         public ModTranslation name;
         public int value = Item.sellPrice(0, 0, 50, 0);
 
@@ -28,6 +29,7 @@ namespace MechTransfer.Items
             item.consumable = true;
             item.mech = true;
             item.createTile = placeType;
+            item.placeStyle = style;
         }
 
         public override bool Autoload(ref string name)

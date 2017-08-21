@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace MechTransfer.ContainerAdapters
 {
@@ -15,10 +16,13 @@ namespace MechTransfer.ContainerAdapters
 
             int originX = x;
             int originY = y;
-            if (tile.frameX % 36 != 0)
-                originX--;
-            if (tile.frameY != 0)
-                originY--;
+
+            if (TileLoader.IsDresser(tile.type))
+                originX -= tile.frameX % 54 / 18;
+            else
+                originX -= tile.frameX % 36 / 18;
+
+            originY -= tile.frameY % 36 / 18;
 
             if (!Chest.isLocked(originX, originY))
                 return Chest.FindChest(originX, originY);
@@ -47,7 +51,7 @@ namespace MechTransfer.ContainerAdapters
             {
                 if (Main.player[j].chest == i)
                 {
-                    return i;
+                    return j;
                 }
             }
             return -1;
@@ -108,6 +112,7 @@ namespace MechTransfer.ContainerAdapters
                 return;
 
             TransferUtils.EatItem(ref Main.chest[c].item[(int)slot], amount);
+            HandleChestItemChange(c, (int)slot);
         }
     }
 }

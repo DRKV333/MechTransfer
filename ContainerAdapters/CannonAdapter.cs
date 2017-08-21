@@ -47,7 +47,7 @@ namespace MechTransfer.ContainerAdapters
             int originY = y - tile.frameY % 54 / 18;
             int angle = tile.frameY / 54;
 
-            if (!Wiring.CheckMech(x, y, 30))
+            if (!Wiring.CheckMech(originX, originY, 30))
                 return false;
 
             WorldGen.ShootFromCannon(originX, originY, angle, ammotype, item.damage, item.knockBack, Main.myPlayer);
