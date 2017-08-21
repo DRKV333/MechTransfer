@@ -3,14 +3,22 @@ using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace MechTransfer.ContainerAdapters
 {
     internal class OmniTurretAdapter
     {
+        private Mod mod;
+
         private int[] baseDamage = new int[] { 17, 25, 50 };
         private int[] fireRate = new int[] { 11, 7, 0 };
         private int[] shootSpeed = new int[] { 10, 10, 20 };
+
+        public OmniTurretAdapter(Mod m)
+        {
+            mod = m;
+        }
 
         public void TakeItem(int x, int y, object slot, int amount)
         {
@@ -57,7 +65,16 @@ namespace MechTransfer.ContainerAdapters
             }
 
             Main.PlaySound(SoundID.Item11, position);
-            Main.projectile[Projectile.NewProjectile(position, direction * shootSpeed[style], item.shoot, baseDamage[style] * (1 + item.damage / 100), item.knockBack, Main.myPlayer)].hostile = true;
+            int pId = Projectile.NewProjectile(position, direction * shootSpeed[style], item.shoot, baseDamage[style] * (1 + item.damage / 100), item.knockBack, Main.myPlayer);
+            Main.projectile[pId].hostile = true;
+
+            if (Main.netMode == 2)
+            {
+                ModPacket packet = mod.GetPacket();
+                packet.Write((byte)MechTransfer.ModMessageID.ProjectileMakeHostile);
+                packet.Write((Int16)pId);
+                packet.Send();
+            }
 
             return true;
         }

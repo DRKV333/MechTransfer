@@ -16,7 +16,7 @@ namespace MechTransfer.Tiles
             if (Main.netMode == 1)
             {
                 ModPacket packet = mod.GetPacket();
-                packet.Write((int)MechTransfer.ModMessageID.FilterSyncing);
+                packet.Write((byte)MechTransfer.ModMessageID.FilterSyncing);
                 packet.Write(ID);
                 packet.Write(ItemId);
                 packet.Send();

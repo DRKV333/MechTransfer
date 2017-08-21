@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -47,7 +48,10 @@ namespace MechTransfer.Tiles
 
         public override void RightClick(int i, int j)
         {
-            Rotate(i, j, false);
+            if (Main.netMode == 1)
+                RequestRotate(i, j);
+            else
+                Rotate(i, j, false);
         }
 
         public void Rotate(int i, int j, bool skipWies)
@@ -105,6 +109,21 @@ namespace MechTransfer.Tiles
                 Wiring.SkipWire(originX, originY + 1);
                 Wiring.SkipWire(originX + 1, originY + 1);
             }
+
+
+            if (Main.netMode == 2)
+            {
+                NetMessage.SendTileSquare(-1, originX, originY, 2, TileChangeType.None);
+            }
+        }
+
+        public void RequestRotate(int i, int j)
+        {
+            ModPacket packet = mod.GetPacket();
+            packet.Write((byte)MechTransfer.ModMessageID.RotateTurret);
+            packet.Write((Int16)i);
+            packet.Write((Int16)j);
+            packet.Send();
         }
 
         public override void MouseOver(int i, int j)

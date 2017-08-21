@@ -171,7 +171,7 @@ namespace MechTransfer
                 else
                 {
                     ModPacket packet = mod.GetPacket();
-                    packet.Write((int)MechTransfer.ModMessageID.CreateDust);
+                    packet.Write((byte)MechTransfer.ModMessageID.CreateDust);
                     packet.WriteVector2(location);
                     packet.WriteVector2(velocity);
                     packet.Send();

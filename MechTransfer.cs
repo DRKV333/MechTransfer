@@ -18,7 +18,7 @@ namespace MechTransfer
 {
     public class MechTransfer : Mod
     {
-        public enum ModMessageID { FilterSyncing, CreateDust }
+        public enum ModMessageID { FilterSyncing, CreateDust, RotateTurret, ProjectileMakeHostile }
 
         internal Dictionary<int, ContainerAdapterDefinition> ContainerAdapters = new Dictionary<int, ContainerAdapterDefinition>();
         internal HashSet<int> PickupBlacklist = new HashSet<int>();
@@ -154,7 +154,7 @@ namespace MechTransfer
 
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
-            ModMessageID id = (ModMessageID)reader.ReadInt32();
+            ModMessageID id = (ModMessageID)reader.ReadByte();
             if (id == ModMessageID.FilterSyncing)
             {
                 if (Main.netMode != 2)
@@ -170,6 +170,14 @@ namespace MechTransfer
                     return;
 
                 Dust.NewDustPerfect(reader.ReadVector2(), DustID.Silver, reader.ReadVector2()).noGravity = true;
+            }
+            else if (id == ModMessageID.RotateTurret)
+            {
+                GetTile<OmniTurretTile>().Rotate(reader.ReadInt16(), reader.ReadInt16(), false);
+            }
+            else if (id == ModMessageID.ProjectileMakeHostile)
+            {
+                Main.projectile[reader.ReadInt16()].hostile = true;
             }
         }
 
@@ -207,7 +215,7 @@ namespace MechTransfer
             Call(registerAdapterReflection, weaponRackAdapter, new int[] { TileID.WeaponsRack });
 
             //Omni turret
-            OmniTurretAdapter omniTurretAdapter = new OmniTurretAdapter();
+            OmniTurretAdapter omniTurretAdapter = new OmniTurretAdapter(this);
             Call(registerAdapterReflection, omniTurretAdapter, new int[] { TileType<OmniTurretTile>() });
 
             //Chest
