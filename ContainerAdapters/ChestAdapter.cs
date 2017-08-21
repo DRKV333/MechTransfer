@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ObjectData;
 
 namespace MechTransfer.ContainerAdapters
 {
@@ -18,7 +17,7 @@ namespace MechTransfer.ContainerAdapters
             int originX = x;
             int originY = y;
 
-            if(TileLoader.IsDresser(tile.type))
+            if (TileLoader.IsDresser(tile.type))
                 originX -= tile.frameX % 54 / 18;
             else
                 originX -= tile.frameX % 36 / 18;

@@ -1,15 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.ID;
 
 namespace MechTransfer.ContainerAdapters
 {
-    class OmniTurretAdapter
+    internal class OmniTurretAdapter
     {
         private int[] baseDamage = new int[] { 17, 25, 50 };
         private int[] fireRate = new int[] { 11, 7, 0 };
@@ -41,10 +38,10 @@ namespace MechTransfer.ContainerAdapters
                 return false;
 
             int style = origin.frameX / 36;
-            
+
             if (fireRate[style] != 0 && !Wiring.CheckMech(originX, originY, fireRate[style]))
                 return false;
-                
+
             Vector2 position = new Vector2((originX + 1) * 16, (originY + 1) * 16);
 
             Vector2 direction = Vector2.Zero;
@@ -63,7 +60,6 @@ namespace MechTransfer.ContainerAdapters
             Main.projectile[Projectile.NewProjectile(position, direction * shootSpeed[style], item.shoot, baseDamage[style] * (1 + item.damage / 100), item.knockBack, Main.myPlayer)].hostile = true;
 
             return true;
-
         }
     }
 }

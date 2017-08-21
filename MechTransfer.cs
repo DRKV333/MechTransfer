@@ -4,12 +4,12 @@ using MechTransfer.Tiles;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq.Expressions;
+using System.Reflection;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using System.Reflection;
-using System.Linq.Expressions;
 using EnumerateItemsDelegate = System.Func<int, int, System.Collections.Generic.IEnumerable<System.Tuple<Terraria.Item, object>>>;
 using InjectItemDelegate = System.Func<int, int, Terraria.Item, bool>;
 using TakeItemDelegate = System.Action<int, int, object, int>;
@@ -127,7 +127,7 @@ namespace MechTransfer
 
                     foreach (var t in (int[])args[2])
                     {
-                        if(!ContainerAdapters.ContainsKey(t))
+                        if (!ContainerAdapters.ContainsKey(t))
                             ContainerAdapters.Add(t, definition);
                     }
                     return definition;
@@ -164,7 +164,7 @@ namespace MechTransfer
                 entity.ItemId = reader.ReadInt32();
                 NetMessage.SendData(MessageID.TileEntitySharing, -1, whoAmI, null, entity.ID, entity.Position.X, entity.Position.Y);
             }
-            else if(id == ModMessageID.CreateDust)
+            else if (id == ModMessageID.CreateDust)
             {
                 if (Main.netMode != 1)
                     return;

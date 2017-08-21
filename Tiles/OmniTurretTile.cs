@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ModLoader;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
 using Terraria.ObjectData;
-using Microsoft.Xna.Framework;
-using Terraria.DataStructures;
 
 namespace MechTransfer.Tiles
 {
-    class OmniTurretTile : ModTile
+    public class OmniTurretTile : ModTile
     {
         public override void SetDefaults()
         {
@@ -36,7 +31,7 @@ namespace MechTransfer.Tiles
         public int DropType(int frameX)
         {
             int style = frameX / 36;
-            switch(style)
+            switch (style)
             {
                 case 0: return mod.ItemType("OmniTurretItem");
                 case 1: return mod.ItemType("SuperOmniTurretItem");
@@ -77,7 +72,7 @@ namespace MechTransfer.Tiles
                     Main.tile[originX, originY + 1].frameY -= 38;
                     Main.tile[originX + 1, originY + 1].frameY -= 38;
                 }
-                else if(origin.frameY == 0)
+                else if (origin.frameY == 0)
                 {
                     origin.frameY = 228;
                     Main.tile[originX + 1, originY].frameY = 228;
@@ -94,7 +89,7 @@ namespace MechTransfer.Tiles
                     Main.tile[originX, originY + 1].frameY += 38;
                     Main.tile[originX + 1, originY + 1].frameY += 38;
                 }
-                else if(origin.frameY == 228)
+                else if (origin.frameY == 228)
                 {
                     origin.frameY = 0;
                     Main.tile[originX + 1, originY].frameY = 0;
@@ -103,7 +98,7 @@ namespace MechTransfer.Tiles
                 }
             }
 
-            if(skipWies)
+            if (skipWies)
             {
                 Wiring.SkipWire(originX, originY);
                 Wiring.SkipWire(originX + 1, originY);

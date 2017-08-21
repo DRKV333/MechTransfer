@@ -50,7 +50,7 @@ namespace MechTransfer
         private static bool SearchForTarget(int startX, int startY, Item IToTransfer)
         {
             Queue<Point16> searchQ = new Queue<Point16>();
-            Dictionary<Point16,byte> visited = new Dictionary<Point16, byte>();
+            Dictionary<Point16, byte> visited = new Dictionary<Point16, byte>();
 
             searchQ.Enqueue(new Point16(startX, startY));
             visited.Add(new Point16(startX, startY), (byte)Direction.stop);

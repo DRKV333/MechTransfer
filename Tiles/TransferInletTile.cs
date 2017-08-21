@@ -15,7 +15,7 @@ namespace MechTransfer.Tiles
             Main.tileFrameImportant[Type] = true;
             Main.tileSolid[Type] = true;
             Main.tileNoFail[Type] = true;
-            Main.tileNoAttach[Type] = true; 
+            Main.tileNoAttach[Type] = true;
             dustType = 1;
 
             TileObjectData.newTile.Width = 3;
