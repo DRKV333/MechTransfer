@@ -40,3 +40,6 @@ v1.4
 - Added Omni turret, Super omni turret and Matter projector
 - Added support for dressers
 - Added reflection based adapter loading
+
+v1.4.1
+- Fixed modded chest support
