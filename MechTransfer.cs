@@ -220,8 +220,11 @@ namespace MechTransfer
             //Omni turret
             OmniTurretAdapter omniTurretAdapter = new OmniTurretAdapter(this);
             Call(registerAdapterReflection, omniTurretAdapter, new int[] { TileType<OmniTurretTile>() });
+        }
 
-            //Chest
+        //This needs to be called from SetupRecipies, because chests are made in SetupContent.
+        private void LoadChestAdapters()
+        {
             ChestAdapter chestAdapter = new ChestAdapter();
             List<int> chestTypes = new List<int>();
             for (int i = 0; i < TileLoader.TileCount; i++)
@@ -229,7 +232,6 @@ namespace MechTransfer
                 if (TileID.Sets.BasicChest[i] || TileID.Sets.BasicChestFake[i] || TileLoader.IsDresser(i))
                 {
                     chestTypes.Add(i);
-                    continue;
                 }
             }
             Call(registerAdapterReflection, chestAdapter, chestTypes.ToArray());
@@ -339,6 +341,8 @@ namespace MechTransfer
             r.AddTile(TileID.LunarCraftingStation);
             r.SetResult(ItemType("MatterProjectorItem"), 1);
             r.AddRecipe();
+
+            LoadChestAdapters();
         }
 
         private void LoadItems()
