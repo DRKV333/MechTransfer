@@ -1,5 +1,9 @@
 author = DRKV
-version = 1.4
+version = 1.4.1
 displayName = MechTransfer
 includePDB = false
+buildIgnore = .gitignore, description.txt, *.csproj*, *.sln, .git/*, .vs/*, bin/*, obj/*, *.xcf
+hideCode = false
+hideResources = false
+includeSource = true
 homepage = https://forums.terraria.org/index.php?threads/mechtransfer-item-translocation-and-more.60571/
