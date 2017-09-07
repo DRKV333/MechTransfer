@@ -53,6 +53,7 @@ namespace MechTransfer.Tiles
         public override void MouseOver(int i, int j)
         {
             DisplayTooltip(i, j);
+            Main.LocalPlayer.noThrow = 2;
         }
 
         public void DisplayTooltip(int i, int j)
