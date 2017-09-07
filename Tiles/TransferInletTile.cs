@@ -34,21 +34,9 @@ namespace MechTransfer.Tiles
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Item.NewItem(i * 16, j * 16, 16, 16, mod.ItemType("TransferInletItem"));
-            mod.GetTileEntity<TransferInletTileEntity>().Kill(i, j);
-        }
-
-        public override bool CanKillTile(int i, int j, ref bool blockDamaged)
-        {
-            Tile tile = Main.tile[i, j];
-            int originX = i - (tile.frameX / 18 - 1);
-            tile = Main.tile[originX, j - 1];
-            if (tile != null && tile.active() && (TileID.Sets.BasicChest[tile.type] || TileID.Sets.BasicChestFake[tile.type]))
-            {
-                blockDamaged = true;
-                return false;
-            }
-            return true;
+            int originX = (i - frameX / 18) + 1;
+            Item.NewItem(originX * 16, j * 16, 16, 16, mod.ItemType("TransferInletItem"));
+            mod.GetTileEntity<TransferInletTileEntity>().Kill(originX, j);
         }
     }
 }
