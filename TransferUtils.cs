@@ -16,7 +16,7 @@ namespace MechTransfer
 
         private const float dustVelocity = 1.5f;
 
-        public static MechTransfer mod;
+        private static MechTransfer mod = (MechTransfer)ModLoader.GetMod("MechTransfer");
         private static List<Point16> relayTriggered = new List<Point16>(); //stops infinite recursion
 
         public static void EatWorldItem(int id, int eatNumber = 1)

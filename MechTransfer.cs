@@ -18,7 +18,7 @@ namespace MechTransfer
 {
     public class MechTransfer : Mod
     {
-        public enum ModMessageID { FilterSyncing, CreateDust, RotateTurret, ProjectileMakeHostile }
+        public enum ModMessageID { FilterSyncing, CreateDust, RotateTurret, ProjectileMakeHostile, KickFromChest }
 
         internal Dictionary<int, ContainerAdapterDefinition> ContainerAdapters = new Dictionary<int, ContainerAdapterDefinition>();
         internal HashSet<int> PickupBlacklist = new HashSet<int>();
@@ -34,7 +34,6 @@ namespace MechTransfer
                 AutoloadGores = true,
                 AutoloadSounds = true
             };
-            TransferUtils.mod = this;
         }
 
         public override object Call(params object[] args)
@@ -143,18 +142,6 @@ namespace MechTransfer
             return null;
         }
 
-        public override bool HijackGetData(ref byte messageType, ref BinaryReader reader, int playerNumber)
-        {
-            if (Main.netMode == 1 && messageType == MessageID.SyncChestItem && Main.LocalPlayer.chest == reader.ReadInt16())
-            {
-                //This a temporary fix for multiplayer item duplication
-                Main.LocalPlayer.chest = -1;
-                Recipe.FindRecipes();
-                Main.PlaySound(SoundID.MenuClose);
-            }
-            return false;
-        }
-
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
             ModMessageID id = (ModMessageID)reader.ReadByte();
@@ -181,6 +168,12 @@ namespace MechTransfer
             else if (id == ModMessageID.ProjectileMakeHostile)
             {
                 Main.projectile[reader.ReadInt16()].hostile = true;
+            }
+            else if (id == ModMessageID.KickFromChest)
+            {
+                Main.LocalPlayer.chest = -1;
+                Recipe.FindRecipes();
+                Main.PlaySound(SoundID.MenuClose);
             }
         }
 

@@ -8,6 +8,8 @@ namespace MechTransfer.ContainerAdapters
 {
     internal class ChestAdapter
     {
+        private static MechTransfer mod = (MechTransfer)ModLoader.GetMod("MechTransfer");
+
         private int FindChest(int x, int y)
         {
             Tile tile = Main.tile[x, y];
@@ -30,15 +32,16 @@ namespace MechTransfer.ContainerAdapters
                 return -1;
         }
 
-        private void HandleChestItemChange(int chest, int slot)
+        private void HandleChestItemChange(int chest)
         {
             int targetPlayer = WhichPlayerInChest(chest);
             if (targetPlayer != -1)
             {
                 if (Main.netMode == 2)
                 {
-                    Item item = Main.chest[chest].item[slot];
-                    NetMessage.SendData(MessageID.SyncChestItem, targetPlayer, -1, null, chest, slot, item.stack, item.prefix, item.type);
+                    ModPacket packet = mod.GetPacket();
+                    packet.Write((byte)MechTransfer.ModMessageID.KickFromChest);
+                    packet.Send(targetPlayer);
                 }
                 else if (Main.netMode == 0)
                     Recipe.FindRecipes();
@@ -72,7 +75,7 @@ namespace MechTransfer.ContainerAdapters
                     if (item.IsTheSameAs(chestItem) && chestItem.stack < chestItem.maxStack)
                     {
                         chestItem.stack++;
-                        HandleChestItemChange(c, i);
+                        HandleChestItemChange(c);
                         return true;
                     }
                 }
@@ -83,7 +86,7 @@ namespace MechTransfer.ContainerAdapters
                 if (Main.chest[c].item[i].IsAir)
                 {
                     Main.chest[c].item[i] = item;
-                    HandleChestItemChange(c, i);
+                    HandleChestItemChange(c);
                     return true;
                 }
             }
@@ -112,7 +115,7 @@ namespace MechTransfer.ContainerAdapters
                 return;
 
             TransferUtils.EatItem(ref Main.chest[c].item[(int)slot], amount);
-            HandleChestItemChange(c, (int)slot);
+            HandleChestItemChange(c);
         }
     }
 }
