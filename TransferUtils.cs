@@ -150,32 +150,62 @@ namespace MechTransfer
             while (visited.ContainsKey(p))
             {
                 Direction dir = (Direction)visited[p];
-
-                Vector2 velocity = Vector2.Zero;
-
+                
                 switch (dir)
                 {
-                    case Direction.up: p = new Point16(p.X, p.Y - 1); velocity.Y = dustVelocity; break;
-                    case Direction.down: p = new Point16(p.X, p.Y + 1); velocity.Y = -dustVelocity; break;
-                    case Direction.left: p = new Point16(p.X - 1, p.Y); velocity.X = dustVelocity; break;
-                    case Direction.right: p = new Point16(p.X + 1, p.Y); velocity.X = -dustVelocity; break;
+                    case Direction.up: p = new Point16(p.X, p.Y - 1); break;
+                    case Direction.down: p = new Point16(p.X, p.Y + 1); break;
+                    case Direction.left: p = new Point16(p.X - 1, p.Y); break;
+                    case Direction.right: p = new Point16(p.X + 1, p.Y); break;
                     case Direction.stop: return;
                 }
-
-                Vector2 location = new Vector2(p.X * 16 + 8, p.Y * 16 + 8);
-
+                
                 if (Main.netMode == 0)
                 {
-                    Dust.NewDustPerfect(location, DustID.Silver, velocity).noGravity = true;
+                    CreateVisual(p, dir);
                 }
                 else
                 {
                     ModPacket packet = mod.GetPacket();
                     packet.Write((byte)MechTransfer.ModMessageID.CreateDust);
-                    packet.WriteVector2(location);
-                    packet.WriteVector2(velocity);
+                    packet.WritePackedVector2(p.ToVector2());
+                    packet.Write((byte)dir);
                     packet.Send();
                 }
+            }
+        }
+
+        public static void CreateVisual(Point16 point, Direction dir)
+        {
+            Vector2 location = new Vector2(point.X * 16 + 8, point.Y * 16 + 8);
+            Vector2 velocity = Vector2.Zero;
+
+            switch (dir)
+            {
+                case Direction.up: velocity.Y = dustVelocity; break;
+                case Direction.down: velocity.Y = -dustVelocity; break;
+                case Direction.left: velocity.X = dustVelocity; break;
+                case Direction.right: velocity.X = -dustVelocity; break;
+                case Direction.stop: return;
+            }
+
+            Dust dust = Dust.NewDustPerfect(location, DustID.Silver, velocity);
+            dust.noGravity = true;
+
+            if (Main.xMas)
+            {
+                if (point.X % 2 == point.Y % 2)
+                    dust.color = Color.Red;
+                else
+                    dust.color = Color.LightGreen;
+            }
+
+            if (Main.halloween)
+            {
+                if (point.X % 2 == point.Y % 2)
+                    dust.color = Color.MediumPurple;
+                else
+                    dust.color = Color.Orange;
             }
         }
 

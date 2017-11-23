@@ -159,7 +159,7 @@ namespace MechTransfer
                 if (Main.netMode != 1)
                     return;
 
-                Dust.NewDustPerfect(reader.ReadVector2(), DustID.Silver, reader.ReadVector2()).noGravity = true;
+                TransferUtils.CreateVisual(reader.ReadPackedVector2().ToPoint16(), (TransferUtils.Direction)reader.ReadByte());
             }
             else if (id == ModMessageID.RotateTurret)
             {
