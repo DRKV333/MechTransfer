@@ -1,19 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
-using Terraria.UI;
-using Terraria.GameContent.UI.Elements;
-using Terraria.ModLoader;
-using MechTransfer;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Terraria.ID;
+using Terraria;
 using Terraria.GameContent.UI;
-using Terraria.DataStructures;
-using MechTransfer.Tiles;
+using Terraria.GameContent.UI.Elements;
+using Terraria.UI;
 
 namespace MechTransfer.UI
 {
@@ -24,8 +14,8 @@ namespace MechTransfer.UI
         private UIPanel panel;
         private UIText itemText;
         private UIText titleText;
-        private Item displayItem = new Item(); 
-        
+        private Item displayItem = new Item();
+
         public override void OnInitialize()
         {
             titleText = new UIText("Not set");

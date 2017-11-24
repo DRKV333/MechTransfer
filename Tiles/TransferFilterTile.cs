@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
@@ -62,7 +61,7 @@ namespace MechTransfer.Tiles
             if (id == -1)
                 return;
             TransferFilterTileEntity entity = (TransferFilterTileEntity)TileEntity.ByID[id];
-            
+
             ((MechTransfer)mod).filterHoverUI.Display(entity.ItemId, "Filter:", Color.White);
         }
     }

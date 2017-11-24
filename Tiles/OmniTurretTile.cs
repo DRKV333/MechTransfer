@@ -110,7 +110,6 @@ namespace MechTransfer.Tiles
                 Wiring.SkipWire(originX + 1, originY + 1);
             }
 
-
             if (Main.netMode == 2)
             {
                 NetMessage.SendTileSquare(-1, originX, originY, 2, TileChangeType.None);

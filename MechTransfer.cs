@@ -1,6 +1,7 @@
 using MechTransfer.ContainerAdapters;
 using MechTransfer.Items;
 using MechTransfer.Tiles;
+using MechTransfer.UI;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,7 +11,6 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using MechTransfer.UI;
 using Terraria.UI;
 using EnumerateItemsDelegate = System.Func<int, int, System.Collections.Generic.IEnumerable<System.Tuple<Terraria.Item, object>>>;
 using InjectItemDelegate = System.Func<int, int, Terraria.Item, bool>;
@@ -186,7 +186,7 @@ namespace MechTransfer
         public override void Load()
         {
             LoadItems();
-            if(!Main.dedServ)
+            if (!Main.dedServ)
                 LoadUI();
         }
 
@@ -195,7 +195,7 @@ namespace MechTransfer
             int index = layers.FindIndex(x => x.Name == "Vanilla: Mouse Text") + 1;
             layers.Insert(index, interfaceLayer);
 
-            if(filterHoverUI.visible)
+            if (filterHoverUI.visible)
             {
                 layers.Find(x => x.Name == "Vanilla: Interact Item Icon").Active = false;
             }
@@ -213,7 +213,8 @@ namespace MechTransfer
             filterHoverUI.Activate();
 
             interfaceLayer = new LegacyGameInterfaceLayer("MechTransfer: UI",
-                                                            delegate {
+                                                            delegate
+                                                            {
                                                                 filterHoverUI.Draw(Main.spriteBatch);
                                                                 return true;
                                                             },

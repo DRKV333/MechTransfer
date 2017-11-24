@@ -150,7 +150,7 @@ namespace MechTransfer
             while (visited.ContainsKey(p))
             {
                 Direction dir = (Direction)visited[p];
-                
+
                 switch (dir)
                 {
                     case Direction.up: p = new Point16(p.X, p.Y - 1); break;
@@ -159,7 +159,7 @@ namespace MechTransfer
                     case Direction.right: p = new Point16(p.X + 1, p.Y); break;
                     case Direction.stop: return;
                 }
-                
+
                 if (Main.netMode == 0)
                 {
                     CreateVisual(p, dir);
