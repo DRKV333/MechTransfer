@@ -10,6 +10,8 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using MechTransfer.UI;
+using Terraria.UI;
 using EnumerateItemsDelegate = System.Func<int, int, System.Collections.Generic.IEnumerable<System.Tuple<Terraria.Item, object>>>;
 using InjectItemDelegate = System.Func<int, int, Terraria.Item, bool>;
 using TakeItemDelegate = System.Action<int, int, object, int>;
@@ -22,9 +24,13 @@ namespace MechTransfer
 
         internal Dictionary<int, ContainerAdapterDefinition> ContainerAdapters = new Dictionary<int, ContainerAdapterDefinition>();
         internal HashSet<int> PickupBlacklist = new HashSet<int>();
+
         private const string callErorPrefix = "MechTransfer Call() error: ";
         private const string registerAdapter = "RegisterAdapter";
         private const string registerAdapterReflection = "RegisterAdapterReflection";
+
+        private GameInterfaceLayer interfaceLayer;
+        public FilterHoverUI filterHoverUI;
 
         public MechTransfer()
         {
@@ -180,12 +186,38 @@ namespace MechTransfer
         public override void Load()
         {
             LoadItems();
+            if(!Main.dedServ)
+                LoadUI();
+        }
+
+        public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
+        {
+            int index = layers.FindIndex(x => x.Name == "Vanilla: Mouse Text") + 1;
+            layers.Insert(index, interfaceLayer);
+
+            if(filterHoverUI.visible)
+            {
+                layers.Find(x => x.Name == "Vanilla: Interact Item Icon").Active = false;
+            }
         }
 
         public override void PostSetupContent()
         {
             LoadAdapters();
             LoadBlacklist();
+        }
+
+        private void LoadUI()
+        {
+            filterHoverUI = new FilterHoverUI();
+            filterHoverUI.Activate();
+
+            interfaceLayer = new LegacyGameInterfaceLayer("MechTransfer: UI",
+                                                            delegate {
+                                                                filterHoverUI.Draw(Main.spriteBatch);
+                                                                return true;
+                                                            },
+                                                            InterfaceScaleType.UI);
         }
 
         private void LoadAdapters()

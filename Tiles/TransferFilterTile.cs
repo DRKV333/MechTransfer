@@ -62,19 +62,8 @@ namespace MechTransfer.Tiles
             if (id == -1)
                 return;
             TransferFilterTileEntity entity = (TransferFilterTileEntity)TileEntity.ByID[id];
-
-            if (entity.ItemId == 0)
-            {
-                Main.LocalPlayer.showItemIconText = "      Filter: Empty";
-                Main.LocalPlayer.showItemIcon2 = drop;
-            }
-            else
-            {
-                Main.LocalPlayer.showItemIconText = String.Format("      Filter: {0}", TransferUtils.ItemNameById(entity.ItemId));
-                Main.LocalPlayer.showItemIcon2 = entity.ItemId;
-            }
-
-            Main.LocalPlayer.showItemIcon = true;
+            
+            ((MechTransfer)mod).filterHoverUI.Display(entity.ItemId, "Filter:", Color.White);
         }
     }
 }
