@@ -25,7 +25,7 @@ namespace MechTransfer.UI
 
             panel = new UIPanel();
             panel.Left.Set(0, 0);
-            panel.Top.Set(20, 0);
+            panel.Top.Set(25, 0);
             panel.Width.Set(200, 0);
             panel.Height.Set(Main.inventoryBackTexture.Height * 0.5f * Main.UIScale + 10, 0);
 
@@ -64,7 +64,7 @@ namespace MechTransfer.UI
 
             float oldScale = Main.inventoryScale;
             Main.inventoryScale = 0.5f;
-            ItemSlot.Draw(spriteBatch, ref displayItem, ItemSlot.Context.InventoryItem, new Vector2(Left.Pixels + 5, Top.Pixels + 25));
+            ItemSlot.Draw(spriteBatch, ref displayItem, ItemSlot.Context.InventoryItem, new Vector2(Left.Pixels + 5, Top.Pixels + 30));
             Main.inventoryScale = oldScale;
 
             visible = false;

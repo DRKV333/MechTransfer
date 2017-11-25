@@ -54,7 +54,6 @@ namespace MechTransfer.Tiles
                 return;
             TransferAssemblerTileEntity entity = (TransferAssemblerTileEntity)TileEntity.ByID[filterId];
 
-            List<Recipe> candidates = new List<Recipe>();
             for (int r = 0; r < Recipe.maxRecipes && !Main.recipe[r].createItem.IsAir; r++)
             {
                 if (Main.recipe[r].createItem.type == entity.ItemId && TryMakeRecipe(Main.recipe[r], entity))
@@ -184,7 +183,7 @@ namespace MechTransfer.Tiles
             switch (entity.Status)
             {
                 case TransferAssemblerTileEntity.StatusKind.Ready:
-                    statusText = "[c/FFFF00:Ready]"; statusColor = Color.Yellow; break;
+                    statusText = "Ready"; statusColor = Color.Yellow; break;
                 case TransferAssemblerTileEntity.StatusKind.Success:
                     statusText = "Success"; statusColor = Color.Green; break;
                 case TransferAssemblerTileEntity.StatusKind.MissingItem:
