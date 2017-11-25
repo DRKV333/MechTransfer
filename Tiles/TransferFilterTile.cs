@@ -7,7 +7,7 @@ using Terraria.ObjectData;
 
 namespace MechTransfer.Tiles
 {
-    public class TransferFilterTile : ModTile
+    public class TransferFilterTile : FilterableTile
     {
         public override void SetDefaults()
         {
@@ -23,46 +23,13 @@ namespace MechTransfer.Tiles
 
             drop = mod.ItemType("TransferFilterItem");
             AddMapEntry(new Color(200, 200, 200));
+
+            hoverText = "Item allowed:";
         }
 
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
         {
             mod.GetTileEntity<TransferFilterTileEntity>().Kill(i, j);
-        }
-
-        public override void RightClick(int i, int j)
-        {
-            if (!Main.LocalPlayer.HeldItem.IsAir)
-            {
-                int id = mod.GetTileEntity<TransferFilterTileEntity>().Find(i, j);
-                if (id != -1)
-                {
-                    TransferFilterTileEntity tileEntity = (TransferFilterTileEntity)TileEntity.ByID[id];
-                    tileEntity.ItemId = Main.LocalPlayer.HeldItem.type;
-                    tileEntity.SyncData();
-                }
-            }
-        }
-
-        public override void MouseOverFar(int i, int j)
-        {
-            DisplayTooltip(i, j);
-        }
-
-        public override void MouseOver(int i, int j)
-        {
-            DisplayTooltip(i, j);
-            Main.LocalPlayer.noThrow = 2;
-        }
-
-        public void DisplayTooltip(int i, int j)
-        {
-            int id = mod.GetTileEntity<TransferFilterTileEntity>().Find(i, j);
-            if (id == -1)
-                return;
-            TransferFilterTileEntity entity = (TransferFilterTileEntity)TileEntity.ByID[id];
-
-            ((MechTransfer)mod).filterHoverUI.Display(entity.ItemId, "Filter:", Color.White);
         }
     }
 }

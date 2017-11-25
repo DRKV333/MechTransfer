@@ -10,7 +10,7 @@ using Terraria.ObjectData;
 
 namespace MechTransfer.Tiles
 {
-    public class TransferAssemblerTile : ModTile
+    public class TransferAssemblerTile : FilterableTile
     {
         private ItemInventory inventory = new ItemInventory();
 
@@ -172,32 +172,7 @@ namespace MechTransfer.Tiles
             mod.GetTileEntity<TransferAssemblerTileEntity>().Kill(i, j);
         }
 
-        public override void RightClick(int i, int j)
-        {
-            if (!Main.LocalPlayer.HeldItem.IsAir)
-            {
-                int id = mod.GetTileEntity<TransferAssemblerTileEntity>().Find(i, j);
-                if (id != -1)
-                {
-                    TransferAssemblerTileEntity tileEntity = (TransferAssemblerTileEntity)TileEntity.ByID[id];
-                    tileEntity.ItemId = Main.LocalPlayer.HeldItem.type;
-                    tileEntity.SyncData();
-                }
-            }
-        }
-
-        public override void MouseOverFar(int i, int j)
-        {
-            DisplayTooltip(i, j);
-        }
-
-        public override void MouseOver(int i, int j)
-        {
-            DisplayTooltip(i, j);
-            Main.LocalPlayer.noThrow = 2;
-        }
-
-        public void DisplayTooltip(int i, int j)
+        public override void DisplayTooltip(int i, int j)
         {
             int id = mod.GetTileEntity<TransferAssemblerTileEntity>().Find(i, j);
             if (id == -1)
@@ -205,34 +180,22 @@ namespace MechTransfer.Tiles
             TransferAssemblerTileEntity entity = (TransferAssemblerTileEntity)TileEntity.ByID[id];
 
             string statusText = "";
+            Color statusColor = Color.White;
             switch (entity.Status)
             {
                 case TransferAssemblerTileEntity.StatusKind.Ready:
-                    statusText = "[c/FFFF00:Ready]"; break;
+                    statusText = "[c/FFFF00:Ready]"; statusColor = Color.Yellow; break;
                 case TransferAssemblerTileEntity.StatusKind.Success:
-                    statusText = "[c/00FF00:Success]"; break;
+                    statusText = "Success"; statusColor = Color.Green; break;
                 case TransferAssemblerTileEntity.StatusKind.MissingItem:
-                    statusText = string.Format("[c/FF0000:Missing ingredient ({0})]", TransferUtils.ItemNameById(entity.MissingItemType)); break;
+                    statusText = string.Format("Missing ingredient ({0})", TransferUtils.ItemNameById(entity.MissingItemType)); statusColor = Color.Red; break;
                 case TransferAssemblerTileEntity.StatusKind.MissingStation:
-                    statusText = "[c/FF0000:Missing crafting station]"; break;
+                    statusText = "Missing crafting station"; statusColor = Color.Red; break;
                 case TransferAssemblerTileEntity.StatusKind.MissingSpace:
-                    statusText = "[c/FF0000:Inventory full]"; break;
+                    statusText = "Inventory full"; statusColor = Color.Red; break;
             }
 
-            string itemText = "";
-            if (entity.ItemId == 0)
-            {
-                itemText = "Not set";
-                Main.LocalPlayer.showItemIcon2 = drop;
-            }
-            else
-            {
-                itemText = TransferUtils.ItemNameById(entity.ItemId);
-                Main.LocalPlayer.showItemIcon2 = entity.ItemId;
-            }
-
-            Main.LocalPlayer.showItemIconText = string.Format("      Crafting: {0}\n{1}", itemText, statusText);
-            Main.LocalPlayer.showItemIcon = true;
+            ((MechTransfer)mod).filterHoverUI.Display(entity.ItemId, "Crafting: " + statusText, statusColor);
         }
     }
 }
