@@ -13,6 +13,7 @@ namespace MechTransfer.Tiles
     public class TransferAssemblerTile : ModTile
     {
         private ItemInventory inventory = new ItemInventory();
+        private Item stockpile = new Item();
 
         private Dictionary<int, int[]> tileRemap = new Dictionary<int, int[]>() {
             { 302,  new int[]{ 17 } },
@@ -67,6 +68,18 @@ namespace MechTransfer.Tiles
 
         private bool TryMakeRecipe(Recipe recipe, TransferAssemblerTileEntity entity)
         {
+            
+            while (stockpile.stack > 0)
+            {
+                Item safeCLone = stockpile.Clone();
+                safeCLone.stack = 1;
+                if(!TransferUtils.InjectItem(entity.Position.X, entity.Position.Y, safeCLone))
+                {
+                    return true;
+                }
+                stockpile.stack--;
+            }
+
             for (int i = 0; i < Recipe.maxRequirements && !recipe.requiredItem[i].IsAir; i++)
             {
                 if (!inventory.TryTakeIngredient(recipe, recipe.requiredItem[i]))
@@ -93,10 +106,27 @@ namespace MechTransfer.Tiles
                 ItemLoader.OnCraft(clone, recipe);
             }
 
-            if (!TransferUtils.InjectItem(entity.Position.X, entity.Position.Y, clone))
+            if (clone.stack == 1)
             {
-                entity.Status = TransferAssemblerTileEntity.StatusKind.MissingSpace;
-                return true; //returning with success, so we don't try alternate recipes
+                if (!TransferUtils.InjectItem(entity.Position.X, entity.Position.Y, clone))
+                {
+                    entity.Status = TransferAssemblerTileEntity.StatusKind.MissingSpace;
+                    return true; //returning with success, so we don't try alternate recipes
+                }
+            }
+            else
+            {
+                stockpile = clone;
+                while (stockpile.stack > 0)
+                {
+                    Item safeCLone = stockpile.Clone();
+                    safeCLone.stack = 1;
+                    if (!TransferUtils.InjectItem(entity.Position.X, entity.Position.Y, safeCLone))
+                    {
+                        break;
+                    }
+                    stockpile.stack--;
+                }
             }
 
             inventory.Commit(alchemy);

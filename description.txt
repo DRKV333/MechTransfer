@@ -43,3 +43,6 @@ v1.4
 
 v1.4.1
 - Fixed modded chest support
+
+v1.4.2
+- Quick fix to stop assembler from eating items
