@@ -14,8 +14,6 @@ namespace MechTransfer.ContainerAdapters
 {
     class MagicStorageInterfaceAdapter
     {
-        private static MechTransfer mod = (MechTransfer)ModLoader.GetMod("MechTransfer");
-
         private TEStorageHeart FindHeart(int x, int y)
         {
             Point16 center = TEStorageComponent.FindStorageCenter(new Point16(x, y));

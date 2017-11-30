@@ -7,7 +7,12 @@ namespace MechTransfer.ContainerAdapters
 {
     internal class ChestAdapter
     {
-        private static MechTransfer mod = (MechTransfer)ModLoader.GetMod("MechTransfer");
+        private Mod mod;
+
+        public ChestAdapter(Mod mod)
+        {
+            this.mod = mod;
+        }
 
         private int FindChest(int x, int y)
         {

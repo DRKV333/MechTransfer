@@ -143,8 +143,6 @@ namespace MechTransfer
 
         private static void UnwindVisuals(Dictionary<Point16, byte> visited, Point16 startPoint)
         {
-            MechTransferWorld world = mod.GetModWorld<MechTransferWorld>();
-
             Point16 p = startPoint;
 
             while (visited.ContainsKey(p))

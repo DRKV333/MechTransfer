@@ -283,7 +283,7 @@ namespace MechTransfer
         //This needs to be called from SetupRecipies, because chests are made in SetupContent.
         private void LoadChestAdapters()
         {
-            ChestAdapter chestAdapter = new ChestAdapter();
+            ChestAdapter chestAdapter = new ChestAdapter(this);
             List<int> chestTypes = new List<int>();
             for (int i = 0; i < TileLoader.TileCount; i++)
             {

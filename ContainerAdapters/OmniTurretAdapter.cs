@@ -15,9 +15,9 @@ namespace MechTransfer.ContainerAdapters
         private int[] fireRate = new int[] { 11, 7, 0 };
         private int[] shootSpeed = new int[] { 10, 10, 20 };
 
-        public OmniTurretAdapter(Mod m)
+        public OmniTurretAdapter(Mod mod)
         {
-            mod = m;
+            this.mod = mod;
         }
 
         public void TakeItem(int x, int y, object slot, int amount)
