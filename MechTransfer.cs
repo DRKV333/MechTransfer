@@ -20,7 +20,7 @@ namespace MechTransfer
 {
     public class MechTransfer : Mod
     {
-        public enum ModMessageID { FilterSyncing, CreateDust, RotateTurret, ProjectileMakeHostile, KickFromChest }
+        public enum ModMessageID { FilterSyncing, InterfaceSyncing, CreateDust, RotateTurret, ProjectileMakeHostile, KickFromChest }
 
         internal Dictionary<int, ContainerAdapterDefinition> ContainerAdapters = new Dictionary<int, ContainerAdapterDefinition>();
         internal HashSet<int> PickupBlacklist = new HashSet<int>();
@@ -31,6 +31,8 @@ namespace MechTransfer
 
         private GameInterfaceLayer interfaceLayer;
         public FilterHoverUI filterHoverUI;
+
+        private Mod modMagicStorage = null;
 
         public MechTransfer()
         {
@@ -151,40 +153,63 @@ namespace MechTransfer
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
             ModMessageID id = (ModMessageID)reader.ReadByte();
-            if (id == ModMessageID.FilterSyncing)
-            {
-                if (Main.netMode != 2)
-                    return;
 
-                TransferFilterTileEntity entity = (TransferFilterTileEntity)TileEntity.ByID[reader.ReadInt32()];
-                entity.ItemId = reader.ReadInt32();
-                NetMessage.SendData(MessageID.TileEntitySharing, -1, whoAmI, null, entity.ID, entity.Position.X, entity.Position.Y);
-            }
-            else if (id == ModMessageID.CreateDust)
+            switch (id)
             {
-                if (Main.netMode != 1)
-                    return;
+                case ModMessageID.FilterSyncing:
 
-                TransferUtils.CreateVisual(reader.ReadPackedVector2().ToPoint16(), (TransferUtils.Direction)reader.ReadByte());
-            }
-            else if (id == ModMessageID.RotateTurret)
-            {
-                GetTile<OmniTurretTile>().Rotate(reader.ReadInt16(), reader.ReadInt16(), false);
-            }
-            else if (id == ModMessageID.ProjectileMakeHostile)
-            {
-                Main.projectile[reader.ReadInt16()].hostile = true;
-            }
-            else if (id == ModMessageID.KickFromChest)
-            {
-                Main.LocalPlayer.chest = -1;
-                Recipe.FindRecipes();
-                Main.PlaySound(SoundID.MenuClose);
+                    if (Main.netMode != 2)
+                        return;
+
+                    TransferFilterTileEntity FilterEntity = (TransferFilterTileEntity)TileEntity.ByID[reader.ReadInt32()];
+                    FilterEntity.ItemId = reader.ReadInt32();
+                    NetMessage.SendData(MessageID.TileEntitySharing, -1, whoAmI, null, FilterEntity.ID, FilterEntity.Position.X, FilterEntity.Position.Y);
+
+                    break;
+                case ModMessageID.InterfaceSyncing:
+
+                    if (Main.netMode != 2)
+                        return;
+
+                    MagicStorageInterfaceTileEntity InterfaceEntity = (MagicStorageInterfaceTileEntity)TileEntity.ByID[reader.ReadInt32()];
+                    for (int i = 0; i < InterfaceEntity.selectedTypes.Length; i++)
+                    {
+                        InterfaceEntity.selectedTypes[i] = reader.ReadInt32();
+                    }
+                    NetMessage.SendData(MessageID.TileEntitySharing, -1, whoAmI, null, InterfaceEntity.ID, InterfaceEntity.Position.X, InterfaceEntity.Position.Y);
+
+                    break;
+                case ModMessageID.CreateDust:
+
+                    if (Main.netMode != 1)
+                        return;
+
+                    TransferUtils.CreateVisual(reader.ReadPackedVector2().ToPoint16(), (TransferUtils.Direction)reader.ReadByte());
+                    break;
+
+                case ModMessageID.RotateTurret:
+
+                    GetTile<OmniTurretTile>().Rotate(reader.ReadInt16(), reader.ReadInt16(), false);
+                    break;
+
+                case ModMessageID.ProjectileMakeHostile:
+
+                    Main.projectile[reader.ReadInt16()].hostile = true;
+                    break;
+
+                case ModMessageID.KickFromChest:
+
+                    Main.LocalPlayer.chest = -1;
+                    Recipe.FindRecipes();
+                    Main.PlaySound(SoundID.MenuClose);
+                    break;
             }
         }
 
         public override void Load()
         {
+            modMagicStorage = ModLoader.GetMod("MagicStorage");
+
             LoadItems();
             if (!Main.dedServ)
                 LoadUI();
@@ -246,6 +271,13 @@ namespace MechTransfer
             //Omni turret
             OmniTurretAdapter omniTurretAdapter = new OmniTurretAdapter(this);
             Call(registerAdapterReflection, omniTurretAdapter, new int[] { TileType<OmniTurretTile>() });
+            
+            if (modMagicStorage != null)
+            {
+                //Magic storage interface
+                MagicStorageInterfaceAdapter magicStorageInterfaceAdapter = new MagicStorageInterfaceAdapter();
+                Call(registerAdapterReflection, magicStorageInterfaceAdapter, new int[] { TileType<MagicStorageInterfaceTile>() });
+            }
         }
 
         //This needs to be called from SetupRecipies, because chests are made in SetupContent.
@@ -462,6 +494,16 @@ namespace MechTransfer
             AddItem("MatterProjectorItem", i);
             i.DisplayName.AddTranslation(LangID.English, "Matter projector");
             i.Tooltip.AddTranslation(LangID.English, "Shoots any standard ammo really, really fast");
+            
+            if (modMagicStorage != null)
+            {
+                //Magic storage interface
+                i = new SimplePlaceableItem();
+                i.placeType = TileType<MagicStorageInterfaceTile>();
+                AddItem("MagicStorageInterfaceItem", i);
+                i.DisplayName.AddTranslation(LangID.English, "Magic storage interface");
+                i.Tooltip.AddTranslation(LangID.English, "Allows you to inject and extract items from storage systems");
+            }
         }
 
         private void LoadBlacklist()
