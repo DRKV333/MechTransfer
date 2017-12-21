@@ -29,26 +29,26 @@ namespace MechTransfer.ContainerAdapters
             yield break;
         }
 
-        public bool InjectItem(int x, int y, Item item)
+        public void InjectItem(int x, int y, Item item)
         {
             if (!item.consumable || item.ammo == 0 || item.shoot == 0)
-                return false;
+                return;
 
             Tile tile = Main.tile[x, y];
             if (tile == null || !tile.active())
-                return false;
+                return;
 
             int originX = x - (tile.frameX % 36) / 18;
             int originY = y - (tile.frameY % 36) / 18;
 
             Tile origin = Main.tile[originX, originY];
             if (origin == null || !origin.active())
-                return false;
+                return;
 
             int style = origin.frameX / 36;
 
             if (fireRate[style] != 0 && !Wiring.CheckMech(originX, originY, fireRate[style]))
-                return false;
+                return;
 
             Vector2 position = new Vector2((originX + 1) * 16, (originY + 1) * 16);
 
@@ -76,7 +76,7 @@ namespace MechTransfer.ContainerAdapters
                 packet.Send();
             }
 
-            return true;
+            item.stack--;
         }
     }
 }

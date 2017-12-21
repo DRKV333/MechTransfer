@@ -17,7 +17,7 @@ namespace MechTransfer
         private const float dustVelocity = 1.5f;
 
         private static MechTransfer mod = (MechTransfer)ModLoader.GetMod("MechTransfer");
-        private static List<Point16> relayTriggered = new List<Point16>(); //stops infinite recursion
+        private static HashSet<Point16> relayTriggered = new HashSet<Point16>(); //stops infinite recursion
 
         public static void EatWorldItem(int id, int eatNumber = 1)
         {
@@ -35,19 +35,20 @@ namespace MechTransfer
                 item = new Item();
         }
 
-        public static bool StartTransfer(int startX, int startY, Item item)
+        public static int StartTransfer(int startX, int startY, Item item)
         {
             relayTriggered.Clear();
 
+            int olstack = item.stack;
             Item clone = item.Clone();
-            clone.stack = 1;
-            bool result = SearchForTarget(startX, startY, clone);
+            SearchForTarget(startX, startY, clone);
 
             relayTriggered.Clear();
-            return result;
+
+            return olstack - clone.stack;
         }
 
-        private static bool SearchForTarget(int startX, int startY, Item IToTransfer)
+        private static void SearchForTarget(int startX, int startY, Item IToTransfer)
         {
             Queue<Point16> searchQ = new Queue<Point16>();
             Dictionary<Point16, byte> visited = new Dictionary<Point16, byte>();
@@ -74,13 +75,14 @@ namespace MechTransfer
 
                     if (visited.ContainsKey(searchP))
                         continue;
-                    visited.Add(searchP, (byte)dir);
+                    visited.Add(searchP, (byte)dir);// 00000VDD
 
                     Tile tile = Main.tile[searchP.X, searchP.Y];
                     if (tile == null || !tile.active())
                         continue;
 
                     bool addToQ = false;
+                    int oldStack = IToTransfer.stack;
 
                     //checking for targets
                     if (tile.type == mod.TileType<TransferRelayTile>() && !relayTriggered.Contains(searchP))
@@ -88,37 +90,43 @@ namespace MechTransfer
                         if (tile.frameX == 0)
                         {
                             relayTriggered.Add(searchP);
-                            if (SearchForTarget(searchP.X + 1, searchP.Y, IToTransfer))
+                            SearchForTarget(searchP.X + 1, searchP.Y, IToTransfer);
+                            if(IToTransfer.stack != oldStack)
                             {
                                 mod.GetModWorld<MechTransferWorld>().TripWireDelayed(searchP.X, searchP.Y, 2, 1);
                                 UnwindVisuals(visited, searchP);
-                                return true;
                             }
                         }
                         if (tile.frameX == 54)
                         {
                             relayTriggered.Add(searchP);
-                            if (SearchForTarget(searchP.X - 1, searchP.Y, IToTransfer))
+                            SearchForTarget(searchP.X - 1, searchP.Y, IToTransfer);
+                            if(IToTransfer.stack != oldStack)
                             {
                                 mod.GetModWorld<MechTransferWorld>().TripWireDelayed(searchP.X - 1, searchP.Y, 2, 1);
                                 UnwindVisuals(visited, searchP);
-                                return true;
                             }
                         }
                     }
-                    else if (tile.type == mod.TileType<TransferInjectorTile>() && InjectItem(searchP.X, searchP.Y, IToTransfer))
+                    else if (tile.type == mod.TileType<TransferInjectorTile>())
                     {
-                        mod.GetModWorld<MechTransferWorld>().TripWireDelayed(searchP.X, searchP.Y, 1, 1);
-                        UnwindVisuals(visited, searchP);
-                        return true;
+                        InjectItem(searchP.X, searchP.Y, IToTransfer);
+                        if (IToTransfer.stack != oldStack)
+                        {
+                            mod.GetModWorld<MechTransferWorld>().TripWireDelayed(searchP.X, searchP.Y, 1, 1);
+                            UnwindVisuals(visited, searchP);
+                        }
                     }
                     else if (tile.type == mod.TileType<TransferOutletTile>())
                     {
                         DropItem(searchP.X, searchP.Y, IToTransfer);
                         mod.GetModWorld<MechTransferWorld>().TripWireDelayed(searchP.X, searchP.Y, 1, 1);
                         UnwindVisuals(visited, searchP);
-                        return true;
+                        return;
                     }
+
+                    if (IToTransfer.stack == 0)
+                        return;
 
                     //checking for pipes
                     else if (tile.type == mod.TileType<TransferPipeTile>())
@@ -138,7 +146,6 @@ namespace MechTransfer
                         searchQ.Enqueue(searchP);
                 }
             }
-            return false;
         }
 
         private static void UnwindVisuals(Dictionary<Point16, byte> visited, Point16 startPoint)
@@ -148,6 +155,7 @@ namespace MechTransfer
             while (visited.ContainsKey(p))
             {
                 Direction dir = (Direction)visited[p];
+                visited[p] = (byte)Direction.stop; //Stops multiple particles, if multiple containers receive
 
                 switch (dir)
                 {
@@ -207,16 +215,16 @@ namespace MechTransfer
             }
         }
 
-        public static bool InjectItem(int x, int y, Item item)
+        public static void InjectItem(int x, int y, Item item)
         {
             List<ContainerAdapter> found = FindContainerAdjacent(x, y);
 
             foreach (var container in found)
             {
-                if (container.InjectItem(item))
-                    return true;
+                container.InjectItem(item);
+                if (item.stack < 1)
+                    return;
             }
-            return false;
         }
 
         public static void DropItem(int x, int y, Item item)

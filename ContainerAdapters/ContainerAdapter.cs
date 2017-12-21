@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using Terraria;
 using EnumerateItemsDelegate = System.Func<int, int, System.Collections.Generic.IEnumerable<System.Tuple<Terraria.Item, object>>>;
-using InjectItemDelegate = System.Func<int, int, Terraria.Item, bool>;
+using InjectItemDelegate = System.Action<int, int, Terraria.Item>;
 using TakeItemDelegate = System.Action<int, int, object, int>;
 
 namespace MechTransfer.ContainerAdapters
 {
     public class ContainerAdapterDefinition
     {
-        public InjectItemDelegate InjectItem; //bool InjectItem(int x, int y, Item item);
+        public InjectItemDelegate InjectItem; //void InjectItem(int x, int y, Item item);
         public EnumerateItemsDelegate EnumerateItems; //IEnumerable<Tuple<Item, object>> EnumerateItems(int x, int y);
         public TakeItemDelegate TakeItem; //void TakeItem(int x, int y, object SlotIdentifier, int amount);
 
@@ -33,9 +33,9 @@ namespace MechTransfer.ContainerAdapters
             definition = def;
         }
 
-        public bool InjectItem(Item item)
+        public void InjectItem(Item item)
         {
-            return definition.InjectItem.Invoke(X, Y, item);
+            definition.InjectItem.Invoke(X, Y, item);
         }
 
         public IEnumerable<Tuple<Item, object>> EnumerateItems()

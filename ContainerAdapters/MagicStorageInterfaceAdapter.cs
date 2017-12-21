@@ -32,16 +32,10 @@ namespace MechTransfer.ContainerAdapters
             return heart;
         }
 
-        public bool InjectItem(int x, int y, Item item)
+        public void InjectItem(int x, int y, Item item)
         {
             TEStorageHeart targetHeart = FindHeart(x, y);
-            int oldstack = item.stack;
             targetHeart.DepositItem(item);
-
-            if (oldstack != item.stack)
-                return true;
-            else
-                return false;
         }
 
         public IEnumerable<Tuple<Item, object>> EnumerateItems(int x, int y)

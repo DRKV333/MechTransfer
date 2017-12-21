@@ -92,7 +92,9 @@ namespace MechTransfer.Tiles
                 ItemLoader.OnCraft(clone, recipe);
             }
 
-            if (!TransferUtils.InjectItem(entity.Position.X, entity.Position.Y, clone))
+
+            TransferUtils.InjectItem(entity.Position.X, entity.Position.Y, clone);
+            if(clone.stack == recipe.createItem.stack) //!+**THIS DOESN'T WORK**
             {
                 entity.Status = TransferAssemblerTileEntity.StatusKind.MissingSpace;
                 return true; //returning with success, so we don't try alternate recipes

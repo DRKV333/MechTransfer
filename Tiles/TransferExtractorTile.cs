@@ -33,10 +33,12 @@ namespace MechTransfer.Tiles
             {
                 foreach (var item in c.EnumerateItems())
                 {
-                    if (!item.Item1.IsAir && TransferUtils.StartTransfer(i, j, item.Item1))
+                    if (!item.Item1.IsAir)
                     {
-                        c.TakeItem(item.Item2, 1);
-                        return;
+                        Item clone = item.Item1.Clone();
+                        clone.stack = 1;
+                        if(TransferUtils.StartTransfer(i, j, clone) > 0)
+                            c.TakeItem(item.Item2, 1);
                     }
                 }
             }

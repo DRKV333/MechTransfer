@@ -17,20 +17,20 @@ namespace MechTransfer.ContainerAdapters
             yield break;
         }
 
-        public bool InjectItem(int x, int y, Item item)
+        public void InjectItem(int x, int y, Item item)
         {
             if (item.type != ItemID.Snowball)
-                return false;
+                return;
 
             Tile tile = Main.tile[x, y];
             if (tile == null || !tile.active())
-                return false;
+                return;
 
             int originX = x - tile.frameX % 54 / 18;
             int originY = y - tile.frameY % 54 / 18;
 
             if (!Wiring.CheckMech(originX, originY, 10))
-                return false;
+                return;
 
             Main.PlaySound(SoundID.Item11, x * 16, y * 16);
 
@@ -54,7 +54,8 @@ namespace MechTransfer.ContainerAdapters
             velocityY *= velocity;
 
             Projectile.NewProjectile(position.X, position.Y, velocityX, velocityY, ProjectileID.SnowBallFriendly, 35, 3.5f, Main.myPlayer, 0, 0);
-            return true;
+
+            item.stack--;
         }
     }
 }

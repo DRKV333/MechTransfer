@@ -13,7 +13,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
 using EnumerateItemsDelegate = System.Func<int, int, System.Collections.Generic.IEnumerable<System.Tuple<Terraria.Item, object>>>;
-using InjectItemDelegate = System.Func<int, int, Terraria.Item, bool>;
+using InjectItemDelegate = System.Action<int, int, Terraria.Item>;
 using TakeItemDelegate = System.Action<int, int, object, int>;
 
 namespace MechTransfer
