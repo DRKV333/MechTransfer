@@ -42,6 +42,7 @@
     <Compile Include="ContainerAdapters\OmniTurretAdapter.cs" />
     <Compile Include="ContainerAdapters\SnowballLauncherAdapter.cs" />
     <Compile Include="ContainerAdapters\WeaponRackAdapter.cs" />
+    <Compile Include="Interfaces.cs" />
     <Compile Include="Items\SimplePlaceableItem.cs" />
     <Compile Include="Tiles\MagicStorageInterfaceTile.cs" />
     <Compile Include="Tiles\FilterableTile.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="Tiles\TransferPipeTile.cs" />
     <Compile Include="TransferUtils.cs" />
     <Compile Include="UI\FilterHoverUI.cs" />
+    <Compile Include="VisualUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MagicStorage.All">

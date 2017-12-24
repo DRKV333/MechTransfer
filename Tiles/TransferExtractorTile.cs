@@ -29,7 +29,7 @@ namespace MechTransfer.Tiles
             if (Main.netMode == 1)
                 return;
 
-            foreach (var c in TransferUtils.FindContainerAdjacent(i, j))
+            foreach (var c in ((MechTransfer)mod).transferAgent.FindContainerAdjacent(i, j))
             {
                 foreach (var item in c.EnumerateItems())
                 {
@@ -37,8 +37,11 @@ namespace MechTransfer.Tiles
                     {
                         Item clone = item.Item1.Clone();
                         clone.stack = 1;
-                        if(TransferUtils.StartTransfer(i, j, clone) > 0)
+                        if (((MechTransfer)mod).transferAgent.StartTransfer(i, j, clone) > 0)
+                        {
                             c.TakeItem(item.Item2, 1);
+                            return;
+                        }
                     }
                 }
             }

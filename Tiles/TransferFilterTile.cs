@@ -7,7 +7,7 @@ using Terraria.ObjectData;
 
 namespace MechTransfer.Tiles
 {
-    public class TransferFilterTile : FilterableTile
+    public class TransferFilterTile : FilterableTile, ITransferPassthrough
     {
         public override void SetDefaults()
         {
@@ -25,11 +25,23 @@ namespace MechTransfer.Tiles
             AddMapEntry(new Color(200, 200, 200));
 
             hoverText = "Item allowed:";
+
+            ((MechTransfer)mod).transferAgent.RegisterPassthrough(this);
         }
 
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
         {
             mod.GetTileEntity<TransferFilterTileEntity>().Kill(i, j);
+        }
+
+        public bool ShouldPassthrough(TransferUtils agent, Point16 location, Item item)
+        {
+            int id = mod.GetTileEntity<TransferFilterTileEntity>().Find(location.X, location.Y);
+            if (id == -1)
+                return false;
+            TransferFilterTileEntity entity = (TransferFilterTileEntity)TileEntity.ByID[id];
+
+            return entity.ItemId == item.netID;
         }
     }
 }

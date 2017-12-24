@@ -7,7 +7,7 @@ using Terraria.ObjectData;
 
 namespace MechTransfer.Tiles
 {
-    public class TransferInjectorTile : ModTile
+    public class TransferInjectorTile : ModTile, ITransferTarget
     {
         public override void SetDefaults()
         {
@@ -22,6 +22,27 @@ namespace MechTransfer.Tiles
 
             drop = mod.ItemType("TransferInjectorItem");
             AddMapEntry(new Color(200, 200, 200));
+
+            ((MechTransfer)mod).transferAgent.RegisterTarget(this);
+        }
+
+        public bool Receive(TransferUtils agent, Point16 location, Item item)
+        {
+            bool success = false;
+
+            foreach (var container in agent.FindContainerAdjacent(location.X, location.Y))
+            {
+                if (container.InjectItem(item))
+                    success = true;
+
+                if (item.stack < 1)
+                    break;
+            }
+
+            if(success)
+                mod.GetModWorld<MechTransferWorld>().TripWireDelayed(location.X, location.Y, 1, 1);
+
+            return success;
         }
     }
 }

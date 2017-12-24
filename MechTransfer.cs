@@ -13,7 +13,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
 using EnumerateItemsDelegate = System.Func<int, int, System.Collections.Generic.IEnumerable<System.Tuple<Terraria.Item, object>>>;
-using InjectItemDelegate = System.Action<int, int, Terraria.Item>;
+using InjectItemDelegate = System.Func<int, int, Terraria.Item, bool>;
 using TakeItemDelegate = System.Action<int, int, object, int>;
 
 namespace MechTransfer
@@ -22,7 +22,8 @@ namespace MechTransfer
     {
         public enum ModMessageID { FilterSyncing, InterfaceSyncing, CreateDust, RotateTurret, ProjectileMakeHostile, KickFromChest }
 
-        internal Dictionary<int, ContainerAdapterDefinition> ContainerAdapters = new Dictionary<int, ContainerAdapterDefinition>();
+        public TransferUtils transferAgent;
+
         internal HashSet<int> PickupBlacklist = new HashSet<int>();
 
         private const string callErorPrefix = "MechTransfer Call() error: ";
@@ -42,6 +43,7 @@ namespace MechTransfer
                 AutoloadGores = true,
                 AutoloadSounds = true
             };
+            transferAgent = new TransferUtils(this);
         }
 
         public override object Call(params object[] args)
@@ -88,8 +90,8 @@ namespace MechTransfer
 
                 foreach (var type in (int[])args[4])
                 {
-                    if (!ContainerAdapters.ContainsKey(type))
-                        ContainerAdapters.Add(type, definition);
+                    if (!transferAgent.ContainerAdapters.ContainsKey(type))
+                        transferAgent.ContainerAdapters.Add(type, definition);
                 }
                 return definition;
             }
@@ -134,8 +136,8 @@ namespace MechTransfer
 
                     foreach (var t in (int[])args[2])
                     {
-                        if (!ContainerAdapters.ContainsKey(t))
-                            ContainerAdapters.Add(t, definition);
+                        if (!transferAgent.ContainerAdapters.ContainsKey(t))
+                            transferAgent.ContainerAdapters.Add(t, definition);
                     }
                     return definition;
                 }
@@ -166,6 +168,7 @@ namespace MechTransfer
                     NetMessage.SendData(MessageID.TileEntitySharing, -1, whoAmI, null, FilterEntity.ID, FilterEntity.Position.X, FilterEntity.Position.Y);
 
                     break;
+
                 case ModMessageID.InterfaceSyncing:
 
                     if (Main.netMode != 2)
@@ -179,12 +182,13 @@ namespace MechTransfer
                     NetMessage.SendData(MessageID.TileEntitySharing, -1, whoAmI, null, InterfaceEntity.ID, InterfaceEntity.Position.X, InterfaceEntity.Position.Y);
 
                     break;
+
                 case ModMessageID.CreateDust:
 
                     if (Main.netMode != 1)
                         return;
 
-                    TransferUtils.CreateVisual(reader.ReadPackedVector2().ToPoint16(), (TransferUtils.Direction)reader.ReadByte());
+                    VisualUtils.CreateVisual(reader.ReadPackedVector2().ToPoint16(), (TransferUtils.Direction)reader.ReadByte());
                     break;
 
                 case ModMessageID.RotateTurret:

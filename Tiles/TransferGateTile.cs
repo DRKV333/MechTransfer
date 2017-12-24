@@ -8,7 +8,7 @@ using Terraria.ObjectData;
 
 namespace MechTransfer.Tiles
 {
-    public class TransferGateTile : ModTile
+    public class TransferGateTile : ModTile, ITransferPassthrough
     {
         public override void SetDefaults()
         {
@@ -23,6 +23,8 @@ namespace MechTransfer.Tiles
 
             drop = mod.ItemType("TransferGateItem");
             AddMapEntry(new Color(200, 200, 200));
+
+            ((MechTransfer)mod).transferAgent.RegisterPassthrough(this);
         }
 
         public override void HitWire(int i, int j)
@@ -38,6 +40,11 @@ namespace MechTransfer.Tiles
 
             if (Main.netMode == 2)
                 NetMessage.SendTileSquare(-1, i, j, 1, TileChangeType.None);
+        }
+
+        public bool ShouldPassthrough(TransferUtils agent, Point16 location, Item item)
+        {
+            return Main.tile[location.X, location.Y].frameY == 0;
         }
     }
 }

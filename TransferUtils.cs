@@ -10,15 +10,33 @@ using Terraria.ModLoader;
 
 namespace MechTransfer
 {
-    public static class TransferUtils
+    public class TransferUtils
     {
         public enum Direction { up, down, left, right, stop }
 
-        private const float dustVelocity = 1.5f;
+        private Mod mod;
+        private HashSet<Point16> TargetTriggered = new HashSet<Point16>(); //stops infinite recursion
+        private int running = 0;
 
-        private static MechTransfer mod = (MechTransfer)ModLoader.GetMod("MechTransfer");
-        private static HashSet<Point16> relayTriggered = new HashSet<Point16>(); //stops infinite recursion
+        internal Dictionary<int, ContainerAdapterDefinition> ContainerAdapters = new Dictionary<int, ContainerAdapterDefinition>();
+        internal int unconditionalPassthroughType = 0;
+        private Dictionary<int, ITransferTarget> targets = new Dictionary<int, ITransferTarget>();
+        private Dictionary<int, ITransferPassthrough> passthroughs = new Dictionary<int, ITransferPassthrough>();
 
+        public TransferUtils(MechTransfer mod)
+        {
+            this.mod = mod;
+        }
+
+        public void RegisterTarget(ITransferTarget target)
+        {
+            targets.Add(target.Type, target);
+        }
+
+        public void RegisterPassthrough(ITransferPassthrough passthrough)
+        {
+            passthroughs.Add(passthrough.Type, passthrough);
+        }
         public static void EatWorldItem(int id, int eatNumber = 1)
         {
             EatItem(ref Main.item[id], eatNumber);
@@ -35,20 +53,25 @@ namespace MechTransfer
                 item = new Item();
         }
 
-        public static int StartTransfer(int startX, int startY, Item item)
+        public int StartTransfer(int startX, int startY, Item item)
         {
-            relayTriggered.Clear();
-
+            running++;
+            
             int olstack = item.stack;
             Item clone = item.Clone();
             SearchForTarget(startX, startY, clone);
 
-            relayTriggered.Clear();
+            running--;
+
+            if(running == 0)
+            {
+                TargetTriggered.Clear();
+            }
 
             return olstack - clone.stack;
         }
 
-        private static void SearchForTarget(int startX, int startY, Item IToTransfer)
+        private void SearchForTarget(int startX, int startY, Item IToTransfer)
         {
             Queue<Point16> searchQ = new Queue<Point16>();
             Dictionary<Point16, byte> visited = new Dictionary<Point16, byte>();
@@ -81,188 +104,61 @@ namespace MechTransfer
                     if (tile == null || !tile.active())
                         continue;
 
-                    bool addToQ = false;
-                    int oldStack = IToTransfer.stack;
-
                     //checking for targets
-                    if (tile.type == mod.TileType<TransferRelayTile>() && !relayTriggered.Contains(searchP))
+                    ITransferTarget target;
+                    if(!TargetTriggered.Contains(searchP) && targets.TryGetValue(tile.type, out target))
                     {
-                        if (tile.frameX == 0)
-                        {
-                            relayTriggered.Add(searchP);
-                            SearchForTarget(searchP.X + 1, searchP.Y, IToTransfer);
-                            if(IToTransfer.stack != oldStack)
-                            {
-                                mod.GetModWorld<MechTransferWorld>().TripWireDelayed(searchP.X, searchP.Y, 2, 1);
-                                UnwindVisuals(visited, searchP);
-                            }
-                        }
-                        if (tile.frameX == 54)
-                        {
-                            relayTriggered.Add(searchP);
-                            SearchForTarget(searchP.X - 1, searchP.Y, IToTransfer);
-                            if(IToTransfer.stack != oldStack)
-                            {
-                                mod.GetModWorld<MechTransferWorld>().TripWireDelayed(searchP.X - 1, searchP.Y, 2, 1);
-                                UnwindVisuals(visited, searchP);
-                            }
-                        }
+                        TargetTriggered.Add(searchP);
+                        if (target.Receive(this, searchP, IToTransfer))
+                            VisualUtils.UnwindVisuals(visited, searchP);
                     }
-                    else if (tile.type == mod.TileType<TransferInjectorTile>())
-                    {
-                        InjectItem(searchP.X, searchP.Y, IToTransfer);
-                        if (IToTransfer.stack != oldStack)
-                        {
-                            mod.GetModWorld<MechTransferWorld>().TripWireDelayed(searchP.X, searchP.Y, 1, 1);
-                            UnwindVisuals(visited, searchP);
-                        }
-                    }
-                    else if (tile.type == mod.TileType<TransferOutletTile>())
-                    {
-                        DropItem(searchP.X, searchP.Y, IToTransfer);
-                        mod.GetModWorld<MechTransferWorld>().TripWireDelayed(searchP.X, searchP.Y, 1, 1);
-                        UnwindVisuals(visited, searchP);
-                        return;
-                    }
+
 
                     if (IToTransfer.stack == 0)
                         return;
 
                     //checking for pipes
-                    else if (tile.type == mod.TileType<TransferPipeTile>())
-                        addToQ = true;
-                    else if (tile.type == mod.TileType<TransferInletTile>() && (tile.frameX == 0 || tile.frameX == 36))
-                        addToQ = true;
-                    else if (tile.type == mod.TileType<TransferGateTile>() && tile.frameY == 0)
-                        addToQ = true;
-                    else if (tile.type == mod.TileType<TransferFilterTile>())
+                    if (tile.type == unconditionalPassthroughType)
                     {
-                        int id = mod.GetTileEntity<TransferFilterTileEntity>().Find(searchP.X, searchP.Y);
-                        if (id != -1 && (((TransferFilterTileEntity)TileEntity.ByID[id]).ItemId == 0 || IToTransfer.type == ((TransferFilterTileEntity)TileEntity.ByID[id]).ItemId))
-                            addToQ = true;
-                    }
-
-                    if (addToQ)
                         searchQ.Enqueue(searchP);
+                    }
+                    else
+                    {
+                        ITransferPassthrough passthrough;
+                        if (passthroughs.TryGetValue(tile.type, out passthrough))
+                        {
+                            if (passthrough.ShouldPassthrough(this, searchP, IToTransfer))
+                                searchQ.Enqueue(searchP);
+                        }
+                    }
                 }
             }
-        }
-
-        private static void UnwindVisuals(Dictionary<Point16, byte> visited, Point16 startPoint)
-        {
-            Point16 p = startPoint;
-
-            while (visited.ContainsKey(p))
-            {
-                Direction dir = (Direction)visited[p];
-                visited[p] = (byte)Direction.stop; //Stops multiple particles, if multiple containers receive
-
-                switch (dir)
-                {
-                    case Direction.up: p = new Point16(p.X, p.Y - 1); break;
-                    case Direction.down: p = new Point16(p.X, p.Y + 1); break;
-                    case Direction.left: p = new Point16(p.X - 1, p.Y); break;
-                    case Direction.right: p = new Point16(p.X + 1, p.Y); break;
-                    case Direction.stop: return;
-                }
-
-                if (Main.netMode == 0)
-                {
-                    CreateVisual(p, dir);
-                }
-                else
-                {
-                    ModPacket packet = mod.GetPacket();
-                    packet.Write((byte)MechTransfer.ModMessageID.CreateDust);
-                    packet.WritePackedVector2(p.ToVector2());
-                    packet.Write((byte)dir);
-                    packet.Send();
-                }
-            }
-        }
-
-        public static void CreateVisual(Point16 point, Direction dir)
-        {
-            Vector2 location = new Vector2(point.X * 16 + 8, point.Y * 16 + 8);
-            Vector2 velocity = Vector2.Zero;
-
-            switch (dir)
-            {
-                case Direction.up: velocity.Y = dustVelocity; break;
-                case Direction.down: velocity.Y = -dustVelocity; break;
-                case Direction.left: velocity.X = dustVelocity; break;
-                case Direction.right: velocity.X = -dustVelocity; break;
-                case Direction.stop: return;
-            }
-
-            Dust dust = Dust.NewDustPerfect(location, DustID.Silver, velocity);
-            dust.noGravity = true;
-
-            if (Main.xMas)
-            {
-                if (point.X % 2 == point.Y % 2)
-                    dust.color = Color.Red;
-                else
-                    dust.color = Color.LightGreen;
-            }
-
-            if (Main.halloween)
-            {
-                if (point.X % 2 == point.Y % 2)
-                    dust.color = Color.MediumPurple;
-                else
-                    dust.color = Color.Orange;
-            }
-        }
-
-        public static void InjectItem(int x, int y, Item item)
-        {
-            List<ContainerAdapter> found = FindContainerAdjacent(x, y);
-
-            foreach (var container in found)
-            {
-                container.InjectItem(item);
-                if (item.stack < 1)
-                    return;
-            }
-        }
-
-        public static void DropItem(int x, int y, Item item)
-        {
-            int dropTarget = Item.NewItem(x * 16, y * 16, item.width, item.height, item.type);
-            item.position = Main.item[dropTarget].position;
-            item.velocity.X = 0;
-            item.velocity.Y = 0;
-            Main.item[dropTarget] = item;
         }
 
         //search order: Up, Down, Left, Right
-        public static List<ContainerAdapter> FindContainerAdjacent(int x, int y)
+        public IEnumerable<ContainerAdapter> FindContainerAdjacent(int x, int y)
         {
-            List<ContainerAdapter> found = new List<ContainerAdapter>();
             ContainerAdapter c;
 
             c = FindContainer(x, y - 1);
             if (c != null)
-                found.Add(c);
+                yield return c;
             c = FindContainer(x, y + 1);
             if (c != null)
-                found.Add(c);
+                yield return c;
             c = FindContainer(x - 1, y);
             if (c != null)
-                found.Add(c);
+                yield return c;
             c = FindContainer(x + 1, y);
             if (c != null)
-                found.Add(c);
-
-            return found;
+                yield return c;
         }
 
-        public static ContainerAdapter FindContainer(int x, int y)
+        public ContainerAdapter FindContainer(int x, int y)
         {
             ContainerAdapterDefinition c;
             Tile tile = Main.tile[x, y];
-            if (tile != null && tile.active() && mod.ContainerAdapters.TryGetValue(tile.type, out c))
+            if (tile != null && tile.active() && ContainerAdapters.TryGetValue(tile.type, out c))
                 return c.GetAdapter(x, y);
             return null;
         }

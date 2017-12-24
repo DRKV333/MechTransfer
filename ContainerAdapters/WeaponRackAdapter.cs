@@ -87,16 +87,16 @@ namespace MechTransfer.ContainerAdapters
             yield return new Tuple<Item, object>(item, null);
         }
 
-        public void InjectItem(int x, int y, Item item)
+        public bool InjectItem(int x, int y, Item item)
         {
             if (!Main.LocalPlayer.ItemFitsWeaponRack(item))
-                return;
+                return false;
 
             bool facingRight;
             Point16 origin = FindOrigin(x, y, out facingRight);
 
             if (Main.tile[origin.X, origin.Y].frameX >= 5000)
-                return; //Already has item
+                return false; //Already has item
 
             if (facingRight)
             {
@@ -112,6 +112,7 @@ namespace MechTransfer.ContainerAdapters
             HandleRackItemChange(origin.X, origin.Y);
 
             item.stack--;
+            return true;
         }
     }
 }

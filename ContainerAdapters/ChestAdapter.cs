@@ -64,12 +64,14 @@ namespace MechTransfer.ContainerAdapters
             return -1;
         }
 
-        public void InjectItem(int x, int y, Item item)
+        public bool InjectItem(int x, int y, Item item)
         {
             int c = FindChest(x, y);
 
             if (c == -1)
-                return;
+                return false;
+
+            bool injectedPartial = false;
 
             if (item.maxStack > 1)
             {
@@ -84,13 +86,14 @@ namespace MechTransfer.ContainerAdapters
                             chestItem.stack += item.stack;
                             item.stack = 0;
                             HandleChestItemChange(c);
-                            return;
+                            return true;
                         }
                         else
                         {
                             item.stack -= spaceLeft;
                             chestItem.stack = chestItem.maxStack;
                             HandleChestItemChange(c);
+                            injectedPartial = true;
                         }
                     }
                 }
@@ -103,9 +106,11 @@ namespace MechTransfer.ContainerAdapters
                     Main.chest[c].item[i] = item.Clone();
                     item.stack = 0;
                     HandleChestItemChange(c);
-                    return;
+                    return true;
                 }
             }
+
+            return injectedPartial;
         }
 
         public IEnumerable<Tuple<Item, object>> EnumerateItems(int x, int y)

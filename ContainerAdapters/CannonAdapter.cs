@@ -16,11 +16,11 @@ namespace MechTransfer.ContainerAdapters
             yield break;
         }
 
-        public void InjectItem(int x, int y, Item item)
+        public bool InjectItem(int x, int y, Item item)
         {
             Tile tile = Main.tile[x, y];
             if (tile == null || !tile.active())
-                return;
+                return false;
 
             int expectedType = 0;
             int ammotype = 0;
@@ -41,18 +41,20 @@ namespace MechTransfer.ContainerAdapters
             }
 
             if (ammotype == 0 || item.type != expectedType)
-                return;
+                return false;
 
             int originX = x - tile.frameX % 72 / 18;
             int originY = y - tile.frameY % 54 / 18;
             int angle = tile.frameY / 54;
 
             if (!Wiring.CheckMech(originX, originY, 30))
-                return;
+                return false;
 
             WorldGen.ShootFromCannon(originX, originY, angle, ammotype, item.damage, item.knockBack, Main.myPlayer);
 
             item.stack--;
+
+            return true;
         }
     }
 }

@@ -7,7 +7,7 @@ using Terraria.ObjectData;
 
 namespace MechTransfer.Tiles
 {
-    public class TransferInletTile : ModTile
+    public class TransferInletTile : ModTile, ITransferPassthrough
     {
         public override void SetDefaults()
         {
@@ -29,6 +29,8 @@ namespace MechTransfer.Tiles
             TileObjectData.addTile(Type);
 
             AddMapEntry(new Color(200, 200, 200));
+
+            ((MechTransfer)mod).transferAgent.RegisterPassthrough(this);
         }
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
@@ -36,6 +38,12 @@ namespace MechTransfer.Tiles
             int originX = (i - frameX / 18) + 1;
             Item.NewItem(originX * 16, j * 16, 16, 16, mod.ItemType("TransferInletItem"));
             mod.GetTileEntity<TransferInletTileEntity>().Kill(originX, j);
+        }
+
+        public bool ShouldPassthrough(TransferUtils agent, Point16 location, Item item)
+        {
+            Tile tile = Main.tile[location.X, location.Y];
+            return (tile.frameX == 0 || tile.frameX == 36);
         }
     }
 }

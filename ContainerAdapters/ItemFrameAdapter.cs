@@ -31,17 +31,18 @@ namespace MechTransfer.ContainerAdapters
                 NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, id, (float)x, (float)y, 0f, 0, 0, 0);
         }
 
-        public void InjectItem(int x, int y, Item item)
+        public bool InjectItem(int x, int y, Item item)
         {
             TEItemFrame frame = FindItemFrame(x, y);
 
             if (!frame.item.IsAir)
-                return;
+                return false;
 
             frame.item = item.Clone();
             frame.item.stack = 1;
             item.stack--;
             HandleItemFrameChange(x, y, frame.ID);
+            return true;
         }
 
         public IEnumerable<Tuple<Item, object>> EnumerateItems(int x, int y)

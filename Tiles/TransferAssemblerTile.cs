@@ -39,7 +39,7 @@ namespace MechTransfer.Tiles
         }
 
         public override void HitWire(int i, int j)
-        {
+        {/*
             if (Main.netMode == 1)
                 return;
 
@@ -61,7 +61,7 @@ namespace MechTransfer.Tiles
                     break;
                 }
             }
-            inventory.Clear();
+            inventory.Clear();*/
         }
 
         private bool TryMakeRecipe(Recipe recipe, TransferAssemblerTileEntity entity)
@@ -93,7 +93,7 @@ namespace MechTransfer.Tiles
             }
 
 
-            TransferUtils.InjectItem(entity.Position.X, entity.Position.Y, clone);
+            //TransferUtils.InjectItem(entity.Position.X, entity.Position.Y, clone);
             if(clone.stack == recipe.createItem.stack) //!+**THIS DOESN'T WORK**
             {
                 entity.Status = TransferAssemblerTileEntity.StatusKind.MissingSpace;
