@@ -33,7 +33,12 @@ namespace MechTransfer.Tiles
 
                     if (!((MechTransfer)mod).PickupBlacklist.Contains(item.type) && new Rectangle((Position.X - 1) * 16, (Position.Y - 1) * 16, 48, 16).Intersects(item.getRect()))
                     {
-                        TransferUtils.EatWorldItem(i, ((MechTransfer)mod).transferAgent.StartTransfer(Position.X, Position.Y, item));
+                        item.stack -= ((MechTransfer)mod).transferAgent.StartTransfer(Position.X, Position.Y, item);
+                        if (item.stack < 1)
+                            Main.item[i] = new Item();
+
+                        if (Main.netMode == 2)
+                            NetMessage.SendData(MessageID.SyncItem, -1, -1, null, i);
                     }
                 }
             }

@@ -26,7 +26,7 @@ namespace MechTransfer.Tiles
 
             AddMapEntry(new Color(200, 200, 200));
 
-            ((MechTransfer)mod).transferAgent.RegisterTarget(this);
+            ((MechTransfer)mod).transferAgent.targets.Add(Type, this);
         }
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)

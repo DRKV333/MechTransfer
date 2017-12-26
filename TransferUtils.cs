@@ -14,44 +14,13 @@ namespace MechTransfer
     {
         public enum Direction { up, down, left, right, stop }
 
-        private Mod mod;
         private HashSet<Point16> TargetTriggered = new HashSet<Point16>(); //stops infinite recursion
         private int running = 0;
 
-        internal Dictionary<int, ContainerAdapterDefinition> ContainerAdapters = new Dictionary<int, ContainerAdapterDefinition>();
-        internal int unconditionalPassthroughType = 0;
-        private Dictionary<int, ITransferTarget> targets = new Dictionary<int, ITransferTarget>();
-        private Dictionary<int, ITransferPassthrough> passthroughs = new Dictionary<int, ITransferPassthrough>();
-
-        public TransferUtils(MechTransfer mod)
-        {
-            this.mod = mod;
-        }
-
-        public void RegisterTarget(ITransferTarget target)
-        {
-            targets.Add(target.Type, target);
-        }
-
-        public void RegisterPassthrough(ITransferPassthrough passthrough)
-        {
-            passthroughs.Add(passthrough.Type, passthrough);
-        }
-        public static void EatWorldItem(int id, int eatNumber = 1)
-        {
-            EatItem(ref Main.item[id], eatNumber);
-
-            if (Main.netMode == 2)
-                NetMessage.SendData(MessageID.SyncItem, -1, -1, null, id);
-        }
-
-        public static void EatItem(ref Item item, int eatNumber)
-        {
-            if (item.stack > eatNumber)
-                item.stack -= eatNumber;
-            else
-                item = new Item();
-        }
+        public Dictionary<int, ContainerAdapterDefinition> ContainerAdapters = new Dictionary<int, ContainerAdapterDefinition>();
+        public int unconditionalPassthroughType = 0;
+        public Dictionary<int, ITransferTarget> targets = new Dictionary<int, ITransferTarget>();
+        public Dictionary<int, ITransferPassthrough> passthroughs = new Dictionary<int, ITransferPassthrough>();
 
         public int StartTransfer(int startX, int startY, Item item)
         {
@@ -161,17 +130,6 @@ namespace MechTransfer
             if (tile != null && tile.active() && ContainerAdapters.TryGetValue(tile.type, out c))
                 return c.GetAdapter(x, y);
             return null;
-        }
-
-        public static string ItemNameById(int id)
-        {
-            if (id == 0)
-                return "";
-
-            LocalizedText name = Lang.GetItemName(id);
-            if (name == LocalizedText.Empty)
-                return string.Format("Unknown item #{0}", id);
-            return name.Value;
         }
     }
 }

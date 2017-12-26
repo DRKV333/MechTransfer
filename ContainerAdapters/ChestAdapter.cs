@@ -133,7 +133,10 @@ namespace MechTransfer.ContainerAdapters
             if (c == -1)
                 return;
 
-            TransferUtils.EatItem(ref Main.chest[c].item[(int)slot], amount);
+            Main.chest[c].item[(int)slot].stack -= amount;
+            if(Main.chest[c].item[(int)slot].stack < 1)
+                Main.chest[c].item[(int)slot] = new Item();
+
             HandleChestItemChange(c);
         }
     }

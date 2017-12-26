@@ -22,7 +22,7 @@ namespace MechTransfer
     {
         public enum ModMessageID { FilterSyncing, InterfaceSyncing, CreateDust, RotateTurret, ProjectileMakeHostile, KickFromChest }
 
-        public TransferUtils transferAgent;
+        public TransferUtils transferAgent = new TransferUtils();
 
         internal HashSet<int> PickupBlacklist = new HashSet<int>();
 
@@ -43,7 +43,6 @@ namespace MechTransfer
                 AutoloadGores = true,
                 AutoloadSounds = true
             };
-            transferAgent = new TransferUtils(this);
         }
 
         public override object Call(params object[] args)

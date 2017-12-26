@@ -5,6 +5,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
@@ -189,7 +190,7 @@ namespace MechTransfer.Tiles
                 case TransferAssemblerTileEntity.StatusKind.Success:
                     statusText = "Success"; statusColor = Color.Green; break;
                 case TransferAssemblerTileEntity.StatusKind.MissingItem:
-                    statusText = string.Format("Missing ingredient ({0})", TransferUtils.ItemNameById(entity.MissingItemType)); statusColor = Color.Red; break;
+                    statusText = string.Format("Missing ingredient ({0})", ItemNameById(entity.MissingItemType)); statusColor = Color.Red; break;
                 case TransferAssemblerTileEntity.StatusKind.MissingStation:
                     statusText = "Missing crafting station"; statusColor = Color.Red; break;
                 case TransferAssemblerTileEntity.StatusKind.MissingSpace:
@@ -197,6 +198,17 @@ namespace MechTransfer.Tiles
             }
 
             ((MechTransfer)mod).filterHoverUI.Display(entity.ItemId, "Crafting: " + statusText, statusColor);
+        }
+
+        public static string ItemNameById(int id)
+        {
+            if (id == 0)
+                return "";
+
+            LocalizedText name = Lang.GetItemName(id);
+            if (name == LocalizedText.Empty)
+                return string.Format("Unknown item #{0}", id);
+            return name.Value;
         }
     }
 }

@@ -24,7 +24,7 @@ namespace MechTransfer.Tiles
             drop = mod.ItemType("TransferGateItem");
             AddMapEntry(new Color(200, 200, 200));
 
-            ((MechTransfer)mod).transferAgent.RegisterPassthrough(this);
+            ((MechTransfer)mod).transferAgent.passthroughs.Add(Type, this);
         }
 
         public override void HitWire(int i, int j)

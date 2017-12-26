@@ -26,7 +26,7 @@ namespace MechTransfer.Tiles
 
             hoverText = "Item allowed:";
 
-            ((MechTransfer)mod).transferAgent.RegisterPassthrough(this);
+            ((MechTransfer)mod).transferAgent.passthroughs.Add(Type, this);
         }
 
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)

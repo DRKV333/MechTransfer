@@ -23,7 +23,7 @@ namespace MechTransfer.Tiles
             drop = mod.ItemType("TransferOutletItem");
             AddMapEntry(new Color(200, 200, 200));
 
-            ((MechTransfer)mod).transferAgent.RegisterTarget(this);
+            ((MechTransfer)mod).transferAgent.targets.Add(Type, this);
         }
 
         public bool Receive(TransferUtils agent, Point16 location, Item item)
