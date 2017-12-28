@@ -28,7 +28,7 @@ namespace MechTransfer.Tiles
 
         public bool Receive(TransferUtils agent, Point16 location, Item item)
         {
-            int dropTarget = Item.NewItem(location.X * 16, location.Y * 16, item.width, item.height, item.type, item.stack, false, item.prefix);
+            int dropTarget = Item.NewItem(location.X * 16, location.Y * 16, 16, 16, item.type, item.stack, false, item.prefix);
             Main.item[dropTarget].velocity = Vector2.Zero;
             item.stack = 0;
             return true;
