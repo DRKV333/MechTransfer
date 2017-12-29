@@ -31,7 +31,7 @@ namespace MechTransfer.ContainerAdapters
 
         public bool InjectItem(int x, int y, Item item)
         {
-            if (item.ammo == 0 || item.shoot == 0)
+            if (item.ammo == 0 || item.shoot == 0 || item.ammo == AmmoID.Rocket)
                 return false;
 
             Tile tile = Main.tile[x, y];
