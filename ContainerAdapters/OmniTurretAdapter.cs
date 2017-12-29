@@ -31,7 +31,7 @@ namespace MechTransfer.ContainerAdapters
 
         public bool InjectItem(int x, int y, Item item)
         {
-            if (!item.consumable || item.ammo == 0 || item.shoot == 0)
+            if (item.ammo == 0 || item.shoot == 0)
                 return false;
 
             Tile tile = Main.tile[x, y];
@@ -76,7 +76,9 @@ namespace MechTransfer.ContainerAdapters
                 packet.Send();
             }
 
-            item.stack--;
+            if(item.consumable)
+                item.stack--;
+
             return true;
         }
     }
