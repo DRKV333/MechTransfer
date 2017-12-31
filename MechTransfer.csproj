@@ -44,6 +44,7 @@
     <Compile Include="ContainerAdapters\WeaponRackAdapter.cs" />
     <Compile Include="Interfaces.cs" />
     <Compile Include="Items\SimplePlaceableItem.cs" />
+    <Compile Include="Tiles\InverseTransferFilterTile.cs" />
     <Compile Include="Tiles\MagicStorageInterfaceTile.cs" />
     <Compile Include="Tiles\FilterableTile.cs" />
     <Compile Include="Tiles\MagicStorageInterfaceTileEntity.cs" />

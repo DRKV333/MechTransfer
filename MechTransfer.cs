@@ -335,6 +335,15 @@ namespace MechTransfer
             r.SetResult(ItemType("TransferFilterItem"), 1);
             r.AddRecipe();
 
+            //InverseFilter
+            r = new ModRecipe(this);
+            r.AddIngredient(ItemType<PneumaticActuatorItem>(), 1);
+            r.AddIngredient(ItemID.Actuator, 1);
+            r.AddIngredient(ItemID.ItemFrame, 1);
+            r.AddTile(TileID.WorkBenches);
+            r.SetResult(ItemType("InverseTransferFilterItem"), 1);
+            r.AddRecipe();
+
             //Gate
             r = new ModRecipe(this);
             r.AddIngredient(ItemType<PneumaticActuatorItem>(), 1);
@@ -434,7 +443,14 @@ namespace MechTransfer
             i = new SimplePlaceableItem();
             i.placeType = TileType<TransferFilterTile>();
             AddItem("TransferFilterItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Transfer filter");
+            i.DisplayName.AddTranslation(LangID.English, "Transfer filter (whitelist)");
+            i.Tooltip.AddTranslation(LangID.English, "Place in line with Transfer pipe\nRight click with item in hand to set filter");
+
+            //InverseFilter
+            i = new SimplePlaceableItem();
+            i.placeType = TileType<InverseTransferFilterTile>();
+            AddItem("InverseTransferFilterItem", i);
+            i.DisplayName.AddTranslation(LangID.English, "Transfer filter (blacklist)");
             i.Tooltip.AddTranslation(LangID.English, "Place in line with Transfer pipe\nRight click with item in hand to set filter");
 
             //Gate
