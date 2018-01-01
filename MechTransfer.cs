@@ -317,6 +317,14 @@ namespace MechTransfer
             r.AddTile(TileID.WorkBenches);
             r.AddRecipe();
 
+            //StackExtractor
+            r = new ModRecipe(this);
+            r.AddIngredient(ItemType("TransferExtractorItem"), 1);
+            r.AddIngredient(ItemID.Nanites, 10);
+            r.SetResult(ItemType("StackExtractorItem"), 1);
+            r.AddTile(TileID.WorkBenches);
+            r.AddRecipe();
+
             //Injector
             r = new ModRecipe(this);
             r.AddIngredient(ItemType<PneumaticActuatorItem>(), 1);
@@ -426,11 +434,19 @@ namespace MechTransfer
             i.Tooltip.AddTranslation(LangID.English, "WIP\nCrafts items automatically\nRight click with item in hand to set filter");
 
             //Extractor
-            SimplePlaceableItem j = new SimplePlaceableItem();
-            j.placeType = TileType<TransferExtractorTile>();
-            AddItem("TransferExtractorItem", j);
-            j.DisplayName.AddTranslation(LangID.English, "Transfer extractor");
-            j.Tooltip.AddTranslation(LangID.English, "Extracts items from adjacent chests");
+            i = new SimplePlaceableItem();
+            i.placeType = TileType<TransferExtractorTile>();
+            AddItem("TransferExtractorItem", i);
+            i.DisplayName.AddTranslation(LangID.English, "Transfer extractor");
+            i.Tooltip.AddTranslation(LangID.English, "Extracts items from adjacent chests");
+
+            //StackExtractor
+            i = new SimplePlaceableItem();
+            i.placeType = TileType<StackExtractorTile>();
+            i.value = Item.sellPrice(0, 1, 0, 0);
+            AddItem("StackExtractorItem", i);
+            i.DisplayName.AddTranslation(LangID.English, "Stack extractor");
+            i.Tooltip.AddTranslation(LangID.English, "Extracts a whole stack at once");
 
             //Injector
             i = new SimplePlaceableItem();

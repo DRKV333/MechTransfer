@@ -49,6 +49,7 @@
     <Compile Include="Tiles\FilterableTile.cs" />
     <Compile Include="Tiles\MagicStorageInterfaceTileEntity.cs" />
     <Compile Include="Tiles\OmniTurretTile.cs" />
+    <Compile Include="Tiles\StackExtractorTile.cs" />
     <Compile Include="Tiles\TransferAssemblerTileEntity.cs" />
     <Compile Include="ItemInventory.cs" />
     <Compile Include="Items\PneumaticActuatorItem.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="Tiles\TransferPipeTile.cs" />
     <Compile Include="TransferUtils.cs" />
     <Compile Include="UI\FilterHoverUI.cs" />
+    <Compile Include="UI\RealItemSlot.cs" />
     <Compile Include="VisualUtils.cs" />
   </ItemGroup>
   <ItemGroup>
