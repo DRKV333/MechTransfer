@@ -14,10 +14,12 @@ namespace MechTransfer.UI
         private UIPanel panel;
         private UIText itemText;
         private UIText titleText;
-        private Item displayItem = new Item();
+        private Item[] fakeInv = new Item[11];
 
         public override void OnInitialize()
         {
+            fakeInv[10] = new Item();
+
             titleText = new UIText("Not set");
             titleText.Left.Set(5, 0);
             titleText.Top.Set(5, 0);
@@ -44,9 +46,9 @@ namespace MechTransfer.UI
             titleText.SetText(text);
             titleText.TextColor = textColor;
 
-            displayItem.SetDefaults(type);
-            itemText.SetText(type == 0 ? "Not set" : displayItem.Name);
-            itemText.TextColor = type == 0 ? Color.Red : ItemRarity.GetColor(displayItem.rare);
+            fakeInv[10].SetDefaults(type);
+            itemText.SetText(type == 0 ? "Not set" : fakeInv[10].Name);
+            itemText.TextColor = type == 0 ? Color.Red : ItemRarity.GetColor(fakeInv[10].rare);
             panel.Width.Pixels = itemText.MinWidth.Pixels + Main.inventoryBackTexture.Width * 0.5f * Main.UIScale + 20;
 
             Left.Pixels = Main.mouseX + 10;
@@ -64,7 +66,7 @@ namespace MechTransfer.UI
 
             float oldScale = Main.inventoryScale;
             Main.inventoryScale = 0.5f;
-            ItemSlot.Draw(spriteBatch, ref displayItem, ItemSlot.Context.InventoryItem, new Vector2(Left.Pixels + 5, Top.Pixels + 30));
+            ItemSlot.Draw(spriteBatch, fakeInv, ItemSlot.Context.InventoryItem, 10, new Vector2(Left.Pixels + 5, Top.Pixels + 30));
             Main.inventoryScale = oldScale;
 
             visible = false;
