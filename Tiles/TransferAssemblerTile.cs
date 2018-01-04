@@ -40,33 +40,52 @@ namespace MechTransfer.Tiles
         }
 
         public override void HitWire(int i, int j)
-        {/*
+        {
             if (Main.netMode == 1)
                 return;
-
-            inventory.Clear();
-            foreach (var c in TransferUtils.FindContainerAdjacent(i, j))
-            {
-                inventory.RegisterContainer(c);
-            }
 
             int filterId = mod.GetTileEntity<TransferAssemblerTileEntity>().Find(i, j);
             if (filterId == -1)
                 return;
             TransferAssemblerTileEntity entity = (TransferAssemblerTileEntity)TileEntity.ByID[filterId];
 
+            if (entity.ItemId == 0 || entity.stock.stack > 0)
+                return;
+
+            inventory.Clear();
+            foreach (var c in ((MechTransfer)mod).transferAgent.FindContainerAdjacent(i, j))
+            {
+                inventory.RegisterContainer(c);
+            }
+
+            bool foundRecipe = false;
             for (int r = 0; r < Recipe.maxRecipes && !Main.recipe[r].createItem.IsAir; r++)
             {
-                if (Main.recipe[r].createItem.type == entity.ItemId && TryMakeRecipe(Main.recipe[r], entity))
+                if (Main.recipe[r].createItem.type == entity.ItemId)
                 {
-                    break;
+                    foundRecipe = true;
+                    if (TryMakeRecipe(Main.recipe[r], entity))
+                        break;
                 }
             }
-            inventory.Clear();*/
+
+            if (!foundRecipe)
+                entity.Status = TransferAssemblerTileEntity.StatusKind.NoRecipe;
+
+            inventory.Clear();
+
+            NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, entity.ID, entity.Position.X, entity.Position.Y);
         }
 
         private bool TryMakeRecipe(Recipe recipe, TransferAssemblerTileEntity entity)
         {
+            bool alchemy;
+            if (!SearchStation(recipe, entity.Position.X, entity.Position.Y, out alchemy))
+            {
+                entity.Status = TransferAssemblerTileEntity.StatusKind.MissingStation;
+                return false;
+            }
+
             for (int i = 0; i < Recipe.maxRequirements && !recipe.requiredItem[i].IsAir; i++)
             {
                 if (!inventory.TryTakeIngredient(recipe, recipe.requiredItem[i]))
@@ -75,13 +94,6 @@ namespace MechTransfer.Tiles
                     entity.MissingItemType = recipe.requiredItem[i].type;
                     return false;
                 }
-            }
-
-            bool alchemy = false;
-            if (!SearchStation(recipe, entity.Position.X, entity.Position.Y, ref alchemy))
-            {
-                entity.Status = TransferAssemblerTileEntity.StatusKind.MissingStation;
-                return false;
             }
 
             Item clone = recipe.createItem.Clone();
@@ -93,22 +105,17 @@ namespace MechTransfer.Tiles
                 ItemLoader.OnCraft(clone, recipe);
             }
 
-
-            //TransferUtils.InjectItem(entity.Position.X, entity.Position.Y, clone);
-            if(clone.stack == recipe.createItem.stack) //!+**THIS DOESN'T WORK**
-            {
-                entity.Status = TransferAssemblerTileEntity.StatusKind.MissingSpace;
-                return true; //returning with success, so we don't try alternate recipes
-            }
-
-            inventory.Commit(alchemy);
+            entity.stock = clone;
             entity.Status = TransferAssemblerTileEntity.StatusKind.Success;
-
+            inventory.Commit(alchemy);    
+        
             return true;
         }
 
-        private bool SearchStation(Recipe recipe, int x, int y, ref bool alchemy)
+        private bool SearchStation(Recipe recipe, int x, int y, out bool alchemy)
         {
+            alchemy = false;
+
             bool[] tileOk = new bool[Recipe.maxRequirements];
             bool waterOk = !recipe.needWater;
             bool honeyOk = !recipe.needHoney;
@@ -124,15 +131,14 @@ namespace MechTransfer.Tiles
                     {
                         for (int z = 0; z < Recipe.maxRequirements && recipe.requiredTile[z] != -1; z++)
                         {
-                            if (recipe.requiredTile[z] == tile.type)
-                                tileOk[z] = true;
-
-                            if (tileRemap.ContainsKey(tile.type) && tileRemap[tile.type].Contains(recipe.requiredTile[z]))
-                                tileOk[z] = true;
-
                             ModTile modTile = TileLoader.GetTile(tile.type);
-                            if (modTile != null && modTile.adjTiles.Contains(recipe.requiredTile[z]))
+
+                            if ((recipe.requiredTile[z] == tile.type) ||
+                                (tileRemap.ContainsKey(tile.type) && tileRemap[tile.type].Contains(recipe.requiredTile[z])) ||
+                                (modTile != null && modTile.adjTiles.Contains(recipe.requiredTile[z])))
+                            {
                                 tileOk[z] = true;
+                            }
 
                             //easier than reimplementing the zone finding logic
                             if (tile.type == TileID.SnowBlock || tile.type == TileID.IceBlock || tile.type == TileID.HallowedIce || tile.type == TileID.FleshIce || tile.type == TileID.CorruptIce)
@@ -147,12 +153,12 @@ namespace MechTransfer.Tiles
 
                     if (tile != null && tile.liquid > 200)
                     {
-                        if (tile.liquidType() == 0)
-                            waterOk = true;
-                        if (tile.liquidType() == 2)
-                            honeyOk = true;
-                        if (tile.liquidType() == 1)
-                            lavaOk = true;
+                        switch (tile.liquidType())
+                        {
+                            case 0: waterOk = true; break;
+                            case 2: honeyOk = true; break;
+                            case 1: lavaOk = true; break;
+                        }
                     }
                 }
             }
@@ -194,7 +200,9 @@ namespace MechTransfer.Tiles
                 case TransferAssemblerTileEntity.StatusKind.MissingStation:
                     statusText = "Missing crafting station"; statusColor = Color.Red; break;
                 case TransferAssemblerTileEntity.StatusKind.MissingSpace:
-                    statusText = "Inventory full"; statusColor = Color.Red; break;
+                    statusText = string.Format("Cant deposit ({0} x{1})", entity.stock.Name ,entity.stock.stack); statusColor = Color.Red; break;
+                case TransferAssemblerTileEntity.StatusKind.NoRecipe:
+                    statusText = "No recipe found"; statusColor = Color.Red; break;
             }
 
             ((MechTransfer)mod).filterHoverUI.Display(entity.ItemId, "Crafting: " + statusText, statusColor);
