@@ -21,7 +21,6 @@ namespace MechTransfer.Tiles
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.None, 0, 0);
             TileObjectData.addTile(Type);
 
-            drop = mod.ItemType("TransferFilterItem");
             AddMapEntry(new Color(200, 200, 200));
 
             hoverText = "Item allowed:";
@@ -31,7 +30,17 @@ namespace MechTransfer.Tiles
 
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
         {
-            mod.GetTileEntity<TransferFilterTileEntity>().Kill(i, j);
+            if (!effectOnly)
+            {
+                mod.GetTileEntity<TransferFilterTileEntity>().Kill(i, j);
+                if (!noItem)
+                {
+                    if (Main.tile[i, j].frameY == 0)
+                        Item.NewItem(i * 16, j * 16, 16, 16, mod.ItemType("TransferFilterItem"));
+                    else
+                        Item.NewItem(i * 16, j * 16, 16, 16, mod.ItemType("InverseTransferFilterItem"));
+                }
+            }
         }
 
         public bool ShouldPassthrough(TransferUtils agent, Point16 location, Item item)
@@ -41,7 +50,10 @@ namespace MechTransfer.Tiles
                 return false;
             TransferFilterTileEntity entity = (TransferFilterTileEntity)TileEntity.ByID[id];
 
-            return entity.ItemId == item.netID;
+            if(Main.tile[location.X,location.Y].frameY == 0)
+                return entity.ItemId == item.type;
+            else
+                return entity.ItemId != item.type;
         }
     }
 }

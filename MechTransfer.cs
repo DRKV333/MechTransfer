@@ -464,7 +464,8 @@ namespace MechTransfer
 
             //InverseFilter
             i = new SimplePlaceableItem();
-            i.placeType = TileType<InverseTransferFilterTile>();
+            i.placeType = TileType<TransferFilterTile>();
+            i.style = 1;
             AddItem("InverseTransferFilterItem", i);
             i.DisplayName.AddTranslation(LangID.English, "Transfer filter (blacklist)");
             i.Tooltip.AddTranslation(LangID.English, "Place in line with Transfer pipe\nRight click with item in hand to set filter");
