@@ -15,12 +15,8 @@ namespace MechTransfer.ContainerAdapters
             if (tile == null || !tile.active())
                 return null;
 
-            int originX = x;
-            int originY = y;
-            if (tile.frameX % 36 != 0)
-                originX--;
-            if (tile.frameY != 0)
-                originY--;
+            int originX = x - tile.frameX % 36 / 18;
+            int originY = y - tile.frameY / 18;
 
             int id = TEItemFrame.Find(originX, originY);
             if (id == -1)
@@ -42,7 +38,9 @@ namespace MechTransfer.ContainerAdapters
             if (!frame.item.IsAir)
                 return false;
 
-            frame.item = item;
+            frame.item = item.Clone();
+            frame.item.stack = 1;
+            item.stack--;
             HandleItemFrameChange(x, y, frame.ID);
             return true;
         }

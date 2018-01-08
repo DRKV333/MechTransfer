@@ -10,11 +10,11 @@ namespace MechTransfer.ContainerAdapters
     {
         //By god, this weapon rack thing is a complete mess...
 
-        public Point16 FindOrigin(int x, int y, out bool something)
+        public Point16 FindOrigin(int x, int y, out bool facingRight)
         {
             Tile tile = Main.tile[x, y];
 
-            int originY = y - tile.frameY % 36 / 18 + 1;
+            int originY = y - tile.frameY / 18 + 1;
 
             int realFrameX = 0;
             int temp = Math.DivRem(tile.frameX, 5000, out realFrameX);
@@ -23,11 +23,11 @@ namespace MechTransfer.ContainerAdapters
                 realFrameX = (temp - 1) * 18;
             }
 
-            something = false;
+            facingRight = false;
             if (realFrameX >= 54)
             {
                 realFrameX -= 54;
-                something = true;
+                facingRight = true;
             }
 
             int originX = x - realFrameX / 18;
@@ -46,26 +46,34 @@ namespace MechTransfer.ContainerAdapters
 
         public void TakeItem(int x, int y, object slot, int amount)
         {
-            bool something;
-            Point16 origin = FindOrigin(x, y, out something);
+            bool facingRight;
+            Point16 origin = FindOrigin(x, y, out facingRight);
 
-            Main.tile[origin.X, origin.Y].frameX = 0;
-            Main.tile[origin.X + 1, origin.Y].frameX = 18;
+            if (facingRight)
+            {
+                Main.tile[origin.X, origin.Y].frameX = 54;
+                Main.tile[origin.X + 1, origin.Y].frameX = 72;
+            }
+            else
+            {
+                Main.tile[origin.X, origin.Y].frameX = 0;
+                Main.tile[origin.X + 1, origin.Y].frameX = 18;
+            }
 
             HandleRackItemChange(origin.X, origin.Y);
         }
 
         public IEnumerable<Tuple<Item, object>> EnumerateItems(int x, int y)
         {
-            bool something;
-            Point16 origin = FindOrigin(x, y, out something);
+            bool facingRight;
+            Point16 origin = FindOrigin(x, y, out facingRight);
 
             if (Main.tile[origin.X, origin.Y].frameX < 5000)
                 yield break; //Empty
 
             Item item = new Item();
 
-            if (something)
+            if (facingRight)
             {
                 item.netDefaults(Main.tile[origin.X, origin.Y].frameX - 20100);
                 item.prefix = (byte)(Main.tile[origin.X + 1, origin.Y].frameX - 25000);
@@ -84,13 +92,13 @@ namespace MechTransfer.ContainerAdapters
             if (!Main.LocalPlayer.ItemFitsWeaponRack(item))
                 return false;
 
-            bool something;
-            Point16 origin = FindOrigin(x, y, out something);
+            bool facingRight;
+            Point16 origin = FindOrigin(x, y, out facingRight);
 
             if (Main.tile[origin.X, origin.Y].frameX >= 5000)
                 return false; //Already has item
 
-            if (something)
+            if (facingRight)
             {
                 Main.tile[origin.X, origin.Y].frameX = (short)(item.netID + 20100);
                 Main.tile[origin.X + 1, origin.Y].frameX = (short)(item.prefix + 25000);
@@ -103,6 +111,7 @@ namespace MechTransfer.ContainerAdapters
 
             HandleRackItemChange(origin.X, origin.Y);
 
+            item.stack--;
             return true;
         }
     }

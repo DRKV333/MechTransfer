@@ -7,7 +7,7 @@ using Terraria.ObjectData;
 
 namespace MechTransfer.Tiles
 {
-    public class TransferOutletTile : ModTile, ITransferTarget
+    public class MagicStorageInterfaceTile : ModTile
     {
         public override void SetDefaults()
         {
@@ -15,23 +15,19 @@ namespace MechTransfer.Tiles
             Main.tileNoFail[Type] = true;
             dustType = 1;
 
-            TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
+            TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
             TileObjectData.newTile.LavaDeath = false;
+            TileObjectData.newTile.StyleHorizontal = true;
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.None, 0, 0);
+            TileObjectData.newTile.CoordinateHeights = new int[] { 16, 16 };
             TileObjectData.addTile(Type);
 
-            drop = mod.ItemType("TransferOutletItem");
             AddMapEntry(new Color(200, 200, 200));
-
-            ((MechTransfer)mod).transferAgent.targets.Add(Type, this);
         }
 
-        public bool Receive(TransferUtils agent, Point16 location, Item item)
+        public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            int dropTarget = Item.NewItem(location.X * 16, location.Y * 16, 16, 16, item.type, item.stack, false, item.prefix);
-            Main.item[dropTarget].velocity = Vector2.Zero;
-            item.stack = 0;
-            return true;
+            Item.NewItem(i * 16, j * 16, 16, 16, mod.ItemType("MagicStorageInterfaceItem"));
         }
     }
 }

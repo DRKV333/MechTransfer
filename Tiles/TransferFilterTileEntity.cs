@@ -25,7 +25,7 @@ namespace MechTransfer.Tiles
 
         public override bool ValidTile(int i, int j)
         {
-            return Main.tile[i, j].active() && (Main.tile[i, j].type == mod.TileType<TransferFilterTile>());
+            return Main.tile[i, j].active() && (TileLoader.GetTile(Main.tile[i, j].type) is FilterableTile);
         }
 
         public override TagCompound Save()

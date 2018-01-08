@@ -1,14 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
-using Terraria.ModLoader;
 using Terraria.ObjectData;
 
 namespace MechTransfer.Tiles
 {
-    public class TransferFilterTile : ModTile
+    public class TransferFilterTile : FilterableTile, ITransferPassthrough
     {
         public override void SetDefaults()
         {
@@ -22,58 +20,39 @@ namespace MechTransfer.Tiles
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.None, 0, 0);
             TileObjectData.addTile(Type);
 
-            drop = mod.ItemType("TransferFilterItem");
             AddMapEntry(new Color(200, 200, 200));
+
+            hoverText = "Item allowed:";
+
+            ((MechTransfer)mod).transferAgent.passthroughs.Add(Type, this);
         }
 
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
         {
-            mod.GetTileEntity<TransferFilterTileEntity>().Kill(i, j);
-        }
-
-        public override void RightClick(int i, int j)
-        {
-            if (!Main.LocalPlayer.HeldItem.IsAir)
+            if (!effectOnly)
             {
-                int id = mod.GetTileEntity<TransferFilterTileEntity>().Find(i, j);
-                if (id != -1)
+                mod.GetTileEntity<TransferFilterTileEntity>().Kill(i, j);
+                if (!noItem)
                 {
-                    TransferFilterTileEntity tileEntity = (TransferFilterTileEntity)TileEntity.ByID[id];
-                    tileEntity.ItemId = Main.LocalPlayer.HeldItem.type;
-                    tileEntity.SyncData();
+                    if (Main.tile[i, j].frameY == 0)
+                        Item.NewItem(i * 16, j * 16, 16, 16, mod.ItemType("TransferFilterItem"));
+                    else
+                        Item.NewItem(i * 16, j * 16, 16, 16, mod.ItemType("InverseTransferFilterItem"));
                 }
             }
         }
 
-        public override void MouseOverFar(int i, int j)
+        public bool ShouldPassthrough(TransferUtils agent, Point16 location, Item item)
         {
-            DisplayTooltip(i, j);
-        }
-
-        public override void MouseOver(int i, int j)
-        {
-            DisplayTooltip(i, j);
-        }
-
-        public void DisplayTooltip(int i, int j)
-        {
-            int id = mod.GetTileEntity<TransferFilterTileEntity>().Find(i, j);
+            int id = mod.GetTileEntity<TransferFilterTileEntity>().Find(location.X, location.Y);
             if (id == -1)
-                return;
+                return false;
             TransferFilterTileEntity entity = (TransferFilterTileEntity)TileEntity.ByID[id];
 
-            if (entity.ItemId == 0)
-            {
-                Main.LocalPlayer.showItemIconText = "      Filter: Empty";
-                Main.LocalPlayer.showItemIcon2 = drop;
-            }
+            if (Main.tile[location.X, location.Y].frameY == 0)
+                return entity.ItemId == item.type;
             else
-            {
-                Main.LocalPlayer.showItemIconText = String.Format("      Filter: {0}", TransferUtils.ItemNameById(entity.ItemId));
-                Main.LocalPlayer.showItemIcon2 = entity.ItemId;
-            }
-
-            Main.LocalPlayer.showItemIcon = true;
+                return entity.ItemId != item.type;
         }
     }
 }

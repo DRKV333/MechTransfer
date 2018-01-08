@@ -52,6 +52,8 @@ namespace MechTransfer.ContainerAdapters
 
             WorldGen.ShootFromCannon(originX, originY, angle, ammotype, item.damage, item.knockBack, Main.myPlayer);
 
+            item.stack--;
+
             return true;
         }
     }

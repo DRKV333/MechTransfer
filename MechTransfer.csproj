@@ -14,7 +14,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -38,20 +38,22 @@
     <Compile Include="ContainerAdapters\ContainerAdapter.cs" />
     <Compile Include="ContainerAdapters\CrystalStandAdapter.cs" />
     <Compile Include="ContainerAdapters\ItemFrameAdapter.cs" />
+    <Compile Include="ContainerAdapters\MagicStorageInterfaceAdapter.cs" />
     <Compile Include="ContainerAdapters\OmniTurretAdapter.cs" />
     <Compile Include="ContainerAdapters\SnowballLauncherAdapter.cs" />
     <Compile Include="ContainerAdapters\WeaponRackAdapter.cs" />
+    <Compile Include="Interfaces.cs" />
     <Compile Include="Items\SimplePlaceableItem.cs" />
+    <Compile Include="Tiles\MagicStorageInterfaceTile.cs" />
+    <Compile Include="Tiles\FilterableTile.cs" />
     <Compile Include="Tiles\OmniTurretTile.cs" />
+    <Compile Include="Tiles\StackExtractorTile.cs" />
     <Compile Include="Tiles\TransferAssemblerTileEntity.cs" />
     <Compile Include="ItemInventory.cs" />
     <Compile Include="Items\PneumaticActuatorItem.cs" />
     <Compile Include="MechTransfer.cs" />
     <Compile Include="MechTransferMechanic.cs" />
     <Compile Include="MechTransferWorld.cs" />
-    <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
-    <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
-    <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
     <Compile Include="Tiles\TransferAssemblerTile.cs" />
     <Compile Include="Tiles\TransferFilterTile.cs" />
     <Compile Include="Tiles\TransferFilterTileEntity.cs" />
@@ -64,8 +66,13 @@
     <Compile Include="Tiles\TransferOutletTile.cs" />
     <Compile Include="Tiles\TransferPipeTile.cs" />
     <Compile Include="TransferUtils.cs" />
+    <Compile Include="UI\FilterHoverUI.cs" />
+    <Compile Include="VisualUtils.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="MagicStorage.All">
+      <HintPath>C:\Users\kwinc\Documents\My Games\Terraria\ModLoader\Mods\MagicStorage.All.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Windows\Microsoft.NET\assembly\GAC_32\Microsoft.Xna.Framework\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.dll</HintPath>

@@ -46,3 +46,9 @@ v1.4.1
 
 v1.4.2
 - Quick fix to stop assembler from eating items
+
+v1.5
+- New tool-tip
+- Added Magic Storage Interface
+- Added blacklist filter
+- Added Stack extractor

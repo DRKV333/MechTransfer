@@ -15,9 +15,9 @@ namespace MechTransfer.ContainerAdapters
         private int[] fireRate = new int[] { 11, 7, 0 };
         private int[] shootSpeed = new int[] { 10, 10, 20 };
 
-        public OmniTurretAdapter(Mod m)
+        public OmniTurretAdapter(Mod mod)
         {
-            mod = m;
+            this.mod = mod;
         }
 
         public void TakeItem(int x, int y, object slot, int amount)
@@ -31,7 +31,7 @@ namespace MechTransfer.ContainerAdapters
 
         public bool InjectItem(int x, int y, Item item)
         {
-            if (!item.consumable || item.ammo == 0 || item.shoot == 0)
+            if (item.ammo == 0 || item.shoot == 0 || item.ammo == AmmoID.Rocket)
                 return false;
 
             Tile tile = Main.tile[x, y];
@@ -75,6 +75,9 @@ namespace MechTransfer.ContainerAdapters
                 packet.Write((Int16)pId);
                 packet.Send();
             }
+
+            if (item.consumable)
+                item.stack--;
 
             return true;
         }

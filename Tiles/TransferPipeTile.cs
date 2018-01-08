@@ -19,6 +19,8 @@ namespace MechTransfer.Tiles
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.None, 0, 0);
             TileObjectData.addTile(Type);
 
+            ((MechTransfer)mod).transferAgent.unconditionalPassthroughType = Type;
+
             drop = mod.ItemType("TransferPipeItem");
             AddMapEntry(new Color(200, 200, 200));
         }

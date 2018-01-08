@@ -1,7 +1,8 @@
 author = DRKV
-version = 1.4.2
+version = 1.5
 displayName = MechTransfer
 includePDB = false
+weakReferences = MagicStorage@0.4.3.1
 buildIgnore = .gitignore, description.txt, *.csproj*, *.sln, .git/*, .vs/*, bin/*, obj/*, *.xcf
 hideCode = false
 hideResources = false

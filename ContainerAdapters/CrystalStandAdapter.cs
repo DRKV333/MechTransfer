@@ -29,16 +29,15 @@ namespace MechTransfer.ContainerAdapters
             if (tile == null || !tile.active())
                 return false;
 
-            int originY = y - tile.frameY % 18;
-
-            if (DD2Event.WouldFailSpawningHere(x, originY))
+            if (DD2Event.WouldFailSpawningHere(x, y))
             {
                 DD2Event.FailureMessage(-1);
                 return false;
             }
             else
             {
-                DD2Event.SummonCrystal(x, originY);
+                DD2Event.SummonCrystal(x, y);
+                item.stack--;
                 return true;
             }
         }

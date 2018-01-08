@@ -7,11 +7,7 @@ namespace MechTransfer.Items
     {
         public int placeType;
         public int style = 0;
-        public ModTranslation name;
         public int value = Item.sellPrice(0, 0, 50, 0);
-
-        public ModTranslation DName { get { return DisplayName; } }
-        public ModTranslation TTip { get { return Tooltip; } }
 
         public override bool CloneNewInstances { get { return true; } }
 
@@ -37,6 +33,7 @@ namespace MechTransfer.Items
             return false;
         }
 
+        //Needed to stop ModLoader from assigning a default display name
         public override void AutoStaticDefaults()
         {
             Main.itemTexture[item.type] = ModLoader.GetTexture(Texture);

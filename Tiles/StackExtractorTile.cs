@@ -2,13 +2,12 @@
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
-using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
 namespace MechTransfer.Tiles
 {
-    public class TransferGateTile : ModTile, ITransferPassthrough
+    public class StackExtractorTile : ModTile
     {
         public override void SetDefaults()
         {
@@ -21,30 +20,31 @@ namespace MechTransfer.Tiles
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.None, 0, 0);
             TileObjectData.addTile(Type);
 
-            drop = mod.ItemType("TransferGateItem");
+            drop = mod.ItemType("StackExtractorItem");
             AddMapEntry(new Color(200, 200, 200));
-
-            ((MechTransfer)mod).transferAgent.passthroughs.Add(Type, this);
         }
 
         public override void HitWire(int i, int j)
         {
-            if (Main.tile[i, j].frameY == 0)
-            {
-                Main.tile[i, j].frameY = 18;
-            }
-            else
-            {
-                Main.tile[i, j].frameY = 0;
-            }
+            if (Main.netMode == 1)
+                return;
 
-            if (Main.netMode == 2)
-                NetMessage.SendTileSquare(-1, i, j, 1, TileChangeType.None);
-        }
-
-        public bool ShouldPassthrough(TransferUtils agent, Point16 location, Item item)
-        {
-            return Main.tile[location.X, location.Y].frameY == 0;
+            foreach (var c in ((MechTransfer)mod).transferAgent.FindContainerAdjacent(i, j))
+            {
+                foreach (var item in c.EnumerateItems())
+                {
+                    if (!item.Item1.IsAir)
+                    {
+                        Item clone = item.Item1.Clone();
+                        int numTook = ((MechTransfer)mod).transferAgent.StartTransfer(i, j, clone);
+                        if (numTook > 0)
+                        {
+                            c.TakeItem(item.Item2, numTook);
+                            return;
+                        }
+                    }
+                }
+            }
         }
     }
 }
