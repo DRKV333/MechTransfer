@@ -22,14 +22,24 @@ namespace MechTransfer.ContainerAdapters
 
             TEStorageHeart heart = ((TEStorageCenter)TileEntity.ByPosition[center]).GetHeart();
 
-            if (Main.netMode == 0)
-            {
-                StoragePlayer storagePlayer = Main.LocalPlayer.GetModPlayer<StoragePlayer>();
-                if (storagePlayer.GetStorageHeart() == heart)
-                    storagePlayer.CloseStorage();
-            }
-
             return heart;
+        }
+
+        private void HandleStorageItemChange(TEStorageHeart heart)
+        {
+            if(Main.netMode == 2)
+            {
+                NetHelper.SendRefreshNetworkItems(heart.ID);
+            }
+            else if (Main.netMode == 0)
+            {
+                StorageGUI.RefreshItems();
+            }
+        }
+
+        public void KickMe()
+        {
+            Main.LocalPlayer.GetModPlayer<StoragePlayer>().CloseStorage();
         }
 
         public bool InjectItem(int x, int y, Item item)
@@ -39,7 +49,12 @@ namespace MechTransfer.ContainerAdapters
             TEStorageHeart targetHeart = FindHeart(x, y);
             targetHeart.DepositItem(item);
 
-            return oldstack != item.stack;
+            if(oldstack != item.stack)
+            {
+                HandleStorageItemChange(targetHeart);
+                return true;
+            }
+            return false;
         }
 
         public IEnumerable<Tuple<Item, object>> EnumerateItems(int x, int y)
@@ -60,6 +75,8 @@ namespace MechTransfer.ContainerAdapters
             toWithdraw.stack = amount;
 
             targetHeart.TryWithdraw(toWithdraw);
+
+            HandleStorageItemChange(targetHeart);
         }
     }
 }
