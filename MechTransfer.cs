@@ -406,6 +406,18 @@ namespace MechTransfer
             r.SetResult(ItemType("MatterProjectorItem"), 1);
             r.AddRecipe();
 
+            if (modMagicStorage != null)
+            {
+                //Magic storage interface
+                r = new ModRecipe(this);
+                r.AddIngredient(modMagicStorage.ItemType("StorageComponent"));
+                r.AddRecipeGroup("MagicStorage:AnyDiamond", 1);
+                r.AddIngredient(ItemType<PneumaticActuatorItem>(), 1);
+                r.AddTile(TileID.WorkBenches);
+                r.SetResult(ItemType("MagicStorageInterfaceItem"));
+                r.AddRecipe();
+            }
+
             LoadChestAdapters();
         }
 
@@ -517,15 +529,13 @@ namespace MechTransfer
             i.DisplayName.AddTranslation(LangID.English, "Matter projector");
             i.Tooltip.AddTranslation(LangID.English, "Shoots any standard ammo really, really fast");
 
-            if (modMagicStorage != null)
-            {
-                //Magic storage interface
-                i = new SimplePlaceableItem();
-                i.placeType = TileType<MagicStorageInterfaceTile>();
-                AddItem("MagicStorageInterfaceItem", i);
-                i.DisplayName.AddTranslation(LangID.English, "Magic storage interface");
-                i.Tooltip.AddTranslation(LangID.English, "Allows you to inject and extract items from storage systems");
-            }
+
+            //Magic storage interface
+            i = new SimplePlaceableItem();
+            i.placeType = TileType<MagicStorageInterfaceTile>();
+            AddItem("MagicStorageInterfaceItem", i);
+            i.DisplayName.AddTranslation(LangID.English, "Magic storage interface");
+            i.Tooltip.AddTranslation(LangID.English, "Allows you to inject and extract items from storage systems");
         }
 
         private void LoadBlacklist()
