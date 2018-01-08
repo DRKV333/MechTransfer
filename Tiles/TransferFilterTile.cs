@@ -2,7 +2,6 @@
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
-using Terraria.ModLoader;
 using Terraria.ObjectData;
 
 namespace MechTransfer.Tiles
@@ -50,7 +49,7 @@ namespace MechTransfer.Tiles
                 return false;
             TransferFilterTileEntity entity = (TransferFilterTileEntity)TileEntity.ByID[id];
 
-            if(Main.tile[location.X,location.Y].frameY == 0)
+            if (Main.tile[location.X, location.Y].frameY == 0)
                 return entity.ItemId == item.type;
             else
                 return entity.ItemId != item.type;

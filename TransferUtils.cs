@@ -1,12 +1,7 @@
 ﻿using MechTransfer.ContainerAdapters;
-using MechTransfer.Tiles;
-using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.Localization;
-using Terraria.ModLoader;
 
 namespace MechTransfer
 {
@@ -25,14 +20,14 @@ namespace MechTransfer
         public int StartTransfer(int startX, int startY, Item item)
         {
             running++;
-            
+
             int olstack = item.stack;
             Item clone = item.Clone();
             SearchForTarget(startX, startY, clone);
 
             running--;
 
-            if(running == 0)
+            if (running == 0)
             {
                 TargetTriggered.Clear();
             }
@@ -75,13 +70,12 @@ namespace MechTransfer
 
                     //checking for targets
                     ITransferTarget target;
-                    if(!TargetTriggered.Contains(searchP) && targets.TryGetValue(tile.type, out target))
+                    if (!TargetTriggered.Contains(searchP) && targets.TryGetValue(tile.type, out target))
                     {
                         TargetTriggered.Add(searchP);
                         if (target.Receive(this, searchP, IToTransfer))
                             VisualUtils.UnwindVisuals(visited, searchP);
                     }
-
 
                     if (IToTransfer.stack == 0)
                         return;

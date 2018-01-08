@@ -260,7 +260,7 @@ namespace MechTransfer
             //Omni turret
             OmniTurretAdapter omniTurretAdapter = new OmniTurretAdapter(this);
             Call(registerAdapterReflection, omniTurretAdapter, new int[] { TileType<OmniTurretTile>() });
-            
+
             if (modMagicStorage != null)
             {
                 //Magic storage interface
@@ -516,7 +516,7 @@ namespace MechTransfer
             AddItem("MatterProjectorItem", i);
             i.DisplayName.AddTranslation(LangID.English, "Matter projector");
             i.Tooltip.AddTranslation(LangID.English, "Shoots any standard ammo really, really fast");
-            
+
             if (modMagicStorage != null)
             {
                 //Magic storage interface

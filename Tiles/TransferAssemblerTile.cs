@@ -107,8 +107,8 @@ namespace MechTransfer.Tiles
 
             entity.stock = clone;
             entity.Status = TransferAssemblerTileEntity.StatusKind.Success;
-            inventory.Commit(alchemy);    
-        
+            inventory.Commit(alchemy);
+
             return true;
         }
 
@@ -200,7 +200,7 @@ namespace MechTransfer.Tiles
                 case TransferAssemblerTileEntity.StatusKind.MissingStation:
                     statusText = "Missing crafting station"; statusColor = Color.Red; break;
                 case TransferAssemblerTileEntity.StatusKind.MissingSpace:
-                    statusText = string.Format("Cant deposit ({0} x{1})", entity.stock.Name ,entity.stock.stack); statusColor = Color.Red; break;
+                    statusText = string.Format("Cant deposit ({0} x{1})", entity.stock.Name, entity.stock.stack); statusColor = Color.Red; break;
                 case TransferAssemblerTileEntity.StatusKind.NoRecipe:
                     statusText = "No recipe found"; statusColor = Color.Red; break;
             }

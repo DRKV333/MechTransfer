@@ -28,12 +28,12 @@ namespace MechTransfer.Tiles
                 return;
             }
 
-            if(stock.stack > 0)
+            if (stock.stack > 0)
             {
                 foreach (var container in ((MechTransfer)mod).transferAgent.FindContainerAdjacent(Position.X, Position.Y))
                 {
                     container.InjectItem(stock);
-                    
+
                     if (stock.stack < 1)
                     {
                         Status = StatusKind.Success;

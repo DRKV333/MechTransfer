@@ -134,7 +134,7 @@ namespace MechTransfer.ContainerAdapters
                 return;
 
             Main.chest[c].item[(int)slot].stack -= amount;
-            if(Main.chest[c].item[(int)slot].stack < 1)
+            if (Main.chest[c].item[(int)slot].stack < 1)
                 Main.chest[c].item[(int)slot] = new Item();
 
             HandleChestItemChange(c);

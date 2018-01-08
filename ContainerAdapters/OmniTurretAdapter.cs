@@ -76,7 +76,7 @@ namespace MechTransfer.ContainerAdapters
                 packet.Send();
             }
 
-            if(item.consumable)
+            if (item.consumable)
                 item.stack--;
 
             return true;

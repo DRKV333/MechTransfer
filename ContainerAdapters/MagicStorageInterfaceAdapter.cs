@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
-using MagicStorage;
+﻿using MagicStorage;
 using MagicStorage.Components;
+using System;
+using System.Collections.Generic;
+using Terraria;
 using Terraria.DataStructures;
-using Terraria.ModLoader;
-using MechTransfer.Tiles;
 
 namespace MechTransfer.ContainerAdapters
 {
-    class MagicStorageInterfaceAdapter
+    internal class MagicStorageInterfaceAdapter
     {
         private TEStorageHeart FindHeart(int x, int y)
         {
@@ -27,7 +22,7 @@ namespace MechTransfer.ContainerAdapters
 
         private void HandleStorageItemChange(TEStorageHeart heart)
         {
-            if(Main.netMode == 2)
+            if (Main.netMode == 2)
             {
                 NetHelper.SendRefreshNetworkItems(heart.ID);
             }
@@ -49,7 +44,7 @@ namespace MechTransfer.ContainerAdapters
             TEStorageHeart targetHeart = FindHeart(x, y);
             targetHeart.DepositItem(item);
 
-            if(oldstack != item.stack)
+            if (oldstack != item.stack)
             {
                 HandleStorageItemChange(targetHeart);
                 return true;

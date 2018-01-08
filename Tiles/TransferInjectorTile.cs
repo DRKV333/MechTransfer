@@ -39,7 +39,7 @@ namespace MechTransfer.Tiles
                     break;
             }
 
-            if(success)
+            if (success)
                 mod.GetModWorld<MechTransferWorld>().TripWireDelayed(location.X, location.Y, 1, 1);
 
             return success;

@@ -1,9 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
@@ -19,10 +14,10 @@ namespace MechTransfer.Tiles
             if (!Main.LocalPlayer.HeldItem.IsAir)
             {
                 TileEntity tileEntity;
-                if(TileEntity.ByPosition.TryGetValue(new Point16(i,j), out tileEntity))
+                if (TileEntity.ByPosition.TryGetValue(new Point16(i, j), out tileEntity))
                 {
                     TransferFilterTileEntity transferFilter = tileEntity as TransferFilterTileEntity;
-                    if(transferFilter != null)
+                    if (transferFilter != null)
                     {
                         transferFilter.ItemId = Main.LocalPlayer.HeldItem.type;
                         transferFilter.SyncData();
