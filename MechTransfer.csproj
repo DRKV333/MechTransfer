@@ -46,7 +46,6 @@
     <Compile Include="Items\SimplePlaceableItem.cs" />
     <Compile Include="Tiles\MagicStorageInterfaceTile.cs" />
     <Compile Include="Tiles\FilterableTile.cs" />
-    <Compile Include="Tiles\MagicStorageInterfaceTileEntity.cs" />
     <Compile Include="Tiles\OmniTurretTile.cs" />
     <Compile Include="Tiles\StackExtractorTile.cs" />
     <Compile Include="Tiles\TransferAssemblerTileEntity.cs" />

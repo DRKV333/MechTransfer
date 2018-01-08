@@ -25,7 +25,6 @@ namespace MechTransfer.Tiles
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.newTile.StyleHorizontal = true;
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.None, 0, 0);
-            TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(mod.GetTileEntity<MagicStorageInterfaceTileEntity>().Hook_AfterPlacement, -1, 0, false);
             TileObjectData.newTile.CoordinateHeights = new int[] { 16, 16 };
             TileObjectData.addTile(Type);
 
@@ -34,10 +33,7 @@ namespace MechTransfer.Tiles
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            int originX = i - frameX / 18;
-            int originY = j - frameX / 18;
-            Item.NewItem(originX * 16, j * 16, 16, 16, mod.ItemType("MagicStorageInterfaceItem"));
-            mod.GetTileEntity<TransferInletTileEntity>().Kill(originX, originY);
+            Item.NewItem(i * 16, j * 16, 16, 16, mod.ItemType("MagicStorageInterfaceItem"));
         }
     }
 }

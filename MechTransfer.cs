@@ -20,7 +20,7 @@ namespace MechTransfer
 {
     public class MechTransfer : Mod
     {
-        public enum ModMessageID { FilterSyncing, InterfaceSyncing, CreateDust, RotateTurret, ProjectileMakeHostile, KickFromChest }
+        public enum ModMessageID { FilterSyncing, CreateDust, RotateTurret, ProjectileMakeHostile, KickFromChest }
 
         public TransferUtils transferAgent = new TransferUtils();
 
@@ -165,20 +165,6 @@ namespace MechTransfer
                     TransferFilterTileEntity FilterEntity = (TransferFilterTileEntity)TileEntity.ByID[reader.ReadInt32()];
                     FilterEntity.ItemId = reader.ReadInt32();
                     NetMessage.SendData(MessageID.TileEntitySharing, -1, whoAmI, null, FilterEntity.ID, FilterEntity.Position.X, FilterEntity.Position.Y);
-
-                    break;
-
-                case ModMessageID.InterfaceSyncing:
-
-                    if (Main.netMode != 2)
-                        return;
-
-                    MagicStorageInterfaceTileEntity InterfaceEntity = (MagicStorageInterfaceTileEntity)TileEntity.ByID[reader.ReadInt32()];
-                    for (int i = 0; i < InterfaceEntity.selectedTypes.Length; i++)
-                    {
-                        InterfaceEntity.selectedTypes[i] = reader.ReadInt32();
-                    }
-                    NetMessage.SendData(MessageID.TileEntitySharing, -1, whoAmI, null, InterfaceEntity.ID, InterfaceEntity.Position.X, InterfaceEntity.Position.Y);
 
                     break;
 
