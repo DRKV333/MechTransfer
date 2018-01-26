@@ -11,7 +11,12 @@ namespace MechTransfer.ContainerAdapters
     {
         private TEStorageHeart FindHeart(int x, int y)
         {
-            Point16 center = TEStorageComponent.FindStorageCenter(new Point16(x, y));
+            Tile tile = Main.tile[x, y];
+
+            int originX = x - tile.frameX / 18;
+            int originY = y - tile.frameY / 18;
+
+            Point16 center = TEStorageComponent.FindStorageCenter(new Point16(originX, originY));
             if (center.X == -1 && center.Y == -1)
                 return null;
 
@@ -32,16 +37,15 @@ namespace MechTransfer.ContainerAdapters
             }
         }
 
-        public void KickMe()
-        {
-            Main.LocalPlayer.GetModPlayer<StoragePlayer>().CloseStorage();
-        }
 
         public bool InjectItem(int x, int y, Item item)
         {
             int oldstack = item.stack;
 
             TEStorageHeart targetHeart = FindHeart(x, y);
+            if (targetHeart == null)
+                return false;
+
             targetHeart.DepositItem(item);
 
             if (oldstack != item.stack)
@@ -55,6 +59,9 @@ namespace MechTransfer.ContainerAdapters
         public IEnumerable<Tuple<Item, object>> EnumerateItems(int x, int y)
         {
             TEStorageHeart targetHeart = FindHeart(x, y);
+            if (targetHeart == null)
+                yield break;
+
             foreach (var item in targetHeart.GetStoredItems())
             {
                 yield return new Tuple<Item, object>(item, item.type);
@@ -64,6 +71,8 @@ namespace MechTransfer.ContainerAdapters
         public void TakeItem(int x, int y, object slot, int amount)
         {
             TEStorageHeart targetHeart = FindHeart(x, y);
+            if (targetHeart == null)
+                return;
 
             Item toWithdraw = new Item();
             toWithdraw.SetDefaults((int)slot);
