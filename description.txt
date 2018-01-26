@@ -52,3 +52,7 @@ v1.5
 - Added Magic Storage Interface
 - Added blacklist filter
 - Added Stack extractor
+
+v1.5.1
+- Fixed outlet wire output
+- Added error handling

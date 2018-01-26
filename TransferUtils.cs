@@ -1,7 +1,10 @@
 ﻿using MechTransfer.ContainerAdapters;
+using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ModLoader;
 
 namespace MechTransfer
 {
@@ -23,15 +26,27 @@ namespace MechTransfer
 
             int olstack = item.stack;
             Item clone = item.Clone();
-            SearchForTarget(startX, startY, clone);
 
-            running--;
-
-            if (running == 0)
+            try
             {
-                TargetTriggered.Clear();
+                SearchForTarget(startX, startY, clone);
             }
-
+            catch(Exception e)
+            {
+                Main.NewText("An exception has occurred at MechTransfer.TransferUtils.SearchForTarget (Please look at the log in Documents/My Games/Terraria/ModLoader/Logs)", Color.Red);
+                ErrorLogger.Log("\nMechTransfer has logged an exception:");
+                ErrorLogger.Log(e.ToString());
+                ErrorLogger.Log("Please report it on the MechTransfer forum page.\n");
+            }
+            finally
+            {
+                running--;
+                if (running == 0)
+                {
+                    TargetTriggered.Clear();
+                }
+            }
+            
             return olstack - clone.stack;
         }
 

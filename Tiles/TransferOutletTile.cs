@@ -31,6 +31,7 @@ namespace MechTransfer.Tiles
             int dropTarget = Item.NewItem(location.X * 16, location.Y * 16, 16, 16, item.type, item.stack, false, item.prefix);
             Main.item[dropTarget].velocity = Vector2.Zero;
             item.stack = 0;
+            mod.GetModWorld<MechTransferWorld>().TripWireDelayed(location.X, location.Y, 1, 1);
             return true;
         }
     }
