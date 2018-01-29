@@ -64,7 +64,7 @@ namespace MechTransfer.ContainerAdapters
 
             foreach (var item in targetHeart.GetStoredItems())
             {
-                yield return new Tuple<Item, object>(item, item.type);
+                yield return new Tuple<Item, object>(item, item);
             }
         }
 
@@ -74,8 +74,7 @@ namespace MechTransfer.ContainerAdapters
             if (targetHeart == null)
                 return;
 
-            Item toWithdraw = new Item();
-            toWithdraw.SetDefaults((int)slot);
+            Item toWithdraw = ((Item)slot).Clone();
             toWithdraw.stack = amount;
 
             targetHeart.TryWithdraw(toWithdraw);
