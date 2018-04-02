@@ -1,4 +1,5 @@
 ﻿using MechTransfer.Items;
+using MechTransfer.Tiles.Simple;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
@@ -6,7 +7,6 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
-using MechTransfer.Tiles.Simple;
 
 namespace MechTransfer.Tiles
 {
@@ -25,7 +25,6 @@ namespace MechTransfer.Tiles
             TileObjectData.newTile.StyleHorizontal = true;
             TileObjectData.newTile.CoordinateHeights = new int[] { 16, 18 };
         }
-
 
         public override void HitWire(int i, int j)
         {
@@ -119,7 +118,7 @@ namespace MechTransfer.Tiles
             if (tile == null || !tile.active())
                 return;
 
-            Main.LocalPlayer.showItemIcon2 = placeItems[GetDropKind(tile.frameX,tile.frameY)].item.type;
+            Main.LocalPlayer.showItemIcon2 = placeItems[GetDropKind(tile.frameX, tile.frameY)].item.type;
             Main.LocalPlayer.showItemIcon = true;
         }
 

@@ -1,11 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MechTransfer.Items;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
-using Terraria.ObjectData;
-using Terraria.ModLoader;
-using MechTransfer.Items;
 using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.ObjectData;
 
 namespace MechTransfer.Tiles
 {

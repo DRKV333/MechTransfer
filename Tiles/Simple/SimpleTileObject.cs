@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.Xna.Framework;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ModLoader;
-using Terraria.ObjectData;
 using Terraria;
 using Terraria.DataStructures;
-using Microsoft.Xna.Framework;
+using Terraria.ModLoader;
+using Terraria.ObjectData;
 
 namespace MechTransfer.Tiles.Simple
 {
@@ -68,7 +64,6 @@ namespace MechTransfer.Tiles.Simple
                 DropItem(i, j, tile.frameX, tile.frameY);
             }
         }
-
 
         protected virtual void DropItem(int i, int j, int Fx, int Fy)
         {

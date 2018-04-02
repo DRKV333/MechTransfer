@@ -1,12 +1,12 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MechTransfer.Items;
+using MechTransfer.Tiles.Simple;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
-using MechTransfer.Tiles.Simple;
-using MechTransfer.Items;
-using Terraria.ID;
 
 namespace MechTransfer.Tiles
 {
@@ -23,12 +23,11 @@ namespace MechTransfer.Tiles
         {
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.None, 0, 0);
-
         }
 
         public override void HitWire(int i, int j)
         {
-            if (Main.netMode == 1) 
+            if (Main.netMode == 1)
                 return;
 
             foreach (var c in ((MechTransfer)mod).transferAgent.FindContainerAdjacent(i, j))

@@ -1,6 +1,5 @@
 ﻿using MechTransfer.Items;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
@@ -182,16 +181,22 @@ namespace MechTransfer.Tiles
             {
                 case TransferAssemblerTileEntity.StatusKind.Ready:
                     return "Ready";
+
                 case TransferAssemblerTileEntity.StatusKind.Success:
                     return "Success";
+
                 case TransferAssemblerTileEntity.StatusKind.MissingItem:
                     return string.Format("Missing ingredient ({0})", ItemNameById(entity.MissingItemType));
+
                 case TransferAssemblerTileEntity.StatusKind.MissingStation:
                     return "Missing crafting station";
+
                 case TransferAssemblerTileEntity.StatusKind.MissingSpace:
                     return string.Format("Cant deposit ({0} x{1})", entity.stock.Name, entity.stock.stack);
+
                 case TransferAssemblerTileEntity.StatusKind.NoRecipe:
                     return "No recipe found";
+
                 default:
                     return "How?!?";
             }
@@ -203,13 +208,16 @@ namespace MechTransfer.Tiles
             {
                 case TransferAssemblerTileEntity.StatusKind.Ready:
                     return Color.Yellow;
+
                 case TransferAssemblerTileEntity.StatusKind.Success:
                     return Color.Green;
+
                 case TransferAssemblerTileEntity.StatusKind.MissingItem:
                 case TransferAssemblerTileEntity.StatusKind.MissingStation:
                 case TransferAssemblerTileEntity.StatusKind.MissingSpace:
                 case TransferAssemblerTileEntity.StatusKind.NoRecipe:
                     return Color.Red;
+
                 default:
                     return Color.CornflowerBlue;
             }

@@ -1,12 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MechTransfer.Tiles.Simple;
+using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.DataStructures;
-using Terraria.ModLoader;
-using MechTransfer.Tiles.Simple;
 
 namespace MechTransfer.Tiles
 {
-    public abstract class FilterableTile<T> : SimpleTETile<T> where T: TransferFilterTileEntity 
+    public abstract class FilterableTile<T> : SimpleTETile<T> where T : TransferFilterTileEntity
     {
         public override void RightClick(int i, int j)
         {
@@ -35,7 +33,7 @@ namespace MechTransfer.Tiles
         public virtual void DisplayTooltip(int i, int j)
         {
             T entity;
-            if(TryGetEntity(i,j,out entity))
+            if (TryGetEntity(i, j, out entity))
                 ((MechTransfer)mod).filterHoverUI.Display(entity.ItemId, HoverText(entity), HoverColor(entity));
         }
 
@@ -48,6 +46,5 @@ namespace MechTransfer.Tiles
         {
             return Color.White;
         }
-
     }
 }

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ModLoader;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace MechTransfer.Tiles.Simple
 {
@@ -27,7 +24,7 @@ namespace MechTransfer.Tiles.Simple
         public override bool ValidTile(int i, int j)
         {
             Tile tile = Main.tile[i, j];
-            return tile != null && tile.active() && validTiles[Type].Contains(tile.type); 
+            return tile != null && tile.active() && validTiles[Type].Contains(tile.type);
         }
 
         public override bool Autoload(ref string name)

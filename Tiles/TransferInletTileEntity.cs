@@ -1,8 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MechTransfer.Tiles.Simple;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
-using MechTransfer.Tiles.Simple;
 
 namespace MechTransfer.Tiles
 {

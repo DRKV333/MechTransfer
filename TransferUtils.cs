@@ -31,7 +31,7 @@ namespace MechTransfer
             {
                 SearchForTarget(startX, startY, clone);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Main.NewText("An exception has occurred at MechTransfer.TransferUtils.SearchForTarget (Please look at the log in Documents/My Games/Terraria/ModLoader/Logs)", Color.Red);
                 ErrorLogger.Log("\nMechTransfer has logged an exception:");
@@ -46,7 +46,7 @@ namespace MechTransfer
                     TargetTriggered.Clear();
                 }
             }
-            
+
             return olstack - clone.stack;
         }
 

@@ -1,10 +1,9 @@
-﻿using System;
+﻿using MechTransfer.Tiles.Simple;
+using System;
 using System.IO;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
-using MechTransfer.Tiles.Simple;
 
 namespace MechTransfer.Tiles
 {

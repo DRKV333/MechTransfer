@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ObjectData;
 using Terraria.DataStructures;
-using Terraria.ModLoader;
-using Terraria;
+using Terraria.ObjectData;
 
 namespace MechTransfer.Tiles.Simple
 {
@@ -26,7 +20,7 @@ namespace MechTransfer.Tiles.Simple
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            Point16 origin = GetOrigin(i,j,frameX,frameY);
+            Point16 origin = GetOrigin(i, j, frameX, frameY);
             mod.GetTileEntity<TEntity>().Kill(origin.X, origin.Y);
             base.KillMultiTile(i, j, frameX, frameY);
         }
@@ -34,7 +28,7 @@ namespace MechTransfer.Tiles.Simple
         public TEntity GetEntity(int x, int y)
         {
             TileEntity TE;
-            if(!TileEntity.ByPosition.TryGetValue(GetOrigin(x, y), out TE))
+            if (!TileEntity.ByPosition.TryGetValue(GetOrigin(x, y), out TE))
             {
                 throw new ArgumentException("No tile entity at location");
             }
@@ -44,7 +38,7 @@ namespace MechTransfer.Tiles.Simple
         public bool TryGetEntity(int x, int y, out TEntity entity)
         {
             int id = mod.GetTileEntity<TEntity>().Find(x, y);
-            if(id == -1)
+            if (id == -1)
             {
                 entity = null;
                 return false;

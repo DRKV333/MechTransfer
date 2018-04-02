@@ -37,7 +37,6 @@ namespace MechTransfer.ContainerAdapters
             }
         }
 
-
         public bool InjectItem(int x, int y, Item item)
         {
             int oldstack = item.stack;

@@ -219,7 +219,7 @@ namespace MechTransfer
                     simpleTileAddRecipequeue.Add(new Action(tile.Addrecipes));
 
                     Type TEType;
-                    if(IsTETile(item, out TEType))
+                    if (IsTETile(item, out TEType))
                     {
                         if (!TEValid.ContainsKey(TEType))
                             TEValid.Add(TEType, new List<int>());
@@ -263,7 +263,7 @@ namespace MechTransfer
                 baseType = baseType.BaseType;
             }
 
-            if(baseType == typeof(object))
+            if (baseType == typeof(object))
             {
                 TEType = null;
                 return false;
@@ -273,8 +273,6 @@ namespace MechTransfer
                 TEType = type.GetMethod("GetEntity").ReturnType;
                 return true;
             }
-
-            
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
@@ -429,6 +427,5 @@ namespace MechTransfer
         {
             return GetPlaceItem<T>(style).item.type;
         }
-
     }
 }
