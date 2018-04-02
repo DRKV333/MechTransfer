@@ -4,10 +4,11 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using MechTransfer.Tiles.Simple;
 
 namespace MechTransfer.Tiles
 {
-    public class TransferFilterTileEntity : ModTileEntity
+    public class TransferFilterTileEntity : SimpleTileEntity
     {
         public int ItemId = 0;
 
@@ -23,11 +24,6 @@ namespace MechTransfer.Tiles
             }
         }
 
-        public override bool ValidTile(int i, int j)
-        {
-            return Main.tile[i, j].active() && (TileLoader.GetTile(Main.tile[i, j].type) is FilterableTile);
-        }
-
         public override TagCompound Save()
         {
             return new TagCompound() { { "ID", ItemId } };
@@ -37,17 +33,6 @@ namespace MechTransfer.Tiles
         {
             if (tag.ContainsKey("ID"))
                 ItemId = (int)tag["ID"];
-        }
-
-        public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction)
-        {
-            if (Main.netMode == 1)
-            {
-                NetMessage.SendTileSquare(Main.myPlayer, i, j, 1, TileChangeType.None);
-                NetMessage.SendData(MessageID.TileEntityPlacement, -1, -1, null, i, j, Type, 0f, 0, 0, 0);
-                return -1;
-            }
-            return Place(i, j);
         }
 
         public override void NetSend(BinaryWriter writer, bool lightSend)

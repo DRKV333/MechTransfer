@@ -4,26 +4,27 @@ using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
+using MechTransfer.Tiles.Simple;
+using MechTransfer.Items;
+using Terraria.ID;
 
 namespace MechTransfer.Tiles
 {
-    public class TransferInjectorTile : ModTile, ITransferTarget
+    public class TransferInjectorTile : SimpleTileObject, ITransferTarget
     {
         public override void SetDefaults()
         {
-            Main.tileFrameImportant[Type] = true;
-            Main.tileNoFail[Type] = true;
-            dustType = 1;
-
-            TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
-            TileObjectData.newTile.LavaDeath = false;
-            TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.None, 0, 0);
-            TileObjectData.addTile(Type);
-
-            drop = mod.ItemType("TransferInjectorItem");
             AddMapEntry(new Color(200, 200, 200));
 
             ((MechTransfer)mod).transferAgent.targets.Add(Type, this);
+
+            base.SetDefaults();
+        }
+
+        protected override void SetTileObjectData()
+        {
+            TileObjectData.newTile.LavaDeath = false;
+            TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.None, 0, 0);
         }
 
         public bool Receive(TransferUtils agent, Point16 location, Item item)
@@ -43,6 +44,27 @@ namespace MechTransfer.Tiles
                 mod.GetModWorld<MechTransferWorld>().TripWireDelayed(location.X, location.Y, 1, 1);
 
             return success;
+        }
+
+        public override void PostLoad()
+        {
+            SimplePlaceableItem i = new SimplePlaceableItem();
+            i.placeType = Type;
+            mod.AddItem("TransferInjectorItem", i);
+            i.DisplayName.AddTranslation(LangID.English, "Transfer Injector");
+            i.Tooltip.AddTranslation(LangID.English, "Injects items into adjacent chests");
+            placeItems[0] = i;
+        }
+
+        public override void Addrecipes()
+        {
+            ModRecipe r = new ModRecipe(mod);
+            r.AddIngredient(mod.ItemType<PneumaticActuatorItem>(), 1);
+            r.AddIngredient(ItemID.GoldenKey, 1);
+            r.AddIngredient(ItemID.Wire, 2);
+            r.SetResult(placeItems[0], 1);
+            r.AddTile(TileID.WorkBenches);
+            r.AddRecipe();
         }
     }
 }

@@ -15,11 +15,6 @@ namespace MechTransfer.Tiles
 
         private int timer = 0;
 
-        public override bool ValidTile(int i, int j)
-        {
-            return Main.tile[i, j].active() && (Main.tile[i, j].type == mod.TileType<TransferAssemblerTile>());
-        }
-
         public override void Update()
         {
             if (timer > 0)

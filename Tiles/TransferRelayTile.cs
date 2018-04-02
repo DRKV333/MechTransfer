@@ -4,17 +4,25 @@ using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
+using MechTransfer.Tiles.Simple;
+using MechTransfer.Items;
+using Terraria.ID;
 
 namespace MechTransfer.Tiles
 {
-    public class TransferRelayTile : ModTile, ITransferTarget
+    public class TransferRelayTile : SimpleTileObject, ITransferTarget
     {
         public override void SetDefaults()
         {
-            Main.tileFrameImportant[Type] = true;
-            Main.tileNoFail[Type] = true;
-            dustType = 1;
+            AddMapEntry(new Color(200, 200, 200));
 
+            ((MechTransfer)mod).transferAgent.targets.Add(Type, this);
+
+            base.SetDefaults();
+        }
+
+        protected override void SetTileObjectData()
+        {
             TileObjectData.newTile.CopyFrom(TileObjectData.Style2x1);
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.None, 0, 0);
             TileObjectData.newTile.LavaDeath = false;
@@ -22,16 +30,6 @@ namespace MechTransfer.Tiles
             TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
             TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceLeft;
             TileObjectData.addAlternate(1);
-            TileObjectData.addTile(Type);
-
-            AddMapEntry(new Color(200, 200, 200));
-
-            ((MechTransfer)mod).transferAgent.targets.Add(Type, this);
-        }
-
-        public override void KillMultiTile(int i, int j, int frameX, int frameY)
-        {
-            Item.NewItem(i * 16, j * 16, 16, 16, mod.ItemType("TransferRelayItem"));
         }
 
         public bool Receive(TransferUtils agent, Point16 location, Item item)
@@ -60,6 +58,27 @@ namespace MechTransfer.Tiles
             }
 
             return false;
+        }
+
+        public override void PostLoad()
+        {
+            SimplePlaceableItem i = new SimplePlaceableItem();
+            i.placeType = Type;
+            mod.AddItem("TransferRelayItem", i);
+            i.DisplayName.AddTranslation(LangID.English, "Transfer relay");
+            i.Tooltip.AddTranslation(LangID.English, "Receives items, and sends them out again");
+            placeItems[0] = i;
+        }
+
+        public override void Addrecipes()
+        {
+            ModRecipe r = new ModRecipe(mod);
+            r.AddIngredient(mod.ItemType<PneumaticActuatorItem>(), 1);
+            r.AddIngredient(ItemID.RedPressurePlate, 1);
+            r.anyPressurePlate = true;
+            r.AddTile(TileID.WorkBenches);
+            r.SetResult(placeItems[0], 1);
+            r.AddRecipe();
         }
     }
 }

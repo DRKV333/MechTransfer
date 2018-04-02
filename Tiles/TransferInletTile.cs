@@ -4,46 +4,64 @@ using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
+using MechTransfer.Tiles.Simple;
+using MechTransfer.Items;
+using Terraria.ID;
 
 namespace MechTransfer.Tiles
 {
-    public class TransferInletTile : ModTile, ITransferPassthrough
+    public class TransferInletTile : SimpleTETile<TransferInletTileEntity>, ITransferPassthrough
     {
         public override void SetDefaults()
         {
-            Main.tileFrameImportant[Type] = true;
             Main.tileSolid[Type] = true;
-            Main.tileNoFail[Type] = true;
             Main.tileNoAttach[Type] = true;
-            dustType = 1;
-
-            TileObjectData.newTile.Width = 3;
-            TileObjectData.newTile.Height = 1;
-            TileObjectData.newTile.Origin = new Point16(1, 0);
-            TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
-            TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(mod.GetTileEntity<TransferInletTileEntity>().Hook_AfterPlacement, -1, 0, false);
-            TileObjectData.newTile.UsesCustomCanPlace = true;
-            TileObjectData.newTile.CoordinateHeights = new int[] { 16 };
-            TileObjectData.newTile.CoordinateWidth = 16;
-            TileObjectData.newTile.CoordinatePadding = 2;
-            TileObjectData.addTile(Type);
 
             AddMapEntry(new Color(200, 200, 200));
 
             ((MechTransfer)mod).transferAgent.passthroughs.Add(Type, this);
+
+            base.SetDefaults();
         }
 
-        public override void KillMultiTile(int i, int j, int frameX, int frameY)
+        protected override void SetTileObjectData()
         {
-            int originX = (i - frameX / 18) + 1;
-            Item.NewItem(originX * 16, j * 16, 16, 16, mod.ItemType("TransferInletItem"));
-            mod.GetTileEntity<TransferInletTileEntity>().Kill(originX, j);
+            TileObjectData.newTile.Width = 3;
+            TileObjectData.newTile.Height = 1;
+            TileObjectData.newTile.Origin = new Point16(1, 0);
+            TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
+            TileObjectData.newTile.UsesCustomCanPlace = true;
+            TileObjectData.newTile.CoordinateHeights = new int[] { 16 };
+            TileObjectData.newTile.CoordinateWidth = 16;
+            TileObjectData.newTile.CoordinatePadding = 2;
+
+            base.SetTileObjectData();
         }
 
         public bool ShouldPassthrough(TransferUtils agent, Point16 location, Item item)
         {
             Tile tile = Main.tile[location.X, location.Y];
             return (tile.frameX == 0 || tile.frameX == 36);
+        }
+
+        public override void PostLoad()
+        {
+            SimplePlaceableItem i = new SimplePlaceableItem();
+            i.placeType = Type;
+            mod.AddItem("TransferInletItem", i);
+            i.DisplayName.AddTranslation(LangID.English, "Transfer inlet");
+            i.Tooltip.AddTranslation(LangID.English, "Picks up dropped items");
+            placeItems[0] = i;
+        }
+
+        public override void Addrecipes()
+        {
+            ModRecipe r = new ModRecipe(mod);
+            r.AddIngredient(mod.ItemType<PneumaticActuatorItem>(), 1);
+            r.AddIngredient(ItemID.InletPump, 1);
+            r.SetResult(placeItems[0].item.type, 1);
+            r.AddTile(TileID.WorkBenches);
+            r.AddRecipe();
         }
     }
 }

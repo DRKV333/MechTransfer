@@ -3,56 +3,98 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ObjectData;
+using Terraria.ModLoader;
+using MechTransfer.Items;
+using Terraria.ID;
 
 namespace MechTransfer.Tiles
 {
-    public class TransferFilterTile : FilterableTile, ITransferPassthrough
+    public class TransferFilterTile : FilterableTile<TransferFilterTileEntity>, ITransferPassthrough
     {
         public override void SetDefaults()
         {
-            Main.tileFrameImportant[Type] = true;
-            Main.tileNoFail[Type] = true;
-            dustType = 1;
-
-            TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
-            TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(mod.GetTileEntity<TransferFilterTileEntity>().Hook_AfterPlacement, -1, 0, false);
-            TileObjectData.newTile.LavaDeath = false;
-            TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.None, 0, 0);
-            TileObjectData.addTile(Type);
-
             AddMapEntry(new Color(200, 200, 200));
 
-            hoverText = "Item allowed:";
-
             ((MechTransfer)mod).transferAgent.passthroughs.Add(Type, this);
+
+            base.SetDefaults();
         }
 
-        public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
+        protected override void SetTileObjectData()
         {
-            if (!effectOnly)
-            {
-                mod.GetTileEntity<TransferFilterTileEntity>().Kill(i, j);
-                if (!noItem)
-                {
-                    if (Main.tile[i, j].frameY == 0)
-                        Item.NewItem(i * 16, j * 16, 16, 16, mod.ItemType("TransferFilterItem"));
-                    else
-                        Item.NewItem(i * 16, j * 16, 16, 16, mod.ItemType("InverseTransferFilterItem"));
-                }
-            }
+            TileObjectData.newTile.LavaDeath = false;
+            TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.None, 0, 0);
+            base.SetTileObjectData();
         }
 
         public bool ShouldPassthrough(TransferUtils agent, Point16 location, Item item)
         {
-            int id = mod.GetTileEntity<TransferFilterTileEntity>().Find(location.X, location.Y);
-            if (id == -1)
-                return false;
-            TransferFilterTileEntity entity = (TransferFilterTileEntity)TileEntity.ByID[id];
+            TransferFilterTileEntity TE;
+            if (TryGetEntity(location.X, location.Y, out TE))
+            {
+                if (Main.tile[location.X, location.Y].frameY == 0)
+                    return TE.ItemId == item.type;
+                else
+                    return TE.ItemId != item.type;
+            }
+            return false;
+        }
 
-            if (Main.tile[location.X, location.Y].frameY == 0)
-                return entity.ItemId == item.type;
+        public override string HoverText(TransferFilterTileEntity entity)
+        {
+            Tile tile = Main.tile[entity.Position.X, entity.Position.Y];
+            if (tile.frameY == 0)
+                return "Item allowed:";
             else
-                return entity.ItemId != item.type;
+                return "Item restricted:";
+        }
+
+        public override int GetDropKind(int Fx, int Fy)
+        {
+            return Fy / tileObjectData.CoordinateFullHeight;
+        }
+
+        public override void PostLoad()
+        {
+            placeItems = new ModItem[2];
+
+            //Filter
+            SimplePlaceableItem i = new SimplePlaceableItem();
+            i.placeType = Type;
+            mod.AddItem("TransferFilterItem", i);
+            i.DisplayName.AddTranslation(LangID.English, "Transfer filter (whitelist)");
+            i.Tooltip.AddTranslation(LangID.English, "Place in line with Transfer pipe\nRight click with item in hand to set filter");
+            placeItems[0] = i;
+
+            //InverseFilter
+            i = new SimplePlaceableItem();
+            i.placeType = Type;
+            i.style = 1;
+            mod.AddItem("InverseTransferFilterItem", i);
+            i.DisplayName.AddTranslation(LangID.English, "Transfer filter (blacklist)");
+            i.Tooltip.AddTranslation(LangID.English, "Place in line with Transfer pipe\nRight click with item in hand to set filter");
+            placeItems[1] = i;
+        }
+
+        public override void Addrecipes()
+        {
+            //Filter
+            ModRecipe r = new ModRecipe(mod);
+            r.AddIngredient(mod.ItemType<PneumaticActuatorItem>(), 1);
+            r.AddIngredient(ItemID.Actuator, 1);
+            r.AddIngredient(ItemID.ItemFrame, 1);
+            r.AddTile(TileID.WorkBenches);
+            r.SetResult(placeItems[0], 1);
+            r.AddRecipe();
+
+            //InverseFilter
+            r = new ModRecipe(mod);
+            r.AddIngredient(mod.ItemType<PneumaticActuatorItem>(), 1);
+            r.AddIngredient(ItemID.Actuator, 1);
+            r.AddIngredient(ItemID.ItemFrame, 1);
+            r.AddTile(TileID.WorkBenches);
+            r.SetResult(placeItems[1], 1);
+            r.AddRecipe();
         }
     }
 }

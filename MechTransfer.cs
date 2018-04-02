@@ -1,6 +1,7 @@
 using MechTransfer.ContainerAdapters;
 using MechTransfer.Items;
 using MechTransfer.Tiles;
+using MechTransfer.Tiles.Simple;
 using MechTransfer.UI;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,8 @@ namespace MechTransfer
 
         private GameInterfaceLayer interfaceLayer;
         public FilterHoverUI filterHoverUI;
+
+        private List<Action> simpleTileAddRecipequeue;
 
         private Mod modMagicStorage = null;
 
@@ -199,9 +202,79 @@ namespace MechTransfer
         {
             modMagicStorage = ModLoader.GetMod("MagicStorage");
 
-            LoadItems();
+            Assembly asm = Assembly.GetExecutingAssembly();
+            simpleTileAddRecipequeue = new List<Action>();
+            Dictionary<Type, List<int>> TEValid = new Dictionary<Type, List<int>>();
+            SimpleTileEntity.validTiles = new Dictionary<int, int[]>();
+            foreach (var item in asm.GetTypes())
+            {
+                if (item.IsAbstract)
+                    continue;
+
+                if (item.IsSubclassOf(typeof(SimpleTile)))
+                {
+                    SimpleTile tile = (SimpleTile)Activator.CreateInstance(item);
+                    AddTile(item.Name, tile, item.FullName.Replace('.', '/'));
+                    tile.PostLoad();
+                    simpleTileAddRecipequeue.Add(new Action(tile.Addrecipes));
+
+                    Type TEType;
+                    if(IsTETile(item, out TEType))
+                    {
+                        if (!TEValid.ContainsKey(TEType))
+                            TEValid.Add(TEType, new List<int>());
+
+                        TEValid[TEType].Add(tile.Type);
+                    }
+                }
+            }
+
+            foreach (var item in asm.GetTypes())
+            {
+                if (item.IsSubclassOf(typeof(SimpleTileEntity)))
+                {
+                    SimpleTileEntity TE = (SimpleTileEntity)Activator.CreateInstance(item);
+                    AddTileEntity(item.Name, TE);
+
+                    if (TEValid.ContainsKey(item))
+                    {
+                        SimpleTileEntity.validTiles.Add(TE.Type, TEValid[item].ToArray());
+                    }
+                    else
+                    {
+                        SimpleTileEntity.validTiles.Add(TE.Type, new int[0]);
+                    }
+                }
+            }
+
             if (!Main.dedServ)
                 LoadUI();
+        }
+
+        private bool IsTETile(Type type, out Type TEType)
+        {
+            List<Type> bases = new List<Type>();
+
+            Type baseType = type.BaseType;
+            while (baseType != typeof(object))
+            {
+                if (baseType.IsGenericType && baseType.GetGenericTypeDefinition() == typeof(SimpleTETile<>))
+                    break;
+                baseType = baseType.BaseType;
+            }
+
+            if(baseType == typeof(object))
+            {
+                TEType = null;
+                return false;
+            }
+            else
+            {
+                TEType = type.GetMethod("GetEntity").ReturnType;
+                return true;
+            }
+
+            
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
@@ -286,130 +359,16 @@ namespace MechTransfer
 
         public override void AddRecipes()
         {
-            //Assembler
-            ModRecipe r = new ModRecipe(this);
-            r.AddIngredient(ItemType<PneumaticActuatorItem>(), 1);
-            r.AddIngredient(ItemID.Cog, 10);
-            r.AddTile(TileID.WorkBenches);
-            r.SetResult(ItemType("TransferAssemblerItem"), 1);
-            r.AddRecipe();
-
-            //Extractor
-            r = new ModRecipe(this);
-            r.AddIngredient(ItemType<PneumaticActuatorItem>(), 1);
-            r.AddIngredient(ItemID.GoldenKey, 1);
-            r.AddIngredient(ItemID.Wire, 2);
-            r.SetResult(ItemType("TransferExtractorItem"), 1);
-            r.AddTile(TileID.WorkBenches);
-            r.AddRecipe();
-
-            //StackExtractor
-            r = new ModRecipe(this);
-            r.AddIngredient(ItemType("TransferExtractorItem"), 1);
-            r.AddIngredient(ItemID.Nanites, 10);
-            r.SetResult(ItemType("StackExtractorItem"), 1);
-            r.AddTile(TileID.WorkBenches);
-            r.AddRecipe();
-
-            //Injector
-            r = new ModRecipe(this);
-            r.AddIngredient(ItemType<PneumaticActuatorItem>(), 1);
-            r.AddIngredient(ItemID.GoldenKey, 1);
-            r.AddIngredient(ItemID.Wire, 2);
-            r.SetResult(ItemType("TransferInjectorItem"), 1);
-            r.AddTile(TileID.WorkBenches);
-            r.AddRecipe();
-
-            //Filter
-            r = new ModRecipe(this);
-            r.AddIngredient(ItemType<PneumaticActuatorItem>(), 1);
-            r.AddIngredient(ItemID.Actuator, 1);
-            r.AddIngredient(ItemID.ItemFrame, 1);
-            r.AddTile(TileID.WorkBenches);
-            r.SetResult(ItemType("TransferFilterItem"), 1);
-            r.AddRecipe();
-
-            //InverseFilter
-            r = new ModRecipe(this);
-            r.AddIngredient(ItemType<PneumaticActuatorItem>(), 1);
-            r.AddIngredient(ItemID.Actuator, 1);
-            r.AddIngredient(ItemID.ItemFrame, 1);
-            r.AddTile(TileID.WorkBenches);
-            r.SetResult(ItemType("InverseTransferFilterItem"), 1);
-            r.AddRecipe();
-
-            //Gate
-            r = new ModRecipe(this);
-            r.AddIngredient(ItemType<PneumaticActuatorItem>(), 1);
-            r.AddIngredient(ItemID.Actuator, 1);
-            r.AddTile(TileID.WorkBenches);
-            r.SetResult(ItemType("TransferGateItem"), 1);
-            r.AddRecipe();
-
-            //Inlet
-            r = new ModRecipe(this);
-            r.AddIngredient(ItemType<PneumaticActuatorItem>(), 1);
-            r.AddIngredient(ItemID.InletPump, 1);
-            r.SetResult(ItemType("TransferInletItem"), 1);
-            r.AddTile(TileID.WorkBenches);
-            r.AddRecipe();
-
-            //Outlet
-            r = new ModRecipe(this);
-            r.AddIngredient(ItemType<PneumaticActuatorItem>(), 1);
-            r.AddIngredient(ItemID.OutletPump, 1);
-            r.SetResult(ItemType("TransferOutletItem"), 1);
-            r.AddTile(TileID.WorkBenches);
-            r.AddRecipe();
-
-            //Pipe
-            r = new ModRecipe(this);
-            r.AddIngredient(ItemType<PneumaticActuatorItem>(), 1);
-            r.AddIngredient(ItemID.IronBar, 1);
-            r.anyIronBar = true;
-            r.AddTile(TileID.Anvils);
-            r.SetResult(ItemType("TransferPipeItem"), 25);
-            r.AddRecipe();
-
-            //Relay
-            r = new ModRecipe(this);
-            r.AddIngredient(ItemType<PneumaticActuatorItem>(), 1);
-            r.AddIngredient(ItemID.RedPressurePlate, 1);
-            r.anyPressurePlate = true;
-            r.AddTile(TileID.WorkBenches);
-            r.SetResult(ItemType("TransferRelayItem"), 1);
-            r.AddRecipe();
-
-            //Omni turret
-            r = new ModRecipe(this);
-            r.AddIngredient(ItemType<PneumaticActuatorItem>(), 5);
-            r.AddIngredient(ItemID.IllegalGunParts, 1);
-            r.AddIngredient(ItemID.DartTrap, 1);
-            r.AddTile(TileID.WorkBenches);
-            r.SetResult(ItemType("OmniTurretItem"), 1);
-            r.AddRecipe();
-
-            //Super omni turret
-            r = new ModRecipe(this);
-            r.AddIngredient(ItemType("OmniTurretItem"), 1);
-            r.AddIngredient(ItemID.Cog, 10);
-            r.AddTile(TileID.WorkBenches);
-            r.SetResult(ItemType("SuperOmniTurretItem"), 1);
-            r.AddRecipe();
-
-            //Matter projector
-            r = new ModRecipe(this);
-            r.AddIngredient(ItemType("SuperOmniTurretItem"), 1);
-            r.AddIngredient(ItemID.FragmentVortex, 5);
-            r.AddIngredient(ItemID.LunarBar, 5);
-            r.AddTile(TileID.LunarCraftingStation);
-            r.SetResult(ItemType("MatterProjectorItem"), 1);
-            r.AddRecipe();
+            foreach (var item in simpleTileAddRecipequeue)
+            {
+                item();
+            }
+            simpleTileAddRecipequeue = null;
 
             if (modMagicStorage != null)
             {
                 //Magic storage interface
-                r = new ModRecipe(this);
+                ModRecipe r = new ModRecipe(this);
                 r.AddIngredient(modMagicStorage.ItemType("StorageComponent"));
                 r.AddRecipeGroup("MagicStorage:AnyDiamond", 1);
                 r.AddIngredient(ItemType<PneumaticActuatorItem>(), 1);
@@ -419,123 +378,6 @@ namespace MechTransfer
             }
 
             LoadChestAdapters();
-        }
-
-        private void LoadItems()
-        {
-            //Assembler
-            SimplePlaceableItem i = new SimplePlaceableItem();
-            i.placeType = TileType<TransferAssemblerTile>();
-            i.value = Item.sellPrice(0, 1, 0, 0);
-            AddItem("TransferAssemblerItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Transfer assembler");
-            i.Tooltip.AddTranslation(LangID.English, "WIP\nCrafts items automatically\nRight click with item in hand to set filter");
-
-            //Extractor
-            i = new SimplePlaceableItem();
-            i.placeType = TileType<TransferExtractorTile>();
-            AddItem("TransferExtractorItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Transfer extractor");
-            i.Tooltip.AddTranslation(LangID.English, "Extracts items from adjacent chests");
-
-            //StackExtractor
-            i = new SimplePlaceableItem();
-            i.placeType = TileType<StackExtractorTile>();
-            i.value = Item.sellPrice(0, 1, 0, 0);
-            AddItem("StackExtractorItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Stack extractor");
-            i.Tooltip.AddTranslation(LangID.English, "Extracts a whole stack at once");
-
-            //Injector
-            i = new SimplePlaceableItem();
-            i.placeType = TileType<TransferInjectorTile>();
-            AddItem("TransferInjectorItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Transfer Injector");
-            i.Tooltip.AddTranslation(LangID.English, "Injects items into adjacent chests");
-
-            //Filter
-            i = new SimplePlaceableItem();
-            i.placeType = TileType<TransferFilterTile>();
-            AddItem("TransferFilterItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Transfer filter (whitelist)");
-            i.Tooltip.AddTranslation(LangID.English, "Place in line with Transfer pipe\nRight click with item in hand to set filter");
-
-            //InverseFilter
-            i = new SimplePlaceableItem();
-            i.placeType = TileType<TransferFilterTile>();
-            i.style = 1;
-            AddItem("InverseTransferFilterItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Transfer filter (blacklist)");
-            i.Tooltip.AddTranslation(LangID.English, "Place in line with Transfer pipe\nRight click with item in hand to set filter");
-
-            //Gate
-            i = new SimplePlaceableItem();
-            i.placeType = TileType<TransferGateTile>();
-            AddItem("TransferGateItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Transfer gate");
-            i.Tooltip.AddTranslation(LangID.English, "Place in line with Transfer pipe to toggle the item flow with wire");
-
-            //Inlet
-            i = new SimplePlaceableItem();
-            i.placeType = TileType<TransferInletTile>();
-            AddItem("TransferInletItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Transfer inlet");
-            i.Tooltip.AddTranslation(LangID.English, "Picks up dropped items");
-
-            //Outlet
-            i = new SimplePlaceableItem();
-            i.placeType = TileType<TransferOutletTile>();
-            AddItem("TransferOutletItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Transfer outlet");
-            i.Tooltip.AddTranslation(LangID.English, "Drops item");
-
-            //Pipe
-            i = new SimplePlaceableItem();
-            i.placeType = TileType<TransferPipeTile>();
-            AddItem("TransferPipeItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Transfer pipe");
-            i.Tooltip.AddTranslation(LangID.English, "Used to connect item transfer devices");
-
-            //Relay
-            i = new SimplePlaceableItem();
-            i.placeType = TileType<TransferRelayTile>();
-            AddItem("TransferRelayItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Transfer relay");
-            i.Tooltip.AddTranslation(LangID.English, "Receives items, and sends them out again");
-
-            //Omni turret
-            i = new SimplePlaceableItem();
-            i.placeType = TileType<OmniTurretTile>();
-            i.value = Item.sellPrice(0, 1, 0, 0);
-            AddItem("OmniTurretItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Omni turret");
-            i.Tooltip.AddTranslation(LangID.English, "Shoots any standard ammo");
-
-            //Super omni turret
-            i = new SimplePlaceableItem();
-            i.placeType = TileType<OmniTurretTile>();
-            i.value = Item.sellPrice(0, 1, 0, 0);
-            i.style = 1;
-            AddItem("SuperOmniTurretItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Super omni turret");
-            i.Tooltip.AddTranslation(LangID.English, "Shoots any standard ammo");
-
-            //Matter projector
-            i = new SimplePlaceableItem();
-            i.placeType = TileType<OmniTurretTile>();
-            i.value = Item.sellPrice(0, 1, 0, 0);
-            i.style = 2;
-            AddItem("MatterProjectorItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Matter projector");
-            i.Tooltip.AddTranslation(LangID.English, "Shoots any standard ammo really, really fast");
-
-
-            //Magic storage interface
-            i = new SimplePlaceableItem();
-            i.placeType = TileType<MagicStorageInterfaceTile>();
-            AddItem("MagicStorageInterfaceItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Magic storage interface");
-            i.Tooltip.AddTranslation(LangID.English, "Allows you to inject and extract items from storage systems");
         }
 
         private void LoadBlacklist()
@@ -565,5 +407,28 @@ namespace MechTransfer
                 }
             }
         }
+
+        public ModItem GetPlaceItem<T>() where T : SimplePlaceableTile
+        {
+            SimplePlaceableTile tile = (SimplePlaceableTile)GetTile<T>();
+            return tile.placeItem;
+        }
+
+        public ModItem GetPlaceItem<T>(int kind) where T : SimpleTileObject
+        {
+            SimpleTileObject tile = GetTile<T>();
+            return tile.GetPlaceItem(kind);
+        }
+
+        public int PlaceItemType<T>() where T : SimplePlaceableTile
+        {
+            return GetPlaceItem<T>().item.type;
+        }
+
+        public int PlaceItemType<T>(int style) where T : SimpleTileObject
+        {
+            return GetPlaceItem<T>(style).item.type;
+        }
+
     }
 }
