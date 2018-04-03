@@ -332,6 +332,10 @@ namespace MechTransfer
             OmniTurretAdapter omniTurretAdapter = new OmniTurretAdapter(this);
             Call(registerAdapterReflection, omniTurretAdapter, new int[] { TileType<OmniTurretTile>() });
 
+            //Extractinator
+            ExtractinatorAdapter extractinatorAdapter = new ExtractinatorAdapter();
+            Call(registerAdapterReflection, extractinatorAdapter, new int[] { TileID.Extractinator });
+
             if (modMagicStorage != null)
             {
                 //Magic storage interface

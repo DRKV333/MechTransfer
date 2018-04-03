@@ -38,6 +38,7 @@
     <Compile Include="ContainerAdapters\ChestAdapter.cs" />
     <Compile Include="ContainerAdapters\ContainerAdapter.cs" />
     <Compile Include="ContainerAdapters\CrystalStandAdapter.cs" />
+    <Compile Include="ContainerAdapters\ExtractinatorAdapter.cs" />
     <Compile Include="ContainerAdapters\ItemFrameAdapter.cs" />
     <Compile Include="ContainerAdapters\MagicStorageInterfaceAdapter.cs" />
     <Compile Include="ContainerAdapters\OmniTurretAdapter.cs" />
