@@ -15,7 +15,7 @@ namespace MechTransfer.Tiles
         public override void SetDefaults()
         {
             Main.tileSolid[Type] = true;
-            Main.tileNoAttach[Type] = true;
+            mod.GetGlobalTile<ChestPlacementFix>().AddNoChestTile(Type);
 
             AddMapEntry(new Color(200, 200, 200));
 
