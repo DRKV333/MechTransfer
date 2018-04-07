@@ -33,6 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ButtonDelayWorld.cs" />
     <Compile Include="ChestPlacementFix.cs" />
     <Compile Include="ContainerAdapters\CannonAdapter.cs" />
     <Compile Include="ContainerAdapters\ChestAdapter.cs" />
@@ -46,6 +47,7 @@
     <Compile Include="ContainerAdapters\WeaponRackAdapter.cs" />
     <Compile Include="Interfaces.cs" />
     <Compile Include="Items\SimplePlaceableItem.cs" />
+    <Compile Include="Tiles\BigButtonTile.cs" />
     <Compile Include="Tiles\MagicStorageInterfaceTile.cs" />
     <Compile Include="Tiles\FilterableTile.cs" />
     <Compile Include="Tiles\OmniTurretTile.cs" />
@@ -54,6 +56,7 @@
     <Compile Include="Tiles\Simple\SimpleTile.cs" />
     <Compile Include="Tiles\Simple\SimpleTileEntity.cs" />
     <Compile Include="Tiles\Simple\SimpleTileObject.cs" />
+    <Compile Include="Tiles\SmallButtonTile.cs" />
     <Compile Include="Tiles\StackExtractorTile.cs" />
     <Compile Include="Tiles\TransferAssemblerTileEntity.cs" />
     <Compile Include="ItemInventory.cs" />
