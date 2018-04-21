@@ -46,6 +46,7 @@
     <Compile Include="ContainerAdapters\SnowballLauncherAdapter.cs" />
     <Compile Include="ContainerAdapters\WeaponRackAdapter.cs" />
     <Compile Include="Interfaces.cs" />
+    <Compile Include="Items\ItemFilterItem.cs" />
     <Compile Include="Items\SimplePlaceableItem.cs" />
     <Compile Include="Tiles\BigButtonTile.cs" />
     <Compile Include="Tiles\MagicStorageInterfaceTile.cs" />
