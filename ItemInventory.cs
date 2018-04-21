@@ -132,6 +132,43 @@ namespace MechTransfer
             }
         }
 
+        public int ItemCount(int type)
+        {
+            ItemCatalog catalog;
+            if (catalogs.TryGetValue(type, out catalog))
+            {
+                return catalog.Total();
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        public void TakeItem(Item take)
+        {
+            catalogs[take.type].Take(take.stack);
+        }
+
+        public bool TryTakeItem(Item take)
+        {
+            ItemCatalog catalog;
+            if(catalogs.TryGetValue(take.type, out catalog))
+            {
+                if (catalog.Total() >= take.stack)
+                {
+                    catalog.Take(take.stack);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            return false;
+        }
+
         public bool TryTakeIngredient(Recipe recipe, Item ingredient)
         {
             int need = ingredient.stack;
@@ -157,7 +194,6 @@ namespace MechTransfer
                 }
             }
 
-            Reset();
             return false;
         }
     }
