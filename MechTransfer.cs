@@ -25,8 +25,6 @@ namespace MechTransfer
 
         public TransferUtils transferAgent = new TransferUtils();
 
-        internal HashSet<int> PickupBlacklist = new HashSet<int>();
-
         private const string callErorPrefix = "MechTransfer Call() error: ";
         private const string registerAdapter = "RegisterAdapter";
         private const string registerAdapterReflection = "RegisterAdapterReflection";
@@ -289,7 +287,6 @@ namespace MechTransfer
         public override void PostSetupContent()
         {
             LoadAdapters();
-            LoadBlacklist();
         }
 
         private void LoadUI()
@@ -380,34 +377,6 @@ namespace MechTransfer
             }
 
             LoadChestAdapters();
-        }
-
-        private void LoadBlacklist()
-        {
-            PickupBlacklist.Add(ItemID.Heart);
-            PickupBlacklist.Add(ItemID.CandyApple);
-            PickupBlacklist.Add(ItemID.CandyCane);
-
-            PickupBlacklist.Add(ItemID.Star);
-            PickupBlacklist.Add(ItemID.SugarPlum);
-            PickupBlacklist.Add(ItemID.SoulCake);
-
-            PickupBlacklist.Add(ItemID.NebulaPickup1);
-            PickupBlacklist.Add(ItemID.NebulaPickup2);
-            PickupBlacklist.Add(ItemID.NebulaPickup3);
-
-            PickupBlacklist.Add(ItemID.DD2EnergyCrystal);
-
-            for (int i = 0; i < ItemLoader.ItemCount; i++)
-            {
-                ModItem item = ItemLoader.GetItem(i);
-                if (item != null &&
-                   (item.GetType().GetMethod("ItemSpace").DeclaringType != typeof(ModItem) ||
-                   item.GetType().GetMethod("OnPickup").DeclaringType != typeof(ModItem)))
-                {
-                    PickupBlacklist.Add(item.item.type);
-                }
-            }
         }
 
         public ModItem GetPlaceItem<T>() where T : SimplePlaceableTile

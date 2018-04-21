@@ -62,6 +62,36 @@ namespace MechTransfer.Tiles
             r.SetResult(placeItems[0].item.type, 1);
             r.AddTile(TileID.WorkBenches);
             r.AddRecipe();
+
+            LoadBlacklist();
+        }
+
+        private void LoadBlacklist()
+        {
+            TransferInletTileEntity.PickupBlacklist.Add(ItemID.Heart);
+            TransferInletTileEntity.PickupBlacklist.Add(ItemID.CandyApple);
+            TransferInletTileEntity.PickupBlacklist.Add(ItemID.CandyCane);
+
+            TransferInletTileEntity.PickupBlacklist.Add(ItemID.Star);
+            TransferInletTileEntity.PickupBlacklist.Add(ItemID.SugarPlum);
+            TransferInletTileEntity.PickupBlacklist.Add(ItemID.SoulCake);
+
+            TransferInletTileEntity.PickupBlacklist.Add(ItemID.NebulaPickup1);
+            TransferInletTileEntity.PickupBlacklist.Add(ItemID.NebulaPickup2);
+            TransferInletTileEntity.PickupBlacklist.Add(ItemID.NebulaPickup3);
+
+            TransferInletTileEntity.PickupBlacklist.Add(ItemID.DD2EnergyCrystal);
+
+            for (int i = 0; i < ItemLoader.ItemCount; i++)
+            {
+                ModItem item = ItemLoader.GetItem(i);
+                if (item != null &&
+                   (item.GetType().GetMethod("ItemSpace").DeclaringType != typeof(ModItem) ||
+                   item.GetType().GetMethod("OnPickup").DeclaringType != typeof(ModItem)))
+                {
+                    TransferInletTileEntity.PickupBlacklist.Add(item.item.type);
+                }
+            }
         }
     }
 }
