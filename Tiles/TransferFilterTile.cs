@@ -18,7 +18,7 @@ namespace MechTransfer.Tiles
         {
             AddMapEntry(new Color(200, 200, 200));
 
-            ((MechTransfer)mod).transferAgent.passthroughs.Add(Type, this);
+            mod.GetModWorld<TransferAgent>().passthroughs.Add(Type, this);
 
             base.SetDefaults();
         }
@@ -30,7 +30,7 @@ namespace MechTransfer.Tiles
             base.SetTileObjectData();
         }
 
-        public bool ShouldPassthrough(TransferUtils agent, Point16 location, Item item)
+        public bool ShouldPassthrough(Point16 location, Item item)
         {
             TransferFilterTileEntity TE;
             if (TryGetEntity(location.X, location.Y, out TE))

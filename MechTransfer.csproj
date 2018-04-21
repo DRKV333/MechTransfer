@@ -48,6 +48,7 @@
     <Compile Include="Interfaces.cs" />
     <Compile Include="Items\ItemFilterItem.cs" />
     <Compile Include="Items\SimplePlaceableItem.cs" />
+    <Compile Include="MechTransferAssemblerWorld.cs" />
     <Compile Include="Tiles\BigButtonTile.cs" />
     <Compile Include="Tiles\MagicStorageInterfaceTile.cs" />
     <Compile Include="Tiles\FilterableTile.cs" />
@@ -64,7 +65,6 @@
     <Compile Include="Items\PneumaticActuatorItem.cs" />
     <Compile Include="MechTransfer.cs" />
     <Compile Include="MechTransferMechanic.cs" />
-    <Compile Include="MechTransferWorld.cs" />
     <Compile Include="Tiles\TransferAssemblerTile.cs" />
     <Compile Include="Tiles\TransferFilterTile.cs" />
     <Compile Include="Tiles\TransferFilterTileEntity.cs" />
@@ -76,7 +76,7 @@
     <Compile Include="Tiles\TransferInletTileEntity.cs" />
     <Compile Include="Tiles\TransferOutletTile.cs" />
     <Compile Include="Tiles\TransferPipeTile.cs" />
-    <Compile Include="TransferUtils.cs" />
+    <Compile Include="TransferAgent.cs" />
     <Compile Include="UI\FilterHoverUI.cs" />
     <Compile Include="VisualUtils.cs" />
   </ItemGroup>

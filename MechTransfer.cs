@@ -23,8 +23,6 @@ namespace MechTransfer
     {
         public enum ModMessageID { FilterSyncing, CreateDust, RotateTurret, ProjectileMakeHostile, KickFromChest }
 
-        public TransferUtils transferAgent = new TransferUtils();
-
         private const string callErorPrefix = "MechTransfer Call() error: ";
         private const string registerAdapter = "RegisterAdapter";
         private const string registerAdapterReflection = "RegisterAdapterReflection";
@@ -90,8 +88,8 @@ namespace MechTransfer
 
                 foreach (var type in (int[])args[4])
                 {
-                    if (!transferAgent.ContainerAdapters.ContainsKey(type))
-                        transferAgent.ContainerAdapters.Add(type, definition);
+                    if (!GetModWorld<TransferAgent>().ContainerAdapters.ContainsKey(type))
+                        GetModWorld<TransferAgent>().ContainerAdapters.Add(type, definition);
                 }
                 return definition;
             }
@@ -136,8 +134,8 @@ namespace MechTransfer
 
                     foreach (var t in (int[])args[2])
                     {
-                        if (!transferAgent.ContainerAdapters.ContainsKey(t))
-                            transferAgent.ContainerAdapters.Add(t, definition);
+                        if (!GetModWorld<TransferAgent>().ContainerAdapters.ContainsKey(t))
+                            GetModWorld<TransferAgent>().ContainerAdapters.Add(t, definition);
                     }
                     return definition;
                 }
@@ -174,7 +172,7 @@ namespace MechTransfer
                     if (Main.netMode != 1)
                         return;
 
-                    VisualUtils.CreateVisual(reader.ReadPackedVector2().ToPoint16(), (TransferUtils.Direction)reader.ReadByte());
+                    VisualUtils.CreateVisual(reader.ReadPackedVector2().ToPoint16(), (TransferAgent.Direction)reader.ReadByte());
                     break;
 
                 case ModMessageID.RotateTurret:

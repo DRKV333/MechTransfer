@@ -30,14 +30,14 @@ namespace MechTransfer.Tiles
             if (Main.netMode == 1)
                 return;
 
-            foreach (var c in ((MechTransfer)mod).transferAgent.FindContainerAdjacent(i, j))
+            foreach (var c in mod.GetModWorld<TransferAgent>().FindContainerAdjacent(i, j))
             {
                 foreach (var item in c.EnumerateItems())
                 {
                     if (!item.Item1.IsAir)
                     {
                         Item clone = item.Item1.Clone();
-                        int numTook = ((MechTransfer)mod).transferAgent.StartTransfer(i, j, clone);
+                        int numTook = mod.GetModWorld<TransferAgent>().StartTransfer(i, j, clone);
                         if (numTook > 0)
                         {
                             c.TakeItem(item.Item2, numTook);

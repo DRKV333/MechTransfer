@@ -53,7 +53,7 @@ namespace MechTransfer.Tiles
                 return;
 
             inventory.Clear();
-            foreach (var c in ((MechTransfer)mod).transferAgent.FindContainerAdjacent(i, j))
+            foreach (var c in mod.GetModWorld<TransferAgent>().FindContainerAdjacent(i, j))
             {
                 inventory.RegisterContainer(c);
             }

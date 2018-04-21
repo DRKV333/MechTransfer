@@ -25,7 +25,7 @@ namespace MechTransfer.Tiles
 
             if (stock.stack > 0)
             {
-                foreach (var container in ((MechTransfer)mod).transferAgent.FindContainerAdjacent(Position.X, Position.Y))
+                foreach (var container in mod.GetModWorld<TransferAgent>().FindContainerAdjacent(Position.X, Position.Y))
                 {
                     container.InjectItem(stock);
 

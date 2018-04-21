@@ -20,7 +20,7 @@ namespace MechTransfer.Tiles
 
                     if (!PickupBlacklist.Contains(item.type) && new Rectangle((Position.X - 1) * 16, (Position.Y - 1) * 16, 48, 16).Intersects(item.getRect()))
                     {
-                        item.stack -= ((MechTransfer)mod).transferAgent.StartTransfer(Position.X, Position.Y, item);
+                        item.stack -= mod.GetModWorld<TransferAgent>().StartTransfer(Position.X, Position.Y, item);
                         if (item.stack < 1)
                             Main.item[i] = new Item();
 

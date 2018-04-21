@@ -16,7 +16,7 @@ namespace MechTransfer.Tiles
         {
             AddMapEntry(new Color(200, 200, 200));
 
-            ((MechTransfer)mod).transferAgent.targets.Add(Type, this);
+            mod.GetModWorld<TransferAgent>().targets.Add(Type, this);
 
             base.SetDefaults();
         }
@@ -32,8 +32,10 @@ namespace MechTransfer.Tiles
             TileObjectData.addAlternate(1);
         }
 
-        public bool Receive(TransferUtils agent, Point16 location, Item item)
+        public bool Receive(Point16 location, Item item)
         {
+            TransferAgent agent = mod.GetModWorld<TransferAgent>();
+
             Tile tile = Main.tile[location.X, location.Y];
 
             if (tile.frameX == 0)
@@ -42,7 +44,7 @@ namespace MechTransfer.Tiles
                 item.stack -= decrement;
                 if (decrement != 0)
                 {
-                    mod.GetModWorld<MechTransferWorld>().TripWireDelayed(location.X, location.Y, 2, 1);
+                    agent.TripWireDelayed(location.X, location.Y, 2, 1);
                     return true;
                 }
             }
@@ -52,7 +54,7 @@ namespace MechTransfer.Tiles
                 item.stack -= decrement;
                 if (decrement != 0)
                 {
-                    mod.GetModWorld<MechTransferWorld>().TripWireDelayed(location.X - 1, location.Y, 2, 1);
+                    agent.TripWireDelayed(location.X - 1, location.Y, 2, 1);
                     return true;
                 }
             }

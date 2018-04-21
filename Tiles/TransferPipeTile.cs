@@ -18,7 +18,7 @@ namespace MechTransfer.Tiles
 
             Main.tileFrameImportant[Type] = false;
 
-            ((MechTransfer)mod).transferAgent.unconditionalPassthroughType = Type;
+            mod.GetModWorld<TransferAgent>().unconditionalPassthroughType = Type;
 
             AddMapEntry(new Color(200, 200, 200));
         }

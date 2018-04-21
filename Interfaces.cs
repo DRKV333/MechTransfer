@@ -7,13 +7,13 @@ namespace MechTransfer
     {
         ushort Type { get; }
 
-        bool Receive(TransferUtils agent, Point16 location, Item item);
+        bool Receive(Point16 location, Item item);
     }
 
     public interface ITransferPassthrough
     {
         ushort Type { get; }
 
-        bool ShouldPassthrough(TransferUtils agent, Point16 location, Item item);
+        bool ShouldPassthrough(Point16 location, Item item);
     }
 }

@@ -16,7 +16,7 @@ namespace MechTransfer.Tiles
         {
             AddMapEntry(new Color(200, 200, 200));
 
-            ((MechTransfer)mod).transferAgent.passthroughs.Add(Type, this);
+            mod.GetModWorld<TransferAgent>().passthroughs.Add(Type, this);
 
             base.SetDefaults();
         }
@@ -43,7 +43,7 @@ namespace MechTransfer.Tiles
                 NetMessage.SendTileSquare(-1, i, j, 1, TileChangeType.None);
         }
 
-        public bool ShouldPassthrough(TransferUtils agent, Point16 location, Item item)
+        public bool ShouldPassthrough(Point16 location, Item item)
         {
             return Main.tile[location.X, location.Y].frameY == 0;
         }
