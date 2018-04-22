@@ -182,7 +182,17 @@ namespace MechTransfer
 
                 case ModMessageID.ProjectileMakeHostile:
 
-                    Main.projectile[reader.ReadInt16()].hostile = true;
+                    int identity = reader.ReadInt16();
+                    int owner = reader.ReadByte();
+                    for (int i = 0; i < 1000; i++)
+                    {
+                        Projectile proj = Main.projectile[i];
+                        if(proj.owner == owner && proj.identity == identity && proj.active)
+                        {
+                            proj.hostile = true;
+                            break;
+                        }
+                    }
                     break;
 
                 case ModMessageID.KickFromChest:
