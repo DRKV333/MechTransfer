@@ -20,6 +20,7 @@ namespace MechTransfer.Tiles
             AddMapEntry(new Color(200, 200, 200));
 
             mod.GetModWorld<TransferAgent>().passthroughs.Add(Type, this);
+            mod.GetTile<TransferPipeTile>().connectedTiles.Add(Type);
 
             base.SetDefaults();
         }
