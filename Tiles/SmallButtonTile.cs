@@ -45,6 +45,7 @@ namespace MechTransfer.Tiles
         {
             Main.LocalPlayer.showItemIcon = true;
             Main.LocalPlayer.showItemIcon2 = placeItems[0].item.type;
+            Main.LocalPlayer.noThrow = 2;
         }
 
         public override void RightClick(int i, int j)
@@ -53,7 +54,6 @@ namespace MechTransfer.Tiles
             mod.GetModWorld<ButtonDelayWorld>().setPoint(new Point16(i, j));
 
             Main.PlaySound(SoundID.MenuTick);
-            Main.LocalPlayer.noThrow = 2;
         }
 
         public override void AnimateIndividualTile(int type, int i, int j, ref int frameXOffset, ref int frameYOffset)
