@@ -27,7 +27,7 @@ namespace MechTransfer
             return xOffset >= 0 && yOffset >= 0 && xOffset < w && yOffset < h;
         }
 
-        public override void PostUpdate()
+        public override void PostDrawTiles()
         {
             delay--;
             if (delay < 1)
