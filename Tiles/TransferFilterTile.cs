@@ -121,7 +121,10 @@ namespace MechTransfer.Tiles
             ItemFilterItem i = new ItemFilterItem(condition);
             i.recipeItem = recipeItem;
             mod.AddItem(type + "FilterItem", i);
-            i.DisplayName.AddTranslation(LangID.English, string.Format("Item filter ({0})", type));
+            if(Main.halloween && type == "Dye")
+                i.DisplayName.AddTranslation(LangID.English, string.Format("Item filter (Die)", type));
+            else
+                i.DisplayName.AddTranslation(LangID.English, string.Format("Item filter ({0})", type));
             i.Tooltip.AddTranslation(LangID.English, "Use in Transfer filter");
             filterItems.Add(i.item.type, i);
 
@@ -148,7 +151,11 @@ namespace MechTransfer.Tiles
             createFilter("Rarity-Rainbow", ItemID.DemonHeart, x => x.expert == true).expert = true;
             createFilter("Rarity-Amber", ItemID.Amber, x => x.rare == -11).Rarity = -11;
 
-            createFilter("Equipable", ItemID.Shackle, x => (x.headSlot >= 0 || x.bodySlot >= 0 || x.legSlot >= 0 || x.accessory || Main.projHook[x.shoot] || x.mountType >= 0 || (x.buffType > 0 && (Main.lightPet[x.buffType] || Main.vanityPet[x.buffType]))));
+            createFilter("Equipable", ItemID.Shackle, x => (x.headSlot >= 0 || x.bodySlot >= 0 || x.legSlot >= 0 || x.accessory || Main.projHook[x.shoot] || x.mountType >= 0 || x.dye > 0 || (x.buffType > 0 && (Main.lightPet[x.buffType] || Main.vanityPet[x.buffType]))));
+            createFilter("Armor", ItemID.WoodBreastplate, x => ((x.headSlot >= 0 || x.bodySlot >= 0 || x.legSlot >= 0) && !x.vanity));
+            createFilter("Vanity", ItemID.FamiliarWig, x => (x.vanity));
+            createFilter("Accessory", ItemID.Shackle, x => (x.accessory));
+            createFilter("Dye", ItemID.SilverDye, x => (x.dye > 0));
 
             createFilter("Ammo", ItemID.MusketBall, x => x.ammo != 0);
             createFilter("Bait", ItemID.ApprenticeBait, x => x.bait > 0);
@@ -156,6 +163,9 @@ namespace MechTransfer.Tiles
 
             createFilter("Tool", ItemID.CopperPickaxe, x => x.pick > 0 || x.axe > 0 || x.hammer > 0);
             createFilter("Weapon", ItemID.CopperShortsword, x => x.damage > 0 && x.pick == 0 && x.axe == 0 && x.hammer == 0);
+
+            createFilter("Consumable", ItemID.PumpkinPie, x => x.consumable);
+            createFilter("Material", ItemID.Wood, x => x.material);
 
             createFilter("Potion", ItemID.LesserHealingPotion, x => x.consumable && (x.healLife > 0 || x.healMana > 0 || x.buffType > 0));
 
