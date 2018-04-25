@@ -53,3 +53,14 @@ v1.5
 v1.5.1
 - Fixed outlet wire output
 - Added error handling
+
+v1.6
+- Custom tile loading
+- Furniture can now be placed on Inlet
+- Inlet picks up critters
+- Outlet drops critters as NPCs 
+- Pipes visually connect to transfer devices
+- Added Extractinator adapter
+- Added Buttons
+- Added Filter Items
+- Fixed Omni Turret multiplayer support

@@ -1,5 +1,5 @@
 author = DRKV
-version = 1.5.1
+version = 1.6
 displayName = MechTransfer
 includePDB = false
 weakReferences = MagicStorage@0.4.3.1
