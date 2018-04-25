@@ -65,14 +65,15 @@ namespace MechTransfer.ContainerAdapters
             }
 
             Main.PlaySound(SoundID.Item11, position);
-            int pId = Projectile.NewProjectile(position, direction * shootSpeed[style], item.shoot, baseDamage[style] * (1 + item.damage / 100), item.knockBack, Main.myPlayer);
-            Main.projectile[pId].hostile = true;
+            Projectile proj = Main.projectile[Projectile.NewProjectile(position, direction * shootSpeed[style], item.shoot, baseDamage[style] * (1 + item.damage / 100), item.knockBack, Main.myPlayer)];
+            proj.hostile = true;
 
             if (Main.netMode == 2)
             {
                 ModPacket packet = mod.GetPacket();
                 packet.Write((byte)MechTransfer.ModMessageID.ProjectileMakeHostile);
-                packet.Write((Int16)pId);
+                packet.Write((Int16)proj.identity);
+                packet.Write((byte)proj.owner);
                 packet.Send();
             }
 

@@ -33,27 +33,38 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ButtonDelayWorld.cs" />
+    <Compile Include="ChestPlacementFix.cs" />
     <Compile Include="ContainerAdapters\CannonAdapter.cs" />
     <Compile Include="ContainerAdapters\ChestAdapter.cs" />
     <Compile Include="ContainerAdapters\ContainerAdapter.cs" />
     <Compile Include="ContainerAdapters\CrystalStandAdapter.cs" />
+    <Compile Include="ContainerAdapters\ExtractinatorAdapter.cs" />
     <Compile Include="ContainerAdapters\ItemFrameAdapter.cs" />
     <Compile Include="ContainerAdapters\MagicStorageInterfaceAdapter.cs" />
     <Compile Include="ContainerAdapters\OmniTurretAdapter.cs" />
     <Compile Include="ContainerAdapters\SnowballLauncherAdapter.cs" />
     <Compile Include="ContainerAdapters\WeaponRackAdapter.cs" />
     <Compile Include="Interfaces.cs" />
+    <Compile Include="Items\ItemFilterItem.cs" />
     <Compile Include="Items\SimplePlaceableItem.cs" />
+    <Compile Include="MechTransferAssemblerWorld.cs" />
+    <Compile Include="Tiles\BigButtonTile.cs" />
     <Compile Include="Tiles\MagicStorageInterfaceTile.cs" />
     <Compile Include="Tiles\FilterableTile.cs" />
     <Compile Include="Tiles\OmniTurretTile.cs" />
+    <Compile Include="Tiles\Simple\SimplePlaceableTile.cs" />
+    <Compile Include="Tiles\Simple\SimpleTETile.cs" />
+    <Compile Include="Tiles\Simple\SimpleTile.cs" />
+    <Compile Include="Tiles\Simple\SimpleTileEntity.cs" />
+    <Compile Include="Tiles\Simple\SimpleTileObject.cs" />
+    <Compile Include="Tiles\SmallButtonTile.cs" />
     <Compile Include="Tiles\StackExtractorTile.cs" />
     <Compile Include="Tiles\TransferAssemblerTileEntity.cs" />
     <Compile Include="ItemInventory.cs" />
     <Compile Include="Items\PneumaticActuatorItem.cs" />
     <Compile Include="MechTransfer.cs" />
     <Compile Include="MechTransferMechanic.cs" />
-    <Compile Include="MechTransferWorld.cs" />
     <Compile Include="Tiles\TransferAssemblerTile.cs" />
     <Compile Include="Tiles\TransferFilterTile.cs" />
     <Compile Include="Tiles\TransferFilterTileEntity.cs" />
@@ -65,7 +76,7 @@
     <Compile Include="Tiles\TransferInletTileEntity.cs" />
     <Compile Include="Tiles\TransferOutletTile.cs" />
     <Compile Include="Tiles\TransferPipeTile.cs" />
-    <Compile Include="TransferUtils.cs" />
+    <Compile Include="TransferAgent.cs" />
     <Compile Include="UI\FilterHoverUI.cs" />
     <Compile Include="VisualUtils.cs" />
   </ItemGroup>

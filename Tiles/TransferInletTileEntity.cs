@@ -1,26 +1,18 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MechTransfer.Tiles.Simple;
+using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace MechTransfer.Tiles
 {
-    public class TransferInletTileEntity : ModTileEntity
+    public class TransferInletTileEntity : SimpleTileEntity
     {
-        public override bool ValidTile(int i, int j)
-        {
-            return Main.tile[i, j].active() && Main.tile[i, j].type == mod.TileType<TransferInletTile>() && Main.tile[i, j].frameX == 18;
-        }
+        public static HashSet<int> PickupBlacklist = new HashSet<int>();
 
-        public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction)
+        private Rectangle PickupArea()
         {
-            if (Main.netMode == 1)
-            {
-                NetMessage.SendTileSquare(Main.myPlayer, i, j, 3, TileChangeType.None);
-                NetMessage.SendData(MessageID.TileEntityPlacement, -1, -1, null, i, j, Type, 0f, 0, 0, 0);
-                return -1;
-            }
-            return Place(i, j);
+            return new Rectangle((Position.X - 1) * 16, (Position.Y - 1) * 16, 48, 16);
         }
 
         public override void Update()
@@ -31,14 +23,42 @@ namespace MechTransfer.Tiles
                 {
                     Item item = Main.item[i];
 
-                    if (!((MechTransfer)mod).PickupBlacklist.Contains(item.type) && new Rectangle((Position.X - 1) * 16, (Position.Y - 1) * 16, 48, 16).Intersects(item.getRect()))
+                    if (!PickupBlacklist.Contains(item.type) && PickupArea().Intersects(item.getRect()))
                     {
-                        item.stack -= ((MechTransfer)mod).transferAgent.StartTransfer(Position.X, Position.Y, item);
+                        item.stack -= mod.GetModWorld<TransferAgent>().StartTransfer(Position.X, Position.Y, item);
                         if (item.stack < 1)
                             Main.item[i] = new Item();
 
                         if (Main.netMode == 2)
                             NetMessage.SendData(MessageID.SyncItem, -1, -1, null, i);
+                    }
+                }
+            }
+
+            for (int i = 0; i < Main.npc.Length; i++)
+            {
+                NPC npc = Main.npc[i];
+                if (npc.active && PickupArea().Intersects(npc.Hitbox) && npc.catchItem > 0)
+                {
+                    bool remove = false;
+                    if (npc.SpawnedFromStatue)
+                    {
+                        Vector2 PoofSite = npc.Center - new Vector2(20f);
+                        Utils.PoofOfSmoke(PoofSite);
+                        NetMessage.SendData(MessageID.PoofOfSmoke, -1, -1, null, (int)PoofSite.X, PoofSite.Y);
+                        remove = true;
+                    }
+                    else
+                    {
+                        Item item = new Item();
+                        item.SetDefaults(npc.catchItem);
+                        if (mod.GetModWorld<TransferAgent>().StartTransfer(Position.X, Position.Y, item) > 0)
+                            remove = true;
+                    }
+                    if (remove)
+                    {
+                        npc.active = false;
+                        NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, i);
                     }
                 }
             }

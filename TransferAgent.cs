@@ -2,18 +2,28 @@
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 
 namespace MechTransfer
 {
-    public class TransferUtils
+    public class TransferAgent : ModWorld
     {
+        private class delayedTrip
+        {
+            public int x;
+            public int y;
+            public int width;
+            public int height;
+        }
+
         public enum Direction { up, down, left, right, stop }
 
         private HashSet<Point16> TargetTriggered = new HashSet<Point16>(); //stops infinite recursion
         private int running = 0;
+        private List<delayedTrip> wireTriggerQ = new List<delayedTrip>();
 
         public Dictionary<int, ContainerAdapterDefinition> ContainerAdapters = new Dictionary<int, ContainerAdapterDefinition>();
         public int unconditionalPassthroughType = 0;
@@ -31,7 +41,7 @@ namespace MechTransfer
             {
                 SearchForTarget(startX, startY, clone);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Main.NewText("An exception has occurred at MechTransfer.TransferUtils.SearchForTarget (Please look at the log in Documents/My Games/Terraria/ModLoader/Logs)", Color.Red);
                 ErrorLogger.Log("\nMechTransfer has logged an exception:");
@@ -46,7 +56,7 @@ namespace MechTransfer
                     TargetTriggered.Clear();
                 }
             }
-            
+
             return olstack - clone.stack;
         }
 
@@ -88,7 +98,7 @@ namespace MechTransfer
                     if (!TargetTriggered.Contains(searchP) && targets.TryGetValue(tile.type, out target))
                     {
                         TargetTriggered.Add(searchP);
-                        if (target.Receive(this, searchP, IToTransfer))
+                        if (target.Receive(searchP, IToTransfer))
                             VisualUtils.UnwindVisuals(visited, searchP);
                     }
 
@@ -105,7 +115,7 @@ namespace MechTransfer
                         ITransferPassthrough passthrough;
                         if (passthroughs.TryGetValue(tile.type, out passthrough))
                         {
-                            if (passthrough.ShouldPassthrough(this, searchP, IToTransfer))
+                            if (passthrough.ShouldPassthrough(searchP, IToTransfer))
                                 searchQ.Enqueue(searchP);
                         }
                     }
@@ -139,6 +149,32 @@ namespace MechTransfer
             if (tile != null && tile.active() && ContainerAdapters.TryGetValue(tile.type, out c))
                 return c.GetAdapter(x, y);
             return null;
+        }
+
+        //trigger wire on the new update, to stop infinite wire loops
+        public void TripWireDelayed(int x, int y, int width, int height)
+        {
+            if (wireTriggerQ.Any(i => i.x == x && i.y == y))
+                return;
+
+            delayedTrip trip = new delayedTrip();
+            trip.x = x;
+            trip.y = y;
+            trip.width = width;
+            trip.height = height;
+            wireTriggerQ.Add(trip);
+        }
+
+        public override void PostUpdate()
+        {
+            List<delayedTrip> temp = wireTriggerQ;
+            wireTriggerQ = new List<delayedTrip>();
+
+            foreach (var item in temp)
+            {
+                Wiring.TripWire(item.x, item.y, item.width, item.height);
+            }
+            temp.Clear();
         }
     }
 }

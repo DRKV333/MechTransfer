@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MechTransfer.Items;
+using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
@@ -11,7 +12,7 @@ using Terraria.ObjectData;
 
 namespace MechTransfer.Tiles
 {
-    public class TransferAssemblerTile : FilterableTile
+    public class TransferAssemblerTile : FilterableTile<TransferAssemblerTileEntity>
     {
         private ItemInventory inventory = new ItemInventory();
 
@@ -27,16 +28,16 @@ namespace MechTransfer.Tiles
 
         public override void SetDefaults()
         {
-            Main.tileFrameImportant[Type] = true;
+            AddMapEntry(new Color(200, 200, 200));
 
-            TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
+            base.SetDefaults();
+        }
+
+        protected override void SetTileObjectData()
+        {
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.None, 0, 0);
-            TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(mod.GetTileEntity<TransferAssemblerTileEntity>().Hook_AfterPlacement, -1, 0, false);
-            TileObjectData.addTile(Type);
-
-            drop = mod.ItemType("TransferAssemblerItem");
-            AddMapEntry(new Color(200, 200, 200));
+            base.SetTileObjectData();
         }
 
         public override void HitWire(int i, int j)
@@ -44,16 +45,15 @@ namespace MechTransfer.Tiles
             if (Main.netMode == 1)
                 return;
 
-            int filterId = mod.GetTileEntity<TransferAssemblerTileEntity>().Find(i, j);
-            if (filterId == -1)
+            TransferAssemblerTileEntity entity;
+            if (!TryGetEntity(i, j, out entity))
                 return;
-            TransferAssemblerTileEntity entity = (TransferAssemblerTileEntity)TileEntity.ByID[filterId];
 
             if (entity.ItemId == 0 || entity.stock.stack > 0)
                 return;
 
             inventory.Clear();
-            foreach (var c in ((MechTransfer)mod).transferAgent.FindContainerAdjacent(i, j))
+            foreach (var c in mod.GetModWorld<TransferAgent>().FindContainerAdjacent(i, j))
             {
                 inventory.RegisterContainer(c);
             }
@@ -175,37 +175,52 @@ namespace MechTransfer.Tiles
             return true;
         }
 
-        public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
+        public override string HoverText(TransferAssemblerTileEntity entity)
         {
-            mod.GetTileEntity<TransferAssemblerTileEntity>().Kill(i, j);
-        }
-
-        public override void DisplayTooltip(int i, int j)
-        {
-            int id = mod.GetTileEntity<TransferAssemblerTileEntity>().Find(i, j);
-            if (id == -1)
-                return;
-            TransferAssemblerTileEntity entity = (TransferAssemblerTileEntity)TileEntity.ByID[id];
-
-            string statusText = "";
-            Color statusColor = Color.White;
             switch (entity.Status)
             {
                 case TransferAssemblerTileEntity.StatusKind.Ready:
-                    statusText = "Ready"; statusColor = Color.Yellow; break;
-                case TransferAssemblerTileEntity.StatusKind.Success:
-                    statusText = "Success"; statusColor = Color.Green; break;
-                case TransferAssemblerTileEntity.StatusKind.MissingItem:
-                    statusText = string.Format("Missing ingredient ({0})", ItemNameById(entity.MissingItemType)); statusColor = Color.Red; break;
-                case TransferAssemblerTileEntity.StatusKind.MissingStation:
-                    statusText = "Missing crafting station"; statusColor = Color.Red; break;
-                case TransferAssemblerTileEntity.StatusKind.MissingSpace:
-                    statusText = string.Format("Cant deposit ({0} x{1})", entity.stock.Name, entity.stock.stack); statusColor = Color.Red; break;
-                case TransferAssemblerTileEntity.StatusKind.NoRecipe:
-                    statusText = "No recipe found"; statusColor = Color.Red; break;
-            }
+                    return "Ready";
 
-            ((MechTransfer)mod).filterHoverUI.Display(entity.ItemId, "Crafting: " + statusText, statusColor);
+                case TransferAssemblerTileEntity.StatusKind.Success:
+                    return "Success";
+
+                case TransferAssemblerTileEntity.StatusKind.MissingItem:
+                    return string.Format("Missing ingredient ({0})", ItemNameById(entity.MissingItemType));
+
+                case TransferAssemblerTileEntity.StatusKind.MissingStation:
+                    return "Missing crafting station";
+
+                case TransferAssemblerTileEntity.StatusKind.MissingSpace:
+                    return string.Format("Cant deposit ({0} x{1})", entity.stock.Name, entity.stock.stack);
+
+                case TransferAssemblerTileEntity.StatusKind.NoRecipe:
+                    return "No recipe found";
+
+                default:
+                    return "How?!?";
+            }
+        }
+
+        public override Color HoverColor(TransferAssemblerTileEntity entity)
+        {
+            switch (entity.Status)
+            {
+                case TransferAssemblerTileEntity.StatusKind.Ready:
+                    return Color.Yellow;
+
+                case TransferAssemblerTileEntity.StatusKind.Success:
+                    return Color.Green;
+
+                case TransferAssemblerTileEntity.StatusKind.MissingItem:
+                case TransferAssemblerTileEntity.StatusKind.MissingStation:
+                case TransferAssemblerTileEntity.StatusKind.MissingSpace:
+                case TransferAssemblerTileEntity.StatusKind.NoRecipe:
+                    return Color.Red;
+
+                default:
+                    return Color.CornflowerBlue;
+            }
         }
 
         public static string ItemNameById(int id)
@@ -217,6 +232,27 @@ namespace MechTransfer.Tiles
             if (name == LocalizedText.Empty)
                 return string.Format("Unknown item #{0}", id);
             return name.Value;
+        }
+
+        public override void PostLoad()
+        {
+            SimplePlaceableItem i = new SimplePlaceableItem();
+            i.placeType = Type;
+            i.value = Item.sellPrice(0, 1, 0, 0);
+            mod.AddItem("TransferAssemblerItem", i);
+            i.DisplayName.AddTranslation(LangID.English, "Transfer assembler");
+            i.Tooltip.AddTranslation(LangID.English, "WIP\nCrafts items automatically\nRight click with item in hand to set filter");
+            placeItems[0] = i;
+        }
+
+        public override void Addrecipes()
+        {
+            ModRecipe r = new ModRecipe(mod);
+            r.AddIngredient(mod.ItemType<PneumaticActuatorItem>(), 1);
+            r.AddIngredient(ItemID.Cog, 10);
+            r.AddTile(TileID.WorkBenches);
+            r.SetResult(placeItems[0], 1);
+            r.AddRecipe();
         }
     }
 }

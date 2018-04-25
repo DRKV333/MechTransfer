@@ -1,27 +1,20 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MechTransfer.Tiles.Simple;
+using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.DataStructures;
-using Terraria.ModLoader;
 
 namespace MechTransfer.Tiles
 {
-    public abstract class FilterableTile : ModTile
+    public abstract class FilterableTile<T> : SimpleTETile<T> where T : TransferFilterTileEntity
     {
-        protected string hoverText = "Filter:";
-
         public override void RightClick(int i, int j)
         {
             if (!Main.LocalPlayer.HeldItem.IsAir)
             {
-                TileEntity tileEntity;
-                if (TileEntity.ByPosition.TryGetValue(new Point16(i, j), out tileEntity))
+                T tileEntity;
+                if (TryGetEntity(i, j, out tileEntity))
                 {
-                    TransferFilterTileEntity transferFilter = tileEntity as TransferFilterTileEntity;
-                    if (transferFilter != null)
-                    {
-                        transferFilter.ItemId = Main.LocalPlayer.HeldItem.type;
-                        transferFilter.SyncData();
-                    }
+                    tileEntity.ItemId = Main.LocalPlayer.HeldItem.type;
+                    tileEntity.SyncData();
                 }
             }
         }
@@ -39,12 +32,19 @@ namespace MechTransfer.Tiles
 
         public virtual void DisplayTooltip(int i, int j)
         {
-            int id = mod.GetTileEntity<TransferFilterTileEntity>().Find(i, j);
-            if (id == -1)
-                return;
-            TransferFilterTileEntity entity = (TransferFilterTileEntity)TileEntity.ByID[id];
+            T entity;
+            if (TryGetEntity(i, j, out entity))
+                ((MechTransfer)mod).filterHoverUI.Display(entity.ItemId, HoverText(entity), HoverColor(entity));
+        }
 
-            ((MechTransfer)mod).filterHoverUI.Display(entity.ItemId, hoverText, Color.White);
+        public virtual string HoverText(T entity)
+        {
+            return "Filter:";
+        }
+
+        public virtual Color HoverColor(T entity)
+        {
+            return Color.White;
         }
     }
 }

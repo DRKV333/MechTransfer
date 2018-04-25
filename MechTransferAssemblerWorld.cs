@@ -1,52 +1,14 @@
 ﻿using MechTransfer.Tiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
-using System.Linq;
 using Terraria;
 using Terraria.GameContent.UI;
 using Terraria.ModLoader;
 
 namespace MechTransfer
 {
-    internal class MechTransferWorld : ModWorld
+    internal class MechTransferAssemblerWorld : ModWorld
     {
-        private class delayedTrip
-        {
-            public int x;
-            public int y;
-            public int width;
-            public int height;
-        }
-
-        private List<delayedTrip> wireTriggerQ = new List<delayedTrip>();
-
-        //trigger wire on the new update, to stop infinite wire loops
-        public void TripWireDelayed(int x, int y, int width, int height)
-        {
-            if (wireTriggerQ.Any(i => i.x == x && i.y == y))
-                return;
-
-            delayedTrip trip = new delayedTrip();
-            trip.x = x;
-            trip.y = y;
-            trip.width = width;
-            trip.height = height;
-            wireTriggerQ.Add(trip);
-        }
-
-        public override void PostUpdate()
-        {
-            List<delayedTrip> temp = wireTriggerQ;
-            wireTriggerQ = new List<delayedTrip>();
-
-            foreach (var item in temp)
-            {
-                Wiring.TripWire(item.x, item.y, item.width, item.height);
-            }
-            temp.Clear();
-        }
-
         public override void PostDrawTiles()
         {
             if (!WiresUI.Settings.DrawWires)

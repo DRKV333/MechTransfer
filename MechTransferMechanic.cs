@@ -11,8 +11,8 @@ namespace MechTransfer
         {
             if (type == NPCID.Mechanic)
             {
-                shop.item[nextSlot].SetDefaults(mod.ItemType<PneumaticActuatorItem>());
-                nextSlot++;
+                shop.item[nextSlot++].SetDefaults(mod.ItemType<PneumaticActuatorItem>());
+                shop.item[nextSlot++].SetDefaults(mod.ItemType("AnyFilterItem"));
             }
         }
     }

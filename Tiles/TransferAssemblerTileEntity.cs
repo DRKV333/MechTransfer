@@ -15,11 +15,6 @@ namespace MechTransfer.Tiles
 
         private int timer = 0;
 
-        public override bool ValidTile(int i, int j)
-        {
-            return Main.tile[i, j].active() && (Main.tile[i, j].type == mod.TileType<TransferAssemblerTile>());
-        }
-
         public override void Update()
         {
             if (timer > 0)
@@ -30,7 +25,7 @@ namespace MechTransfer.Tiles
 
             if (stock.stack > 0)
             {
-                foreach (var container in ((MechTransfer)mod).transferAgent.FindContainerAdjacent(Position.X, Position.Y))
+                foreach (var container in mod.GetModWorld<TransferAgent>().FindContainerAdjacent(Position.X, Position.Y))
                 {
                     container.InjectItem(stock);
 

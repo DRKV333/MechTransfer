@@ -1,58 +1,194 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MechTransfer.Items;
+using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
+using Terraria.ID;
+using Terraria.ModLoader;
 using Terraria.ObjectData;
 
 namespace MechTransfer.Tiles
 {
-    public class TransferFilterTile : FilterableTile, ITransferPassthrough
+    public class TransferFilterTile : FilterableTile<TransferFilterTileEntity>, ITransferPassthrough
     {
+        private Dictionary<int, ItemFilterItem> filterItems = new Dictionary<int, ItemFilterItem>();
+
         public override void SetDefaults()
         {
-            Main.tileFrameImportant[Type] = true;
-            Main.tileNoFail[Type] = true;
-            dustType = 1;
-
-            TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
-            TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(mod.GetTileEntity<TransferFilterTileEntity>().Hook_AfterPlacement, -1, 0, false);
-            TileObjectData.newTile.LavaDeath = false;
-            TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.None, 0, 0);
-            TileObjectData.addTile(Type);
-
             AddMapEntry(new Color(200, 200, 200));
 
-            hoverText = "Item allowed:";
+            mod.GetModWorld<TransferAgent>().passthroughs.Add(Type, this);
+            mod.GetTile<TransferPipeTile>().connectedTiles.Add(Type);
 
-            ((MechTransfer)mod).transferAgent.passthroughs.Add(Type, this);
+            base.SetDefaults();
         }
 
-        public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
+        protected override void SetTileObjectData()
         {
-            if (!effectOnly)
+            TileObjectData.newTile.LavaDeath = false;
+            TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.None, 0, 0);
+            base.SetTileObjectData();
+        }
+
+        public bool ShouldPassthrough(Point16 location, Item item)
+        {
+            TransferFilterTileEntity TE;
+            if (TryGetEntity(location.X, location.Y, out TE))
             {
-                mod.GetTileEntity<TransferFilterTileEntity>().Kill(i, j);
-                if (!noItem)
+                ItemFilterItem filterItem;
+                if (filterItems.TryGetValue(TE.ItemId, out filterItem))
                 {
-                    if (Main.tile[i, j].frameY == 0)
-                        Item.NewItem(i * 16, j * 16, 16, 16, mod.ItemType("TransferFilterItem"));
+                    if (Main.tile[location.X, location.Y].frameY == 0)
+                        return filterItem.MatchesItem(item);
                     else
-                        Item.NewItem(i * 16, j * 16, 16, 16, mod.ItemType("InverseTransferFilterItem"));
+                        return !filterItem.MatchesItem(item);
+                }
+                else
+                {
+                    if (Main.tile[location.X, location.Y].frameY == 0)
+                        return TE.ItemId == item.type;
+                    else
+                        return TE.ItemId != item.type;
                 }
             }
+            return false;
         }
 
-        public bool ShouldPassthrough(TransferUtils agent, Point16 location, Item item)
+        public override string HoverText(TransferFilterTileEntity entity)
         {
-            int id = mod.GetTileEntity<TransferFilterTileEntity>().Find(location.X, location.Y);
-            if (id == -1)
-                return false;
-            TransferFilterTileEntity entity = (TransferFilterTileEntity)TileEntity.ByID[id];
-
-            if (Main.tile[location.X, location.Y].frameY == 0)
-                return entity.ItemId == item.type;
+            Tile tile = Main.tile[entity.Position.X, entity.Position.Y];
+            if (tile.frameY == 0)
+                return "Item allowed:";
             else
-                return entity.ItemId != item.type;
+                return "Item restricted:";
+        }
+
+        public override int GetDropKind(int Fx, int Fy)
+        {
+            return Fy / tileObjectData.CoordinateFullHeight;
+        }
+
+        public override void PostLoad()
+        {
+            placeItems = new ModItem[2];
+
+            //Filter
+            SimplePlaceableItem i = new SimplePlaceableItem();
+            i.placeType = Type;
+            mod.AddItem("TransferFilterItem", i);
+            i.DisplayName.AddTranslation(LangID.English, "Transfer filter (whitelist)");
+            i.Tooltip.AddTranslation(LangID.English, "Place in line with Transfer pipe\nRight click with item in hand to set filter");
+            placeItems[0] = i;
+
+            //InverseFilter
+            i = new SimplePlaceableItem();
+            i.placeType = Type;
+            i.style = 1;
+            mod.AddItem("InverseTransferFilterItem", i);
+            i.DisplayName.AddTranslation(LangID.English, "Transfer filter (blacklist)");
+            i.Tooltip.AddTranslation(LangID.English, "Place in line with Transfer pipe\nRight click with item in hand to set filter");
+            placeItems[1] = i;
+
+            LoadFilters();
+        }
+
+        public override void Addrecipes()
+        {
+            //Filter
+            ModRecipe r = new ModRecipe(mod);
+            r.AddIngredient(mod.ItemType<PneumaticActuatorItem>(), 1);
+            r.AddIngredient(ItemID.Actuator, 1);
+            r.AddIngredient(ItemID.ItemFrame, 1);
+            r.AddTile(TileID.WorkBenches);
+            r.SetResult(placeItems[0], 1);
+            r.AddRecipe();
+
+            //InverseFilter
+            r = new ModRecipe(mod);
+            r.AddIngredient(mod.ItemType<PneumaticActuatorItem>(), 1);
+            r.AddIngredient(ItemID.Actuator, 1);
+            r.AddIngredient(ItemID.ItemFrame, 1);
+            r.AddTile(TileID.WorkBenches);
+            r.SetResult(placeItems[1], 1);
+            r.AddRecipe();
+
+            //LogFilterTets();
+        }
+
+        private ItemFilterItem createFilter(string type, int recipeItem, ItemFilterItem.MatchConditionn condition)
+        {
+            ItemFilterItem i = new ItemFilterItem(condition);
+            i.recipeItem = recipeItem;
+            mod.AddItem(type + "FilterItem", i);
+            if(Main.halloween && type == "Dye")
+                i.DisplayName.AddTranslation(LangID.English, string.Format("Item filter (Die)", type));
+            else
+                i.DisplayName.AddTranslation(LangID.English, string.Format("Item filter ({0})", type));
+            i.Tooltip.AddTranslation(LangID.English, "Use in Transfer filter");
+            filterItems.Add(i.item.type, i);
+
+            return i;
+        }
+
+        private void LoadFilters()
+        {
+            createFilter("Any", -1, x => true);
+
+            createFilter("Rarity-Gray", ItemID.GrayPaint, x => x.rare == -1).Rarity = -1;
+            createFilter("Rarity-White", ItemID.WhitePaint, x => x.rare == 0).Rarity = 0;
+            createFilter("Rarity-Blue", ItemID.BluePaint, x => x.rare == 1).Rarity = 1;
+            createFilter("Rarity-Green", ItemID.GreenPaint, x => x.rare == 2).Rarity = 2;
+            createFilter("Rarity-Orange", ItemID.OrangePaint, x => x.rare == 3).Rarity = 3;
+            createFilter("Rarity-LightRed", ItemID.RedPaint, x => x.rare == 4).Rarity = 4;
+            createFilter("Rarity-Pink", ItemID.PinkPaint, x => x.rare == 5).Rarity = 5;
+            createFilter("Rarity-LightPurple", ItemID.PurplePaint, x => x.rare == 6).Rarity = 6;
+            createFilter("Rarity-Lime", ItemID.LimePaint, x => x.rare == 7).Rarity = 7;
+            createFilter("Rarity-Yellow", ItemID.YellowPaint, x => x.rare == 8).Rarity = 8;
+            createFilter("Rarity-Cyan", ItemID.CyanPaint, x => x.rare == 9).Rarity = 9;
+            createFilter("Rarity-Red", ItemID.RedPaint, x => x.rare == 10).Rarity = 10;
+            createFilter("Rarity-Purple", ItemID.PurplePaint, x => x.rare == 11).Rarity = 11;
+            createFilter("Rarity-Rainbow", ItemID.DemonHeart, x => x.expert == true).expert = true;
+            createFilter("Rarity-Amber", ItemID.Amber, x => x.rare == -11).Rarity = -11;
+
+            createFilter("Equipable", ItemID.Shackle, x => (x.headSlot >= 0 || x.bodySlot >= 0 || x.legSlot >= 0 || x.accessory || Main.projHook[x.shoot] || x.mountType >= 0 || x.dye > 0 || (x.buffType > 0 && (Main.lightPet[x.buffType] || Main.vanityPet[x.buffType]))));
+            createFilter("Armor", ItemID.WoodBreastplate, x => ((x.headSlot >= 0 || x.bodySlot >= 0 || x.legSlot >= 0) && !x.vanity));
+            createFilter("Vanity", ItemID.FamiliarWig, x => (x.vanity));
+            createFilter("Accessory", ItemID.Shackle, x => (x.accessory));
+            createFilter("Dye", ItemID.SilverDye, x => (x.dye > 0));
+
+            createFilter("Ammo", ItemID.MusketBall, x => x.ammo != 0);
+            createFilter("Bait", ItemID.ApprenticeBait, x => x.bait > 0);
+            createFilter("Money", ItemID.GoldCoin, x => x.type == ItemID.CopperCoin || x.type == ItemID.SilverCoin || x.type == ItemID.GoldCoin || x.type == ItemID.PlatinumCoin);
+
+            createFilter("Tool", ItemID.CopperPickaxe, x => x.pick > 0 || x.axe > 0 || x.hammer > 0);
+            createFilter("Weapon", ItemID.CopperShortsword, x => x.damage > 0 && x.pick == 0 && x.axe == 0 && x.hammer == 0);
+
+            createFilter("Consumable", ItemID.PumpkinPie, x => x.consumable);
+            createFilter("Material", ItemID.Wood, x => x.material);
+
+            createFilter("Potion", ItemID.LesserHealingPotion, x => x.consumable && (x.healLife > 0 || x.healMana > 0 || x.buffType > 0));
+
+            createFilter("Tile", ItemID.DirtBlock, x => x.createTile > -1);
+            createFilter("Wall", ItemID.WoodWall, x => x.createWall > 0);
+        }
+
+        private void LogFilterTets()
+        {
+            ErrorLogger.Log("---BEGIN FILTER LISTING---");
+            foreach (var item in filterItems)
+            {
+                ErrorLogger.Log("----" + item.Value.DisplayName.GetDefault());
+                for (int i = 0; i < ItemLoader.ItemCount; i++)
+                {
+                    Item testItem = new Item();
+                    testItem.SetDefaults(i);
+
+                    if (item.Value.MatchesItem(testItem))
+                        ErrorLogger.Log(testItem.Name);
+                }
+            }
+            ErrorLogger.Log("---END FILTER LISTING---");
         }
     }
 }
