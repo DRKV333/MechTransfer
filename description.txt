@@ -44,6 +44,9 @@ v1.4
 v1.4.1
 - Fixed modded chest support
 
+v1.4.2
+- Quick fix to stop assembler from eating items
+
 v1.5
 - New tool-tip
 - Added Magic Storage Interface
@@ -53,6 +56,9 @@ v1.5
 v1.5.1
 - Fixed outlet wire output
 - Added error handling
+
+v1.5.2
+- Fixed magic storage item duplication with prefixed items
 
 v1.6
 - Custom tile loading
