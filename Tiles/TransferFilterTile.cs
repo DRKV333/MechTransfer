@@ -14,6 +14,8 @@ namespace MechTransfer.Tiles
     {
         private Dictionary<int, ItemFilterItem> filterItems = new Dictionary<int, ItemFilterItem>();
 
+        private HashSet<int> Bags;
+
         public override void SetDefaults()
         {
             AddMapEntry(new Color(200, 200, 200));
@@ -113,6 +115,7 @@ namespace MechTransfer.Tiles
             r.SetResult(placeItems[1], 1);
             r.AddRecipe();
 
+            LoadBagFilter();
             //LogFilterTets();
         }
 
@@ -160,6 +163,7 @@ namespace MechTransfer.Tiles
             createFilter("Ammo", ItemID.MusketBall, x => x.ammo != 0);
             createFilter("Bait", ItemID.ApprenticeBait, x => x.bait > 0);
             createFilter("Money", ItemID.GoldCoin, x => x.type == ItemID.CopperCoin || x.type == ItemID.SilverCoin || x.type == ItemID.GoldCoin || x.type == ItemID.PlatinumCoin);
+            createFilter("Bag", ItemID.WoodenCrate, x => Bags.Contains(x.type));
 
             createFilter("Tool", ItemID.CopperPickaxe, x => x.pick > 0 || x.axe > 0 || x.hammer > 0);
             createFilter("Weapon", ItemID.CopperShortsword, x => x.damage > 0 && x.pick == 0 && x.axe == 0 && x.hammer == 0);
@@ -173,11 +177,67 @@ namespace MechTransfer.Tiles
             createFilter("Wall", ItemID.WoodWall, x => x.createWall > 0);
         }
 
+        private void LoadBagFilter()
+        {
+            Bags = new HashSet<int>();
+
+            Bags.Add(ItemID.HerbBag);
+
+            Bags.Add(ItemID.GoodieBag);
+            Bags.Add(ItemID.Present);
+            Bags.Add(ItemID.BluePresent);
+            Bags.Add(ItemID.GreenPresent);
+            Bags.Add(ItemID.YellowPresent);
+
+            Bags.Add(ItemID.KingSlimeBossBag);
+            Bags.Add(ItemID.EyeOfCthulhuBossBag);
+            Bags.Add(ItemID.EaterOfWorldsBossBag);
+            Bags.Add(ItemID.BrainOfCthulhuBossBag);
+            Bags.Add(ItemID.QueenBeeBossBag);
+            Bags.Add(ItemID.WallOfFleshBossBag);
+            Bags.Add(ItemID.SkeletronBossBag);
+            Bags.Add(ItemID.DestroyerBossBag);
+            Bags.Add(ItemID.TwinsBossBag);
+            Bags.Add(ItemID.SkeletronPrimeBossBag);
+            Bags.Add(ItemID.PlanteraBossBag);
+            Bags.Add(ItemID.GolemBossBag);
+            Bags.Add(ItemID.FishronBossBag);
+            Bags.Add(ItemID.CultistBossBag);
+            Bags.Add(ItemID.MoonLordBossBag);
+            Bags.Add(ItemID.BossBagBetsy);
+            Bags.Add(ItemID.BossBagDarkMage);
+            Bags.Add(ItemID.BossBagOgre);
+
+            Bags.Add(ItemID.LockBox);
+            Bags.Add(ItemID.WoodenCrate);
+            Bags.Add(ItemID.IronCrate);
+            Bags.Add(ItemID.GoldenCrate);
+            Bags.Add(ItemID.JungleFishingCrate);
+            Bags.Add(ItemID.FloatingIslandFishingCrate);
+            Bags.Add(ItemID.CorruptFishingCrate);
+            Bags.Add(ItemID.CrimsonFishingCrate);
+            Bags.Add(ItemID.HallowedFishingCrate);
+            Bags.Add(ItemID.DungeonFishingCrate);
+
+            for (int i = 0; i < ItemLoader.ItemCount; i++)
+            {
+                ModItem item = ItemLoader.GetItem(i);
+                if (item != null && item.GetType().GetMethod("OpenBossBag").DeclaringType != typeof(ModItem))
+                {
+                    Bags.Add(i);
+                }
+            }
+
+        }
+
         private void LogFilterTets()
         {
             ErrorLogger.Log("---BEGIN FILTER LISTING---");
             foreach (var item in filterItems)
             {
+                //if (item.Value.Name != "BagFilterItem")
+                //    continue;
+
                 ErrorLogger.Log("----" + item.Value.DisplayName.GetDefault());
                 for (int i = 0; i < ItemLoader.ItemCount; i++)
                 {
