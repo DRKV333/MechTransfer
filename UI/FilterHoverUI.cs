@@ -39,16 +39,16 @@ namespace MechTransfer.UI
             Append(panel);
         }
 
-        public void Display(int type, string text, Color textColor)
+        public void Display(Item type, string text, Color textColor)
         {
             visible = true;
 
             titleText.SetText(text);
             titleText.TextColor = textColor;
 
-            fakeInv[10].SetDefaults(type);
-            itemText.SetText(type == 0 ? "Not set" : fakeInv[10].Name);
-            itemText.TextColor = type == 0 ? Color.Red : ItemRarity.GetColor(fakeInv[10].rare);
+            fakeInv[10] = type;
+            itemText.SetText(type.IsAir ? "Not set" : fakeInv[10].Name);
+            itemText.TextColor = type.IsAir ? Color.Red : ItemRarity.GetColor(fakeInv[10].rare);
             panel.Width.Pixels = itemText.MinWidth.Pixels + Main.inventoryBackTexture.Width * 0.5f * Main.UIScale + 20;
 
             Left.Pixels = Main.mouseX + 10;

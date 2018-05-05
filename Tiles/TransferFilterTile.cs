@@ -39,7 +39,7 @@ namespace MechTransfer.Tiles
             if (TryGetEntity(location.X, location.Y, out TE))
             {
                 ItemFilterItem filterItem;
-                if (filterItems.TryGetValue(TE.ItemId, out filterItem))
+                if (filterItems.TryGetValue(TE.item.type, out filterItem))
                 {
                     if (Main.tile[location.X, location.Y].frameY == 0)
                         return filterItem.MatchesItem(item);
@@ -49,9 +49,9 @@ namespace MechTransfer.Tiles
                 else
                 {
                     if (Main.tile[location.X, location.Y].frameY == 0)
-                        return TE.ItemId == item.type;
+                        return TE.item.type == item.type;
                     else
-                        return TE.ItemId != item.type;
+                        return TE.item.type != item.type;
                 }
             }
             return false;

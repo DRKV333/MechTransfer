@@ -13,7 +13,8 @@ namespace MechTransfer.Tiles
                 T tileEntity;
                 if (TryGetEntity(i, j, out tileEntity))
                 {
-                    tileEntity.ItemId = Main.LocalPlayer.HeldItem.type;
+                    tileEntity.item = Main.LocalPlayer.HeldItem.Clone();
+                    tileEntity.item.stack = 1;
                     tileEntity.SyncData();
                 }
             }
@@ -34,7 +35,7 @@ namespace MechTransfer.Tiles
         {
             T entity;
             if (TryGetEntity(i, j, out entity))
-                ((MechTransfer)mod).filterHoverUI.Display(entity.ItemId, HoverText(entity), HoverColor(entity));
+                ((MechTransfer)mod).filterHoverUI.Display(entity.item, HoverText(entity), HoverColor(entity));
         }
 
         public virtual string HoverText(T entity)
