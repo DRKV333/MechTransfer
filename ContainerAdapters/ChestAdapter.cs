@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace MechTransfer.ContainerAdapters
 {
-    internal class ChestAdapter
+    internal class ChestAdapter : INetHandler
     {
         private Mod mod;
 
         public ChestAdapter(Mod mod)
         {
             this.mod = mod;
+            NetRouter.AddHandler(this);
         }
 
         private int FindChest(int x, int y)
@@ -43,9 +46,9 @@ namespace MechTransfer.ContainerAdapters
             {
                 if (Main.netMode == 2)
                 {
-                    ModPacket packet = mod.GetPacket();
-                    packet.Write((byte)MechTransfer.ModMessageID.KickFromChest);
+                    ModPacket packet = NetRouter.GetPacketTo(this, mod);
                     packet.Send(targetPlayer);
+                    Main.player[targetPlayer].chest = -1;
                 }
                 else if (Main.netMode == 0)
                     Recipe.FindRecipes();
@@ -138,6 +141,13 @@ namespace MechTransfer.ContainerAdapters
                 Main.chest[c].item[(int)slot] = new Item();
 
             HandleChestItemChange(c);
+        }
+
+        public void HandlePacket(BinaryReader reader, int WhoAmI)
+        {
+            Main.LocalPlayer.chest = -1;
+            Recipe.FindRecipes();
+            Main.PlaySound(SoundID.MenuClose);
         }
     }
 }

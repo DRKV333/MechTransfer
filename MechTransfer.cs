@@ -9,10 +9,8 @@ using System.IO;
 using System.Linq.Expressions;
 using System.Reflection;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
 using Terraria.UI;
 using EnumerateItemsDelegate = System.Func<int, int, System.Collections.Generic.IEnumerable<System.Tuple<Terraria.Item, object>>>;
 using InjectItemDelegate = System.Func<int, int, Terraria.Item, bool>;
@@ -153,56 +151,7 @@ namespace MechTransfer
 
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
-            ModMessageID id = (ModMessageID)reader.ReadByte();
-
-            switch (id)
-            {
-                case ModMessageID.FilterSyncing:
-
-                    if (Main.netMode != 2)
-                        return;
-
-                    TransferFilterTileEntity FilterEntity = (TransferFilterTileEntity)TileEntity.ByID[reader.ReadInt32()];
-                    FilterEntity.item = ItemIO.Receive(reader);
-                    NetMessage.SendData(MessageID.TileEntitySharing, -1, whoAmI, null, FilterEntity.ID, FilterEntity.Position.X, FilterEntity.Position.Y);
-
-                    break;
-
-                case ModMessageID.CreateDust:
-
-                    if (Main.netMode != 1)
-                        return;
-
-                    VisualUtils.CreateVisual(reader.ReadPackedVector2().ToPoint16(), (TransferAgent.Direction)reader.ReadByte());
-                    break;
-
-                case ModMessageID.RotateTurret:
-
-                    GetTile<OmniTurretTile>().Rotate(reader.ReadInt16(), reader.ReadInt16(), false);
-                    break;
-
-                case ModMessageID.ProjectileMakeHostile:
-
-                    int identity = reader.ReadInt16();
-                    int owner = reader.ReadByte();
-                    for (int i = 0; i < 1000; i++)
-                    {
-                        Projectile proj = Main.projectile[i];
-                        if(proj.owner == owner && proj.identity == identity && proj.active)
-                        {
-                            proj.hostile = true;
-                            break;
-                        }
-                    }
-                    break;
-
-                case ModMessageID.KickFromChest:
-
-                    Main.LocalPlayer.chest = -1;
-                    Recipe.FindRecipes();
-                    Main.PlaySound(SoundID.MenuClose);
-                    break;
-            }
+            NetRouter.RouteMessage(reader, whoAmI);
         }
 
         public override void Load()
@@ -251,6 +200,8 @@ namespace MechTransfer
                     {
                         SimpleTileEntity.validTiles.Add(TE.Type, new int[0]);
                     }
+
+                    TE.PostLoadPrototype();
                 }
             }
 
@@ -386,6 +337,11 @@ namespace MechTransfer
             }
 
             LoadChestAdapters();
+        }
+
+        public override void PostAddRecipes()
+        {
+            NetRouter.Init(0);
         }
 
         public ModItem GetPlaceItem<T>() where T : SimplePlaceableTile

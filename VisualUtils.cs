@@ -37,8 +37,7 @@ namespace MechTransfer
                 }
                 else
                 {
-                    ModPacket packet = mod.GetPacket();
-                    packet.Write((byte)MechTransfer.ModMessageID.CreateDust);
+                    ModPacket packet = NetRouter.GetPacketTo(mod.GetModWorld<TransferAgent>(), mod);
                     packet.WritePackedVector2(p.ToVector2());
                     packet.Write((byte)dir);
                     packet.Send();

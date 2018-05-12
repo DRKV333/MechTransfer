@@ -27,6 +27,10 @@ namespace MechTransfer.Tiles.Simple
             return tile != null && tile.active() && validTiles[Type].Contains(tile.type);
         }
 
+        public virtual void PostLoadPrototype()
+        {
+        }
+
         public override bool Autoload(ref string name)
         {
             return false;

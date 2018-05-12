@@ -49,6 +49,7 @@
     <Compile Include="Items\ItemFilterItem.cs" />
     <Compile Include="Items\SimplePlaceableItem.cs" />
     <Compile Include="MechTransferAssemblerWorld.cs" />
+    <Compile Include="NetRouter.cs" />
     <Compile Include="Tiles\BigButtonTile.cs" />
     <Compile Include="Tiles\MagicStorageInterfaceTile.cs" />
     <Compile Include="Tiles\FilterableTile.cs" />

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
@@ -9,7 +10,7 @@ using Terraria.ModLoader;
 
 namespace MechTransfer
 {
-    public class TransferAgent : ModWorld
+    public class TransferAgent : ModWorld, INetHandler
     {
         private class delayedTrip
         {
@@ -29,6 +30,11 @@ namespace MechTransfer
         public int unconditionalPassthroughType = 0;
         public Dictionary<int, ITransferTarget> targets = new Dictionary<int, ITransferTarget>();
         public Dictionary<int, ITransferPassthrough> passthroughs = new Dictionary<int, ITransferPassthrough>();
+
+        public TransferAgent() : base()
+        {
+            NetRouter.AddHandler(this);
+        }
 
         public int StartTransfer(int startX, int startY, Item item)
         {
@@ -175,6 +181,14 @@ namespace MechTransfer
                 Wiring.TripWire(item.x, item.y, item.width, item.height);
             }
             temp.Clear();
+        }
+
+        public void HandlePacket(BinaryReader reader, int WhoAmI)
+        {
+            if (Main.netMode != 1)
+                return;
+
+            VisualUtils.CreateVisual(reader.ReadPackedVector2().ToPoint16(), (Direction)reader.ReadByte());
         }
     }
 }
