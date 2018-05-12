@@ -20,8 +20,6 @@ namespace MechTransfer
 {
     public class MechTransfer : Mod
     {
-        public enum ModMessageID { FilterSyncing, CreateDust, RotateTurret, ProjectileMakeHostile, KickFromChest }
-
         private const string callErorPrefix = "MechTransfer Call() error: ";
         private const string registerAdapter = "RegisterAdapter";
         private const string registerAdapterReflection = "RegisterAdapterReflection";
