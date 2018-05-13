@@ -2,6 +2,7 @@
 using MechTransfer.Tiles.Simple;
 using Microsoft.Xna.Framework;
 using System;
+using System.IO;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -10,7 +11,7 @@ using Terraria.ObjectData;
 
 namespace MechTransfer.Tiles
 {
-    public class OmniTurretTile : SimpleTileObject
+    public class OmniTurretTile : SimpleTileObject, INetHandler
     {
         public override void SetDefaults()
         {
@@ -105,8 +106,7 @@ namespace MechTransfer.Tiles
 
         public void RequestRotate(int i, int j)
         {
-            ModPacket packet = mod.GetPacket();
-            packet.Write((byte)MechTransfer.ModMessageID.RotateTurret);
+            ModPacket packet = NetRouter.GetPacketTo(this, mod);
             packet.Write((Int16)i);
             packet.Write((Int16)j);
             packet.Send();
@@ -159,6 +159,8 @@ namespace MechTransfer.Tiles
             i.DisplayName.AddTranslation(LangID.English, "Matter projector");
             i.Tooltip.AddTranslation(LangID.English, "Shoots any standard ammo really, really fast");
             placeItems[2] = i;
+
+            NetRouter.AddHandler(this);
         }
 
         public override void Addrecipes()
@@ -188,6 +190,11 @@ namespace MechTransfer.Tiles
             r.AddTile(TileID.LunarCraftingStation);
             r.SetResult(placeItems[2], 1);
             r.AddRecipe();
+        }
+
+        public void HandlePacket(BinaryReader reader, int WhoAmI)
+        {
+            Rotate(reader.ReadInt16(), reader.ReadInt16(), false);
         }
     }
 }

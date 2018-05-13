@@ -1,13 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace MechTransfer.ContainerAdapters
 {
-    internal class OmniTurretAdapter
+    internal class OmniTurretAdapter : INetHandler
     {
         private Mod mod;
 
@@ -18,6 +19,7 @@ namespace MechTransfer.ContainerAdapters
         public OmniTurretAdapter(Mod mod)
         {
             this.mod = mod;
+            NetRouter.AddHandler(this);
         }
 
         public void TakeItem(int x, int y, object slot, int amount)
@@ -70,8 +72,7 @@ namespace MechTransfer.ContainerAdapters
 
             if (Main.netMode == 2)
             {
-                ModPacket packet = mod.GetPacket();
-                packet.Write((byte)MechTransfer.ModMessageID.ProjectileMakeHostile);
+                ModPacket packet = NetRouter.GetPacketTo(this, mod);
                 packet.Write((Int16)proj.identity);
                 packet.Write((byte)proj.owner);
                 packet.Send();
@@ -81,6 +82,21 @@ namespace MechTransfer.ContainerAdapters
                 item.stack--;
 
             return true;
+        }
+
+        public void HandlePacket(BinaryReader reader, int WhoAmI)
+        {
+            int identity = reader.ReadInt16();
+            int owner = reader.ReadByte();
+            for (int i = 0; i < 1000; i++)
+            {
+                Projectile proj = Main.projectile[i];
+                if (proj.owner == owner && proj.identity == identity && proj.active)
+                {
+                    proj.hostile = true;
+                    break;
+                }
+            }
         }
     }
 }

@@ -5,7 +5,7 @@ using Terraria;
 
 namespace MechTransfer
 {
-    internal class ItemCatalog
+    public class ItemCatalog
     {
         private List<ContainerAdapter> container = new List<ContainerAdapter>();
         private List<object> identifier = new List<object>();
@@ -84,7 +84,7 @@ namespace MechTransfer
         }
     }
 
-    internal class ItemInventory
+    public class ItemInventory
     {
         private Dictionary<int, ItemCatalog> catalogs = new Dictionary<int, ItemCatalog>();
 
@@ -153,7 +153,7 @@ namespace MechTransfer
         public bool TryTakeItem(Item take)
         {
             ItemCatalog catalog;
-            if(catalogs.TryGetValue(take.type, out catalog))
+            if (catalogs.TryGetValue(take.type, out catalog))
             {
                 if (catalog.Total() >= take.stack)
                 {

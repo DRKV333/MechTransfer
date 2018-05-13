@@ -70,3 +70,10 @@ v1.6
 - Added Buttons
 - Added Filter Items
 - Fixed Omni Turret multiplayer support
+
+v1.6.1
+- Added Bag filter item
+- Fixed filterable tile save/load with modded items
+- Fixed buttons in multiplayer
+- New net packet handling system
+- Added player interface

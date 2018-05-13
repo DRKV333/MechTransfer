@@ -49,7 +49,7 @@ namespace MechTransfer.Tiles
             if (!TryGetEntity(i, j, out entity))
                 return;
 
-            if (entity.ItemId == 0 || entity.stock.stack > 0)
+            if (entity.item.IsAir || entity.stock.stack > 0)
                 return;
 
             inventory.Clear();
@@ -61,7 +61,7 @@ namespace MechTransfer.Tiles
             bool foundRecipe = false;
             for (int r = 0; r < Recipe.maxRecipes && !Main.recipe[r].createItem.IsAir; r++)
             {
-                if (Main.recipe[r].createItem.type == entity.ItemId)
+                if (Main.recipe[r].createItem.type == entity.item.type)
                 {
                     foundRecipe = true;
                     if (TryMakeRecipe(Main.recipe[r], entity))

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -12,6 +7,7 @@ namespace MechTransfer.Items
     public class ItemFilterItem : ModItem
     {
         public delegate bool MatchConditionn(Item item);
+
         public int recipeItem = -1;
         public int Rarity = 0;
         public bool expert = false;

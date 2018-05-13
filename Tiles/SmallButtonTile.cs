@@ -1,6 +1,8 @@
 ﻿using MechTransfer.Items;
 using MechTransfer.Tiles.Simple;
 using Microsoft.Xna.Framework;
+using System;
+using System.IO;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
@@ -10,7 +12,7 @@ using Terraria.ObjectData;
 
 namespace MechTransfer.Tiles
 {
-    internal class SmallButtonTile : SimpleTileObject
+    public class SmallButtonTile : SimpleTileObject, INetHandler
     {
         public override void SetDefaults()
         {
@@ -50,7 +52,17 @@ namespace MechTransfer.Tiles
 
         public override void RightClick(int i, int j)
         {
-            Wiring.TripWire(i, j, 1, 1);
+            if (Main.netMode == 0)
+            {
+                Wiring.TripWire(i, j, 1, 1);
+            }
+            else
+            {
+                ModPacket packet = NetRouter.GetPacketTo(this, mod);
+                packet.Write((Int16)i);
+                packet.Write((Int16)j);
+                packet.Send();
+            }
             mod.GetModWorld<ButtonDelayWorld>().setPoint(new Point16(i, j));
 
             Main.PlaySound(SoundID.MenuTick);
@@ -72,6 +84,8 @@ namespace MechTransfer.Tiles
             mod.AddItem("SmallButtonItem", i);
             i.DisplayName.AddTranslation(LangID.English, "Small button");
             placeItems[0] = i;
+
+            NetRouter.AddHandler(this);
         }
 
         public override void Addrecipes()
@@ -85,6 +99,11 @@ namespace MechTransfer.Tiles
             r.AddIngredient(placeItems[0], 1);
             r.SetResult(ItemID.Switch, 1);
             r.AddRecipe();
+        }
+
+        public void HandlePacket(BinaryReader reader, int WhoAmI)
+        {
+            Wiring.TripWire(reader.ReadInt16(), reader.ReadInt16(), 1, 1);
         }
     }
 }

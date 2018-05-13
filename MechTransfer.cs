@@ -9,7 +9,6 @@ using System.IO;
 using System.Linq.Expressions;
 using System.Reflection;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
@@ -21,8 +20,6 @@ namespace MechTransfer
 {
     public class MechTransfer : Mod
     {
-        public enum ModMessageID { FilterSyncing, CreateDust, RotateTurret, ProjectileMakeHostile, KickFromChest }
-
         private const string callErorPrefix = "MechTransfer Call() error: ";
         private const string registerAdapter = "RegisterAdapter";
         private const string registerAdapterReflection = "RegisterAdapterReflection";
@@ -152,56 +149,7 @@ namespace MechTransfer
 
         public override void HandlePacket(BinaryReader reader, int whoAmI)
         {
-            ModMessageID id = (ModMessageID)reader.ReadByte();
-
-            switch (id)
-            {
-                case ModMessageID.FilterSyncing:
-
-                    if (Main.netMode != 2)
-                        return;
-
-                    TransferFilterTileEntity FilterEntity = (TransferFilterTileEntity)TileEntity.ByID[reader.ReadInt32()];
-                    FilterEntity.ItemId = reader.ReadInt32();
-                    NetMessage.SendData(MessageID.TileEntitySharing, -1, whoAmI, null, FilterEntity.ID, FilterEntity.Position.X, FilterEntity.Position.Y);
-
-                    break;
-
-                case ModMessageID.CreateDust:
-
-                    if (Main.netMode != 1)
-                        return;
-
-                    VisualUtils.CreateVisual(reader.ReadPackedVector2().ToPoint16(), (TransferAgent.Direction)reader.ReadByte());
-                    break;
-
-                case ModMessageID.RotateTurret:
-
-                    GetTile<OmniTurretTile>().Rotate(reader.ReadInt16(), reader.ReadInt16(), false);
-                    break;
-
-                case ModMessageID.ProjectileMakeHostile:
-
-                    int identity = reader.ReadInt16();
-                    int owner = reader.ReadByte();
-                    for (int i = 0; i < 1000; i++)
-                    {
-                        Projectile proj = Main.projectile[i];
-                        if(proj.owner == owner && proj.identity == identity && proj.active)
-                        {
-                            proj.hostile = true;
-                            break;
-                        }
-                    }
-                    break;
-
-                case ModMessageID.KickFromChest:
-
-                    Main.LocalPlayer.chest = -1;
-                    Recipe.FindRecipes();
-                    Main.PlaySound(SoundID.MenuClose);
-                    break;
-            }
+            NetRouter.RouteMessage(reader, whoAmI);
         }
 
         public override void Load()
@@ -250,6 +198,8 @@ namespace MechTransfer
                     {
                         SimpleTileEntity.validTiles.Add(TE.Type, new int[0]);
                     }
+
+                    TE.PostLoadPrototype();
                 }
             }
 
@@ -341,6 +291,10 @@ namespace MechTransfer
             ExtractinatorAdapter extractinatorAdapter = new ExtractinatorAdapter();
             Call(registerAdapterReflection, extractinatorAdapter, new int[] { TileID.Extractinator });
 
+            //Player interface
+            PlayerInterfaceAdapter playerInterfaceAdapter = new PlayerInterfaceAdapter(this);
+            Call(registerAdapterReflection, playerInterfaceAdapter, new int[] { TileType<PlayerInterfaceTile>() });
+
             if (modMagicStorage != null)
             {
                 //Magic storage interface
@@ -387,26 +341,39 @@ namespace MechTransfer
             LoadChestAdapters();
         }
 
-        public ModItem GetPlaceItem<T>() where T : SimplePlaceableTile
+        public override void PostAddRecipes()
         {
-            SimplePlaceableTile tile = (SimplePlaceableTile)GetTile<T>();
+            NetRouter.Init(0);
+        }
+
+        public override void Unload()
+        {
+            NetRouter.Unload();
+        }
+    }
+
+    public static class ModExtensions
+    {
+        public static ModItem GetPlaceItem<T>(this Mod mod) where T : SimplePlaceableTile
+        {
+            SimplePlaceableTile tile = mod.GetTile<T>();
             return tile.placeItem;
         }
 
-        public ModItem GetPlaceItem<T>(int kind) where T : SimpleTileObject
+        public static ModItem GetPlaceItem<T>(this Mod mod, int kind) where T : SimpleTileObject
         {
-            SimpleTileObject tile = GetTile<T>();
+            SimpleTileObject tile = mod.GetTile<T>();
             return tile.GetPlaceItem(kind);
         }
 
-        public int PlaceItemType<T>() where T : SimplePlaceableTile
+        public static int PlaceItemType<T>(this Mod mod) where T : SimplePlaceableTile
         {
-            return GetPlaceItem<T>().item.type;
+            return GetPlaceItem<T>(mod).item.type;
         }
 
-        public int PlaceItemType<T>(int style) where T : SimpleTileObject
+        public static int PlaceItemType<T>(this Mod mod, int style) where T : SimpleTileObject
         {
-            return GetPlaceItem<T>(style).item.type;
+            return GetPlaceItem<T>(mod, style).item.type;
         }
     }
 }

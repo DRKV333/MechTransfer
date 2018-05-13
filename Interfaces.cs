@@ -1,4 +1,5 @@
-﻿using Terraria;
+﻿using System.IO;
+using Terraria;
 using Terraria.DataStructures;
 
 namespace MechTransfer
@@ -15,5 +16,10 @@ namespace MechTransfer
         ushort Type { get; }
 
         bool ShouldPassthrough(Point16 location, Item item);
+    }
+
+    public interface INetHandler
+    {
+        void HandlePacket(BinaryReader reader, int WhoAmI);
     }
 }
