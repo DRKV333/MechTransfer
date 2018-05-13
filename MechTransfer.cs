@@ -346,6 +346,11 @@ namespace MechTransfer
             NetRouter.Init(0);
         }
 
+        public override void Unload()
+        {
+            NetRouter.Unload();
+        }
+
         public ModItem GetPlaceItem<T>() where T : SimplePlaceableTile
         {
             SimplePlaceableTile tile = (SimplePlaceableTile)GetTile<T>();

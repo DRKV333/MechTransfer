@@ -88,5 +88,15 @@ namespace MechTransfer
 
             return packet;
         }
+
+        public static void Unload()
+        {
+            prefix = 0;
+            bigIds = false;
+            inited = false;
+            handlers = null;
+            handlersInverse = null;
+            loadList = new List<INetHandler>();
+        }
     }
 }
