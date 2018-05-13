@@ -55,7 +55,7 @@
     <Compile Include="Tiles\MagicStorageInterfaceTile.cs" />
     <Compile Include="Tiles\FilterableTile.cs" />
     <Compile Include="Tiles\OmniTurretTile.cs" />
-    <Compile Include="Tiles\PlayerInterface.cs" />
+    <Compile Include="Tiles\PlayerInterfaceTile.cs" />
     <Compile Include="Tiles\Simple\SimplePlaceableTile.cs" />
     <Compile Include="Tiles\Simple\SimpleTETile.cs" />
     <Compile Include="Tiles\Simple\SimpleTile.cs" />
