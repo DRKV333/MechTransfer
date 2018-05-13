@@ -350,27 +350,30 @@ namespace MechTransfer
         {
             NetRouter.Unload();
         }
+    }
 
-        public ModItem GetPlaceItem<T>() where T : SimplePlaceableTile
+    public static class ModExtensions
+    {
+        public static ModItem GetPlaceItem<T>(this Mod mod) where T : SimplePlaceableTile
         {
-            SimplePlaceableTile tile = (SimplePlaceableTile)GetTile<T>();
+            SimplePlaceableTile tile = mod.GetTile<T>();
             return tile.placeItem;
         }
 
-        public ModItem GetPlaceItem<T>(int kind) where T : SimpleTileObject
+        public static ModItem GetPlaceItem<T>(this Mod mod, int kind) where T : SimpleTileObject
         {
-            SimpleTileObject tile = GetTile<T>();
+            SimpleTileObject tile = mod.GetTile<T>();
             return tile.GetPlaceItem(kind);
         }
 
-        public int PlaceItemType<T>() where T : SimplePlaceableTile
+        public static int PlaceItemType<T>(this Mod mod) where T : SimplePlaceableTile
         {
-            return GetPlaceItem<T>().item.type;
+            return GetPlaceItem<T>(mod).item.type;
         }
 
-        public int PlaceItemType<T>(int style) where T : SimpleTileObject
+        public static int PlaceItemType<T>(this Mod mod, int style) where T : SimpleTileObject
         {
-            return GetPlaceItem<T>(style).item.type;
+            return GetPlaceItem<T>(mod, style).item.type;
         }
     }
 }
