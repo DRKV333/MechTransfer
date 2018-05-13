@@ -12,7 +12,7 @@ using Terraria.ObjectData;
 
 namespace MechTransfer.Tiles
 {
-    internal class SmallButtonTile : SimpleTileObject, INetHandler
+    public class SmallButtonTile : SimpleTileObject, INetHandler
     {
         public override void SetDefaults()
         {

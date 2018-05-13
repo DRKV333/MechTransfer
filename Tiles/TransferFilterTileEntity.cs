@@ -1,5 +1,4 @@
 ﻿using MechTransfer.Tiles.Simple;
-using System;
 using System.IO;
 using Terraria;
 using Terraria.ID;
@@ -27,7 +26,7 @@ namespace MechTransfer.Tiles
         {
             return new TagCompound() { { "Item", ItemIO.Save(item) } };
         }
-        
+
         public override void Load(TagCompound tag)
         {
             if (tag.ContainsKey("Item"))

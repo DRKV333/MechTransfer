@@ -124,7 +124,7 @@ namespace MechTransfer.Tiles
             ItemFilterItem i = new ItemFilterItem(condition);
             i.recipeItem = recipeItem;
             mod.AddItem(type + "FilterItem", i);
-            if(Main.halloween && type == "Dye")
+            if (Main.halloween && type == "Dye")
                 i.DisplayName.AddTranslation(LangID.English, string.Format("Item filter (Die)", type));
             else
                 i.DisplayName.AddTranslation(LangID.English, string.Format("Item filter ({0})", type));
@@ -227,7 +227,6 @@ namespace MechTransfer.Tiles
                     Bags.Add(i);
                 }
             }
-
         }
 
         private void LogFilterTets()

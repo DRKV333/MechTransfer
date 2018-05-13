@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria.ModLoader;
+﻿using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace MechTransfer
 {
-    class ChestPlacementFix : GlobalTile
+    internal class ChestPlacementFix : GlobalTile
     {
         private List<int> noChestTiles = new List<int>();
 

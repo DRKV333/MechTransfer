@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MechTransfer.Items;
+﻿using MechTransfer.Items;
 using MechTransfer.Tiles.Simple;
 using Microsoft.Xna.Framework;
-using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ID;
-using Terraria.ModLoader;
 using Terraria.ObjectData;
 
 namespace MechTransfer.Tiles
 {
-    class PlayerInterfaceTile : SimpleTileObject
+    public class PlayerInterfaceTile : SimpleTileObject
     {
         public override void SetDefaults()
         {
@@ -44,7 +37,5 @@ namespace MechTransfer.Tiles
             i.Tooltip.AddTranslation(LangID.English, "Allows you to inject and extract items from a players inventory");
             placeItems[0] = i;
         }
-
-
     }
 }

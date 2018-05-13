@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria.ModLoader;
 
 namespace MechTransfer
 {
-    static class NetRouter
+    internal static class NetRouter
     {
         private class TypeSpecificComparer<T> : IEqualityComparer<T>
         {

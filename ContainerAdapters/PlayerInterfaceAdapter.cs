@@ -3,9 +3,6 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -78,11 +75,10 @@ namespace MechTransfer.ContainerAdapters
                     yield return item2;
                 }
             }
-
         }
 
-        private IEnumerable<Tuple<Item,object>> EnumerateRange(int player, SlotKind kind, int from = 0, int length = -1)
-        {           
+        private IEnumerable<Tuple<Item, object>> EnumerateRange(int player, SlotKind kind, int from = 0, int length = -1)
+        {
             Item[] items = GetInventoryFromKind(player, kind);
 
             if (length == -1)
@@ -120,31 +116,31 @@ namespace MechTransfer.ContainerAdapters
 
             int oldStack = item.stack;
 
-            if(item.dye > 0)
+            if (item.dye > 0)
             {
                 InjectToRange(p, SlotKind.Dye, item, false, 0, 8 + Main.player[p].extraAccessorySlots);
                 if (item.stack > 0)
                     InjectToRange(p, SlotKind.MiscDye, item, false);
             }
-            else if(Main.projHook[item.shoot])
+            else if (Main.projHook[item.shoot])
             {
                 InjectToSpecificSlot(p, SlotKind.MiscEquip, 4, item);
             }
-            else if(item.mountType != -1)
+            else if (item.mountType != -1)
             {
                 if (MountID.Sets.Cart[item.mountType])
                     InjectToSpecificSlot(p, SlotKind.MiscEquip, 2, item);
                 else
                     InjectToSpecificSlot(p, SlotKind.MiscEquip, 3, item);
             }
-            else if(item.buffType > 0)
+            else if (item.buffType > 0)
             {
-                if(Main.lightPet[item.buffType])
+                if (Main.lightPet[item.buffType])
                     InjectToSpecificSlot(p, SlotKind.MiscEquip, 1, item);
-                else if(Main.vanityPet[item.buffType])
+                else if (Main.vanityPet[item.buffType])
                     InjectToSpecificSlot(p, SlotKind.MiscEquip, 0, item);
             }
-            else if(item.headSlot != -1)
+            else if (item.headSlot != -1)
             {
                 InjectArmor(p, item, 0, 10);
             }
@@ -156,21 +152,21 @@ namespace MechTransfer.ContainerAdapters
             {
                 InjectArmor(p, item, 2, 12);
             }
-            else if(item.accessory)
+            else if (item.accessory)
             {
                 InjectAccessory(p, item);
             }
-            else if(MoneyValue(item.type) > 0)
+            else if (MoneyValue(item.type) > 0)
             {
                 //I should probably compact coins here
                 InjectToRange(p, SlotKind.Inventory, item, true, 50, 4);
             }
-            else if(item.ammo != 0)
+            else if (item.ammo != 0)
             {
                 InjectToRange(p, SlotKind.Inventory, item, true, 54, 4);
             }
 
-            if(item.stack > 0)
+            if (item.stack > 0)
                 InjectToRange(p, SlotKind.Inventory, item, true, 0, 50);
 
             return item.stack < oldStack;
@@ -294,9 +290,8 @@ namespace MechTransfer.ContainerAdapters
             int len = 5 + Main.player[player].extraAccessorySlots;
 
             InjectToRange(player, SlotKind.Armor, item, false, start1, len);
-            if(item.stack > 0)
+            if (item.stack > 0)
                 InjectToRange(player, SlotKind.Armor, item, false, start2, len);
-
         }
 
         private int MoneyValue(int type)
