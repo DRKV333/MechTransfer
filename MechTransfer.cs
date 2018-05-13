@@ -291,6 +291,10 @@ namespace MechTransfer
             ExtractinatorAdapter extractinatorAdapter = new ExtractinatorAdapter();
             Call(registerAdapterReflection, extractinatorAdapter, new int[] { TileID.Extractinator });
 
+            //Player interface
+            PlayerInterfaceAdapter playerInterfaceAdapter = new PlayerInterfaceAdapter(this);
+            Call(registerAdapterReflection, playerInterfaceAdapter, new int[] { TileType<PlayerInterfaceTile>() });
+
             if (modMagicStorage != null)
             {
                 //Magic storage interface
