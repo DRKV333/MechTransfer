@@ -1,6 +1,7 @@
 ﻿using MechTransfer.Tiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using Terraria;
 using Terraria.GameContent.UI;
 using Terraria.ModLoader;
@@ -9,6 +10,14 @@ namespace MechTransfer
 {
     internal class MechTransferAssemblerWorld : ModWorld
     {
+        Texture2D pixel;
+
+        public override void Initialize()
+        {
+            pixel = new Texture2D(Main.graphics.GraphicsDevice, 1, 1);
+            pixel.SetData(new Color[] { Color.White });
+        }
+
         public override void PostDrawTiles()
         {
             if (!WiresUI.Settings.DrawWires)
@@ -35,14 +44,23 @@ namespace MechTransfer
                 {
                     if (Main.tile[x, y] != null && Main.tile[x, y].active() && Main.tile[x, y].type == mod.TileType<TransferAssemblerTile>())
                     {
-                        Vector2 start = new Vector2(x * 16 - 81, y * 16 - 81);
-                        Vector2 end = new Vector2(x * 16 + 97, y * 16 + 97);
-                        Utils.DrawRectangle(Main.spriteBatch, start, end, Color.LightSeaGreen, Color.LightSeaGreen, 2f);
+                        DrawRectFast(x * 16 - 80 - (int)Main.screenPosition.X, y * 16 - 80 - (int)Main.screenPosition.Y, 176, 176);
                     }
                 }
             }
 
             Main.spriteBatch.End();
+        }
+
+        void DrawRectFast(int left, int top, int height, int width)
+        {
+            if (Main.LocalPlayer.gravDir == -1)
+                top = Main.screenHeight - top - height;
+
+            Main.spriteBatch.Draw(pixel, new Rectangle(left, top, width, 2), null, Color.LightSeaGreen);
+            Main.spriteBatch.Draw(pixel, new Rectangle(left, top + height, width, 2), null, Color.LightSeaGreen);
+            Main.spriteBatch.Draw(pixel, new Rectangle(left, top, 2, height), null, Color.LightSeaGreen);
+            Main.spriteBatch.Draw(pixel, new Rectangle(left + width, top, 2, height), null, Color.LightSeaGreen);
         }
     }
 }
