@@ -157,6 +157,12 @@ namespace MechTransfer
             return null;
         }
 
+        public bool IsContainer(int x, int y)
+        {
+            Tile tile = Main.tile[x, y];
+            return (tile != null && tile.active() && ContainerAdapters.ContainsKey(tile.type));
+        }
+
         //trigger wire on the new update, to stop infinite wire loops
         public void TripWireDelayed(int x, int y, int width, int height)
         {
