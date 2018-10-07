@@ -77,3 +77,7 @@ v1.6.1
 - Fixed buttons in multiplayer
 - New net packet handling system
 - Added player interface
+
+v1.6.2
+- Improved assembler area drawing
+- Added transition markers
