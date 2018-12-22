@@ -23,8 +23,9 @@ namespace MechTransfer
 
         public override void PostDrawTiles()
         {
-            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, null, null, null, Main.GameViewMatrix.TransformationMatrix);
 
+            //These should be recalculated for view space, but they don't really hurt anything like this, so...
             int screenLeft = (int)((Main.screenPosition.X) / 16f - 1f);
             int screenRight = (int)((Main.screenPosition.X + (float)Main.screenWidth) / 16f) + 2;
             int screenTop = (int)((Main.screenPosition.Y) / 16f - 1f);

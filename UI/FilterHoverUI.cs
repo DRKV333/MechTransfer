@@ -51,8 +51,10 @@ namespace MechTransfer.UI
             itemText.TextColor = type.IsAir ? Color.Red : ItemRarity.GetColor(fakeInv[10].rare);
             panel.Width.Pixels = itemText.MinWidth.Pixels + Main.inventoryBackTexture.Width * 0.5f * Main.UIScale + 20;
 
-            Left.Pixels = Main.mouseX + 10;
-            Top.Pixels = Main.mouseY + 10;
+            Vector2 pos = Vector2.Transform(Main.MouseScreen, Main.GameViewMatrix.TransformationMatrix);
+
+            Left.Pixels = pos.X + 10;
+            Top.Pixels = pos.Y + 10;
 
             Recalculate();
         }
