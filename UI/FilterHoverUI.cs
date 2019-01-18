@@ -53,8 +53,8 @@ namespace MechTransfer.UI
 
             Vector2 pos = Vector2.Transform(Main.MouseScreen, Main.GameViewMatrix.TransformationMatrix);
 
-            Left.Pixels = pos.X + 10;
-            Top.Pixels = pos.Y + 10;
+            Left.Pixels = (pos.X + 10) / Main.UIScale;
+            Top.Pixels = (pos.Y + 10) / Main.UIScale;
 
             Recalculate();
         }
