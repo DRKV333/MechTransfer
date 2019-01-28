@@ -55,7 +55,9 @@ namespace MechTransfer.Tiles
             i.placeType = Type;
             mod.AddItem("TransferOutletItem", i);
             i.DisplayName.AddTranslation(LangID.English, "Transfer outlet");
+            i.DisplayName.AddTranslation(Terraria.Localization.GameCulture.Chinese, "物品丢弃口");
             i.Tooltip.AddTranslation(LangID.English, "Drops item");
+            i.Tooltip.AddTranslation(Terraria.Localization.GameCulture.Chinese, "抛出物品");
             placeItems[0] = i;
         }
 

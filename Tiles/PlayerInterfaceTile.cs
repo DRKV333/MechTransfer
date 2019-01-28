@@ -37,7 +37,9 @@ namespace MechTransfer.Tiles
             mod.AddItem("PlayerInterfaceItem", i);
             i.value = Item.sellPrice(0, 1, 0, 0);
             i.DisplayName.AddTranslation(LangID.English, "Player interface");
+            i.DisplayName.AddTranslation(Terraria.Localization.GameCulture.Chinese, "玩家接口");
             i.Tooltip.AddTranslation(LangID.English, "Allows you to inject and extract items from a players inventory");
+            i.Tooltip.AddTranslation(Terraria.Localization.GameCulture.Chinese, "允许物流系统访问玩家的装备栏和库存");
             placeItems[0] = i;
         }
 
