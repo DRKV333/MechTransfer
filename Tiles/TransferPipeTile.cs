@@ -69,7 +69,9 @@ namespace MechTransfer.Tiles
             i.placeType = Type;
             mod.AddItem("TransferPipeItem", i);
             i.DisplayName.AddTranslation(LangID.English, "Transfer pipe");
+            i.DisplayName.AddTranslation(Terraria.Localization.GameCulture.Chinese, "物流管道");
             i.Tooltip.AddTranslation(LangID.English, "Used to connect item transfer devices");
+            i.Tooltip.AddTranslation(Terraria.Localization.GameCulture.Chinese, "用来连接物流设备和传输物品");
             placeItems[0] = i;
         }
 

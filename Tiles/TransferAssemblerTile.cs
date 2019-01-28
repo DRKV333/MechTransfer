@@ -241,7 +241,9 @@ namespace MechTransfer.Tiles
             i.value = Item.sellPrice(0, 1, 0, 0);
             mod.AddItem("TransferAssemblerItem", i);
             i.DisplayName.AddTranslation(LangID.English, "Transfer assembler");
+            i.DisplayName.AddTranslation(Terraria.Localization.GameCulture.Chinese, "自动合成器");
             i.Tooltip.AddTranslation(LangID.English, "WIP\nCrafts items automatically\nRight click with item in hand to set filter");
+            i.Tooltip.AddTranslation(Terraria.Localization.GameCulture.Chinese, "开发中\n允许自动合成物品\n手持物品右键来设置需要合成的物品\n暂时不支持指定合成配方");
             placeItems[0] = i;
         }
 

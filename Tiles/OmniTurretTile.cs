@@ -137,7 +137,9 @@ namespace MechTransfer.Tiles
             i.value = Item.sellPrice(0, 1, 0, 0);
             mod.AddItem("OmniTurretItem", i);
             i.DisplayName.AddTranslation(LangID.English, "Omni turret");
+            i.DisplayName.AddTranslation(Terraria.Localization.GameCulture.Chinese, "全方位炮台");
             i.Tooltip.AddTranslation(LangID.English, "Shoots any standard ammo");
+            i.Tooltip.AddTranslation(Terraria.Localization.GameCulture.Chinese, "能发射各种标准弹药，开启塔防时代");
             placeItems[0] = i;
 
             //Super omni turret
@@ -147,7 +149,9 @@ namespace MechTransfer.Tiles
             i.style = 1;
             mod.AddItem("SuperOmniTurretItem", i);
             i.DisplayName.AddTranslation(LangID.English, "Super omni turret");
+            i.DisplayName.AddTranslation(Terraria.Localization.GameCulture.Chinese, "超级全方位炮台");
             i.Tooltip.AddTranslation(LangID.English, "Shoots any standard ammo");
+            i.Tooltip.AddTranslation(Terraria.Localization.GameCulture.Chinese, "能发射各种标准弹药，速度更快！");
             placeItems[1] = i;
 
             //Matter projector
@@ -157,7 +161,9 @@ namespace MechTransfer.Tiles
             i.style = 2;
             mod.AddItem("MatterProjectorItem", i);
             i.DisplayName.AddTranslation(LangID.English, "Matter projector");
+            i.DisplayName.AddTranslation(Terraria.Localization.GameCulture.Chinese, "物质投射器");
             i.Tooltip.AddTranslation(LangID.English, "Shoots any standard ammo really, really fast");
+            i.Tooltip.AddTranslation(Terraria.Localization.GameCulture.Chinese, "能发射各种标准弹药，而且它不限速！");
             placeItems[2] = i;
 
             NetRouter.AddHandler(this);

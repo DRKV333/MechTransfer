@@ -78,6 +78,7 @@ namespace MechTransfer.Tiles
             i.value = Item.sellPrice(0, 0, 6, 0);
             mod.AddItem("BigButtonItem", i);
             i.DisplayName.AddTranslation(LangID.English, "Big button");
+            i.DisplayName.AddTranslation(Terraria.Localization.GameCulture.Chinese, "大号按钮");
             placeItems[0] = i;
 
             NetRouter.AddHandler(this);

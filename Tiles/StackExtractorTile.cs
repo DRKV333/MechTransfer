@@ -57,7 +57,9 @@ namespace MechTransfer.Tiles
             i.value = Item.sellPrice(0, 1, 0, 0);
             mod.AddItem("StackExtractorItem", i);
             i.DisplayName.AddTranslation(LangID.English, "Stack extractor");
+            i.DisplayName.AddTranslation(Terraria.Localization.GameCulture.Chinese, "物品提取器(组)");
             i.Tooltip.AddTranslation(LangID.English, "Extracts a whole stack at once");
+            i.Tooltip.AddTranslation(Terraria.Localization.GameCulture.Chinese, "从相邻容器取出物品，一次可以取出一组物品");
             placeItems[0] = i;
         }
 

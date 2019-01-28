@@ -56,7 +56,9 @@ namespace MechTransfer.Tiles
             i.placeType = Type;
             mod.AddItem("TransferExtractorItem", i);
             i.DisplayName.AddTranslation(LangID.English, "Transfer extractor");
+            i.DisplayName.AddTranslation(Terraria.Localization.GameCulture.Chinese, "物品提取器");
             i.Tooltip.AddTranslation(LangID.English, "Extracts items from adjacent chests");
+            i.Tooltip.AddTranslation(Terraria.Localization.GameCulture.Chinese, "从相邻的容器中提取物品\n一次一个");
             placeItems[0] = i;
         }
 
