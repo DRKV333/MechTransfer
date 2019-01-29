@@ -163,6 +163,7 @@ namespace MechTransfer.Tiles
             createFilter("Armor", ItemID.WoodBreastplate, x => ((x.headSlot >= 0 || x.bodySlot >= 0 || x.legSlot >= 0) && !x.vanity));
             createFilter("Vanity", ItemID.FamiliarWig, x => (x.vanity));
             createFilter("Accessory", ItemID.Shackle, x => (x.accessory));
+            Main.checkHalloween();
             createFilter("Dye", ItemID.SilverDye, x => (x.dye > 0));
 
             createFilter("Ammo", ItemID.MusketBall, x => x.ammo != 0);
