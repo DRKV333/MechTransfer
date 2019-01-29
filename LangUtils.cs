@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Terraria;
-using Terraria.Localization;
-using Terraria.ModLoader;
+﻿using System.Collections.Generic;
 using System.Reflection;
+using Terraria.ModLoader;
 
 namespace MechTransfer
 {
-    static class LangUtils
+    internal static class LangUtils
     {
         public static ModTranslation GetModTranslation(this Mod mod, string key)
         {

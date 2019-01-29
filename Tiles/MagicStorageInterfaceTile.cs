@@ -3,7 +3,6 @@ using MechTransfer.Tiles.Simple;
 using Microsoft.Xna.Framework;
 using Terraria.DataStructures;
 using Terraria.Enums;
-using Terraria.ID;
 using Terraria.ObjectData;
 
 namespace MechTransfer.Tiles
