@@ -1,0 +1,86 @@
+ItemName.PneumaticActuatorItem = Pneumatic actuator
+ItemTooltip.PneumaticActuatorItem = Used to craft item transfer devices
+
+ItemName.BigButtonItem = Big button
+ItemName.SmallButtonItem = Small button
+
+ItemName.OmniTurretItem = Omni turret
+ItemTooltip.OmniTurretItem = Shoots any standard ammo
+ItemName.SuperOmniTurretItem = Super omni turret
+ItemTooltip.SuperOmniTurretItem = Shoots any standard ammo
+ItemName.MatterProjectorItem = Matter projector
+ItemTooltip.MatterProjectorItem = Shoots any standard ammo really, really fast
+
+ItemName.TransferPipeItem = Transfer pipe
+ItemTooltip.TransferPipeItem = Used to connect item transfer devices
+
+ItemName.TransferExtractorItem = Transfer extractor
+ItemTooltip.TransferExtractorItem = Extracts items from adjacent chests
+
+ItemName.StackExtractorItem = Stack extractor
+ItemTooltip.StackExtractorItem = Extracts a whole stack at once
+
+ItemName.TransferInletItem = Transfer inlet
+ItemTooltip.TransferInletItem = Picks up dropped items
+
+ItemName.TransferFilterItem = Transfer filter (whitelist)
+ItemTooltip.TransferFilterItem = Place in line with Transfer pipe\nRight click with item in hand to set filter
+ItemName.InverseTransferFilterItem = Transfer filter (blacklist)
+ItemTooltip.InverseTransferFilterItem = Place in line with Transfer pipe\nRight click with item in hand to set filter
+
+ItemName.TransferGateItem = Transfer gate
+ItemTooltip.TransferGateItem = Place in line with Transfer pipe to toggle the item flow with wire
+
+ItemName.TransferRelayItem = Transfer relay
+ItemTooltip.TransferRelayItem = Receives items, and sends them out again
+
+ItemName.TransferInjectorItem = Transfer Injector
+ItemTooltip.TransferInjectorItem = Injects items into adjacent chests
+
+ItemName.TransferOutletItem = Transfer outlet
+ItemTooltip.TransferOutletItem = Drops item
+
+ItemName.MagicStorageInterfaceItem = Magic storage interface
+ItemTooltip.MagicStorageInterfaceItem = Allows you to inject and extract items from storage systems
+
+ItemName.PlayerInterfaceItem = Player interface
+ItemTooltip.PlayerInterfaceItem = Allows you to inject and extract items from a players inventory
+
+ItemName.TransferAssemblerItem = Transfer assembler
+ItemTooltip.TransferAssemblerItem = WIP\nCrafts items automatically\nRight click with item in hand to set filter
+
+Common.ItemName.FilterItem = Item filter
+Common.ItemTooltip.FilterItem = Use in Transfer filter
+ItemName.AnyFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Any)
+ItemName.Rarity-GrayFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Rarity-Gray)
+ItemName.Rarity-WhiteFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Rarity-White)
+ItemName.Rarity-BlueFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Rarity-Blue)
+ItemName.Rarity-GreenFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Rarity-Green)
+ItemName.Rarity-OrangeFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Rarity-Orange)
+ItemName.Rarity-LightRedFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Rarity-LightRed)
+ItemName.Rarity-PinkFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Rarity-Pink)
+ItemName.Rarity-LightPurpleFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Rarity-LightPurple)
+ItemName.Rarity-LimeFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Rarity-Lime)
+ItemName.Rarity-YellowFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Rarity-Yellow)
+ItemName.Rarity-CyanFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Rarity-Cyan)
+ItemName.Rarity-RedFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Rarity-Red)
+ItemName.Rarity-PurpleFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Rarity-Purple)
+ItemName.Rarity-RainbowFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Rarity-Rainbow)
+ItemName.Rarity-AmberFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Rarity-Amber)
+ItemName.EquipableFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Equipable)
+ItemName.ArmorFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Armor)
+ItemName.VanityFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Vanity)
+ItemName.AccessoryFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Accessory)
+ItemName.DyeFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Dye)
+EasterEgg.ItemName.DyeFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Die)
+ItemName.AmmoFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Ammo)
+ItemName.BaitFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Bait)
+ItemName.MoneyFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Money)
+ItemName.BagFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Bag)
+ItemName.ToolFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Tool)
+ItemName.WeaponFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Weapon)
+ItemName.ConsumableFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Consumable)
+ItemName.MaterialFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Material)
+ItemName.PotionFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Potion)
+ItemName.TileFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Tile)
+ItemName.WallFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Wall)

@@ -50,10 +50,6 @@ namespace MechTransfer.Tiles
             SimplePlaceableItem i = new SimplePlaceableItem();
             i.placeType = Type;
             mod.AddItem("TransferInletItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Transfer inlet");
-            i.DisplayName.AddTranslation(Terraria.Localization.GameCulture.Chinese, "物品拾取口");
-            i.Tooltip.AddTranslation(LangID.English, "Picks up dropped items");
-            i.Tooltip.AddTranslation(Terraria.Localization.GameCulture.Chinese, "拾取掉落在上方的物品");
             placeItems[0] = i;
         }
 

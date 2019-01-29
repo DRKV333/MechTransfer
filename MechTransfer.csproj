@@ -50,6 +50,7 @@
     <Compile Include="Interfaces.cs" />
     <Compile Include="Items\ItemFilterItem.cs" />
     <Compile Include="Items\SimplePlaceableItem.cs" />
+    <Compile Include="LangUtils.cs" />
     <Compile Include="MechTransferAssemblerWorld.cs" />
     <Compile Include="NetRouter.cs" />
     <Compile Include="Tiles\BigButtonTile.cs" />

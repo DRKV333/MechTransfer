@@ -52,10 +52,6 @@ namespace MechTransfer.Tiles
             SimplePlaceableItem i = new SimplePlaceableItem();
             i.placeType = Type;
             mod.AddItem("TransferInjectorItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Transfer Injector");
-            i.DisplayName.AddTranslation(Terraria.Localization.GameCulture.Chinese, "物品注入器");
-            i.Tooltip.AddTranslation(LangID.English, "Injects items into adjacent chests");
-            i.Tooltip.AddTranslation(Terraria.Localization.GameCulture.Chinese, "将物品放入相邻的容器中\n它也可以被用在提取器上用于自动提取");
             placeItems[0] = i;
         }
 

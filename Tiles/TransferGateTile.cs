@@ -54,10 +54,6 @@ namespace MechTransfer.Tiles
             SimplePlaceableItem i = new SimplePlaceableItem();
             i.placeType = Type;
             mod.AddItem("TransferGateItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Transfer gate");
-            i.DisplayName.AddTranslation(Terraria.Localization.GameCulture.Chinese, "物流管道阀门");
-            i.Tooltip.AddTranslation(LangID.English, "Place in line with Transfer pipe to toggle the item flow with wire");
-            i.Tooltip.AddTranslation(Terraria.Localization.GameCulture.Chinese, "将其放置在物流管道中使用电信号控制管道通路");
             placeItems[0] = i;
         }
 

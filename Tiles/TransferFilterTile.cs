@@ -80,10 +80,6 @@ namespace MechTransfer.Tiles
             SimplePlaceableItem i = new SimplePlaceableItem();
             i.placeType = Type;
             mod.AddItem("TransferFilterItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Transfer filter (whitelist)");
-            i.DisplayName.AddTranslation(GameCulture.Chinese, "物流过滤器(白名单)");
-            i.Tooltip.AddTranslation(LangID.English, "Place in line with Transfer pipe\nRight click with item in hand to set filter");
-            i.Tooltip.AddTranslation(GameCulture.Chinese, "将其放置在物流管道中用以过滤允许通过的物品\n手持物品右键来设置允许通过的物品\n可以使用过滤卡");
             placeItems[0] = i;
 
             //InverseFilter
@@ -91,10 +87,6 @@ namespace MechTransfer.Tiles
             i.placeType = Type;
             i.style = 1;
             mod.AddItem("InverseTransferFilterItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Transfer filter (blacklist)");
-            i.DisplayName.AddTranslation(GameCulture.Chinese, "物流过滤器(黑名单)");
-            i.Tooltip.AddTranslation(LangID.English, "Place in line with Transfer pipe\nRight click with item in hand to set filter");
-            i.Tooltip.AddTranslation(GameCulture.Chinese, "将其放置在物流管道中用以过滤不允许通过的物品\n手持物品右键来设置不允许通过的物品\n可以使用过滤卡");
             placeItems[1] = i;
 
             LoadFilters();
@@ -139,16 +131,9 @@ namespace MechTransfer.Tiles
             mod.AddItem(type + "FilterItem", i);
             if (Main.halloween && type == "Dye")
             {
-                i.DisplayName.AddTranslation(LangID.English, string.Format("Item filter (Die)", type));
-                i.DisplayName.AddTranslation(GameCulture.Chinese, string.Format("物品过滤卡(Dye,Die,黛!)", filterTypeLocalizationStrDic[GameCulture.Chinese][type]));
+                i.DisplayName.SwapTranslation(mod.GetModTranslation("Mods.MechTransfer.EasterEgg.ItemName.DyeFilterItem"));
             }
-            else
-            {
-                i.DisplayName.AddTranslation(LangID.English, string.Format("Item filter ({0})", type));
-                i.DisplayName.AddTranslation(GameCulture.Chinese, string.Format("物品过滤卡({0})", filterTypeLocalizationStrDic[GameCulture.Chinese][type]));
-            }
-            i.Tooltip.AddTranslation(LangID.English, "Use in Transfer filter");
-            i.Tooltip.AddTranslation(GameCulture.Chinese, "手持它右键物流过滤器来设置指定类型的过滤条件");
+            i.Tooltip.SwapTranslation(mod.GetModTranslation("Mods.MechTransfer.Common.ItemTooltip.FilterItem"));
 
             filterItems.Add(i.item.type, i);
 
@@ -197,82 +182,7 @@ namespace MechTransfer.Tiles
             createFilter("Tile", ItemID.DirtBlock, x => x.createTile > -1);
             createFilter("Wall", ItemID.WoodWall, x => x.createWall > 0);
         }
-        private Dictionary<Terraria.Localization.GameCulture, Dictionary<string, string>> filterTypeLocalizationStrDic =
-            new Dictionary<Terraria.Localization.GameCulture, Dictionary<string, string>>
-            {
-                { GameCulture.Chinese, new Dictionary<string, string>
-                    {
-                        { "Any", "任意" },
-                        { "Rarity-Gray", "稀有度-灰色" },
-                        { "Rarity-White", "稀有度-白色" },
-                        { "Rarity-Blue", "稀有度-蓝色" },
-                        { "Rarity-Green", "稀有度-绿色" },
-                        { "Rarity-Orange", "稀有度-橙色" },
-                        { "Rarity-LightRed", "稀有度-浅红色" },
-                        { "Rarity-Pink", "稀有度-粉红色" },
-                        { "Rarity-LightPurple", "稀有度-浅紫色" },
-                        { "Rarity-Lime", "稀有度-青柠色" },
-                        { "Rarity-Yellow", "稀有度-黄色" },
-                        { "Rarity-Cyan", "稀有度-青色" },
-                        { "Rarity-Red", "稀有度-红色" },
-                        { "Rarity-Purple", "稀有度-紫色" },
-                        { "Rarity-Rainbow", "稀有度-彩虹色" },
-                        { "Rarity-Amber", "稀有度-琥珀色" },
-                        { "Equipable", "可装备" },
-                        { "Armor", "盔甲" },
-                        { "Vanity", "时装" },
-                        { "Accessory", "配饰" },
-                        { "Dye", "染料" },
-                        { "Ammo", "弹药" },
-                        { "Bait", "鱼饵" },
-                        { "Money", "钱币" },
-                        { "Bag", "宝藏袋" },
-                        { "Tool", "工具" },
-                        { "Weapon", "武器" },
-                        { "Consumable", "消耗品" },
-                        { "Material", "材料" },
-                        { "Potion", "药水" },
-                        { "Tile", "图格" },
-                        { "Wall", "墙" },
-                    }
-                },
-                //{ Terraria.Localization.GameCulture.OtherCulture, new Dictionary<string, string>
-                //    {
-                //        { "Any", "" },
-                //        { "Rarity-Gray", "" },
-                //        { "Rarity-White", "" },
-                //        { "Rarity-Blue", "" },
-                //        { "Rarity-Green", "" },
-                //        { "Rarity-Orange", "" },
-                //        { "Rarity-LightRed", "" },
-                //        { "Rarity-Pink", "" },
-                //        { "Rarity-LightPurple", "" },
-                //        { "Rarity-Lime", "" },
-                //        { "Rarity-Yellow", "" },
-                //        { "Rarity-Cyan", "" },
-                //        { "Rarity-Red", "" },
-                //        { "Rarity-Purple", "" },
-                //        { "Rarity-Rainbow", "" },
-                //        { "Rarity-Amber", "" },
-                //        { "Equipable", "" },
-                //        { "Armor", "" },
-                //        { "Vanity", "" },
-                //        { "Accessory", "" },
-                //        { "Dye", "" },
-                //        { "Ammo", "" },
-                //        { "Bait", "" },
-                //        { "Money", "" },
-                //        { "Bag", "" },
-                //        { "Tool", "" },
-                //        { "Weapon", "" },
-                //        { "Consumable", "" },
-                //        { "Material", "" },
-                //        { "Potion", "" },
-                //        { "Tile", "" },
-                //        { "Wall", "" },
-                //    }
-                //}
-            };
+
         private void LoadBagFilter()
         {
             Bags = new HashSet<int>();

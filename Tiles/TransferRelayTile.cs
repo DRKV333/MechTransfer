@@ -68,10 +68,6 @@ namespace MechTransfer.Tiles
             SimplePlaceableItem i = new SimplePlaceableItem();
             i.placeType = Type;
             mod.AddItem("TransferRelayItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Transfer relay");
-            i.DisplayName.AddTranslation(Terraria.Localization.GameCulture.Chinese, "物流中继器");
-            i.Tooltip.AddTranslation(LangID.English, "Receives items, and sends them out again");
-            i.Tooltip.AddTranslation(Terraria.Localization.GameCulture.Chinese, "接收物品，然后再将其发送出去");
             placeItems[0] = i;
         }
 

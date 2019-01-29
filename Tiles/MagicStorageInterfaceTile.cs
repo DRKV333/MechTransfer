@@ -31,10 +31,6 @@ namespace MechTransfer.Tiles
             SimplePlaceableItem i = new SimplePlaceableItem();
             i.placeType = Type;
             mod.AddItem("MagicStorageInterfaceItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Magic storage interface");
-            i.DisplayName.AddTranslation(Terraria.Localization.GameCulture.Chinese, "魔法存储接口");
-            i.Tooltip.AddTranslation(LangID.English, "Allows you to inject and extract items from storage systems");
-            i.Tooltip.AddTranslation(Terraria.Localization.GameCulture.Chinese, "使物流系统可以访问魔法存储的库存");
             placeItems[0] = i;
         }
     }
