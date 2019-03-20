@@ -5,6 +5,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
@@ -61,9 +62,9 @@ namespace MechTransfer.Tiles
         {
             Tile tile = Main.tile[entity.Position.X, entity.Position.Y];
             if (tile.frameY == 0)
-                return "Item allowed:";
+                return Language.GetTextValue("Mods.MechTransfer.UI.Hover.TransferFilterItem");
             else
-                return "Item restricted:";
+                return Language.GetTextValue("Mods.MechTransfer.UI.Hover.InverseTransferFilterItem");
         }
 
         public override int GetDropKind(int Fx, int Fy)

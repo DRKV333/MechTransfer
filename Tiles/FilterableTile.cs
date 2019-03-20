@@ -1,6 +1,7 @@
 ﻿using MechTransfer.Tiles.Simple;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Localization;
 
 namespace MechTransfer.Tiles
 {
@@ -40,7 +41,7 @@ namespace MechTransfer.Tiles
 
         public virtual string HoverText(T entity)
         {
-            return "Filter:";
+            return Language.GetTextValue("Mods.MechTransfer.UI.Hover.Generic");
         }
 
         public virtual Color HoverColor(T entity)

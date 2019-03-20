@@ -1,3 +1,6 @@
+UI.Hover.NotSet = Not set
+UI.Hover.Generic = Filter:
+
 ItemName.PneumaticActuatorItem = Pneumatic actuator
 ItemTooltip.PneumaticActuatorItem = Used to craft item transfer devices
 
@@ -25,8 +28,10 @@ ItemTooltip.TransferInletItem = Picks up dropped items
 
 ItemName.TransferFilterItem = Transfer filter (whitelist)
 ItemTooltip.TransferFilterItem = Place in line with Transfer pipe\nRight click with item in hand to set filter
+UI.Hover.TransferFilterItem = Item allowed:
 ItemName.InverseTransferFilterItem = Transfer filter (blacklist)
 ItemTooltip.InverseTransferFilterItem = Place in line with Transfer pipe\nRight click with item in hand to set filter
+UI.Hover.InverseTransferFilterItem = Item restricted:
 
 ItemName.TransferGateItem = Transfer gate
 ItemTooltip.TransferGateItem = Place in line with Transfer pipe to toggle the item flow with wire
