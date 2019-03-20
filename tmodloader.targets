@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- ==============================================================================================
+		Targets file for compiling TModLoader Mods.
+	 ============================================================================================== -->
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<PropertyGroup>
+		<!-- Get Terraria install directory from registry for reference and post-build event -->
+		<tmodTerrariaPath>$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\re-logic\terraria@install_path)</tmodTerrariaPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- XNA Framework dlls, should be in the GAC... -->
+		<Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+		<Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+		<Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+		<Reference Include="Microsoft.Xna.Framework.Xact, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+		
+		<!-- Terraria.exe from install directory -->
+		<Reference Include="Terraria">
+			<HintPath>$(tmodTerrariaPath)\Terraria.exe</HintPath>
+		</Reference>
+	</ItemGroup>
+	
+	<!-- Setup build target dependency -->
+	<PropertyGroup>
+		<BuildDependsOn>
+			$(BuildDependsOn);
+			tmodBuildModFile
+		</BuildDependsOn>
+	</PropertyGroup>
+	
+	<!-- Create .tmod file -->
+	<Target Name="tmodBuildModFile">
+		<Exec Command="&quot;$(tmodTerrariaPath)\tModLoaderServer.exe&quot; -build &quot;$(ProjectDir.TrimEnd('\'))&quot; -eac &quot;$(TargetPath.TrimEnd('\'))&quot;" />
+	</Target>
+	
+</Project>
