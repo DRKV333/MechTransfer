@@ -34,7 +34,7 @@ ItemTooltip.TransferGateItem = Поставьте в транспортиров�
 ItemName.TransferRelayItem = Транспортное реле
 ItemTooltip.TransferRelayItem = Передаёт предметы в одном направлении
 
-ItemName.TransferInjectoinjectorrItem = Транспортный инжектор
+ItemName.TransferInjectorItem = Транспортный инжектор
 ItemTooltip.TransferInjectorItem = Передаёт предметы в рядом стоящие сундуки
 
 ItemName.TransferOutletItem = Транспортный выбрасыватель
