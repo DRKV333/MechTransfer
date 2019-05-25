@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!-- ==============================================================================================
-		Targets file for compiling TModLoader Mods.
+		Targets file for compiling TModLoader Mods. Now with incremental build support!
 	 ============================================================================================== -->
 
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
@@ -9,6 +9,9 @@
 	<PropertyGroup>
 		<!-- Get Terraria install directory from registry for reference and post-build event -->
 		<tmodTerrariaPath>$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\re-logic\terraria@install_path)</tmodTerrariaPath>
+		
+		<!-- build.txt to parse ignores from -->
+		<tmodBuildTxtPath Condition="'$(tmodBuildTxtPath)'==''">$(ProjectDir)build.txt</tmodBuildTxtPath>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -24,6 +27,35 @@
 		</Reference>
 	</ItemGroup>
 	
+	<!-- Task for listing all files that will be included in the mod file build -->
+	<UsingTask TaskName="tmodParseBuildFilesTask" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+		<ParameterGroup>
+			<ProjectPath ParameterType="System.String" Required="true" />
+			<BuildTxtPath ParameterType="System.String" Required="true" />
+			<Files ParameterType="Microsoft.Build.Framework.ITaskItem[]" Output="true" />
+		</ParameterGroup>
+		<Task>
+			<Reference Include="System.Xml" />
+			<Using Namespace="System" />
+			<Using Namespace="System.IO" />
+			<Using Namespace="System.Text.RegularExpressions" />
+			<Using Namespace="Microsoft.Build.Framework" />
+			<Code Type="Fragment" Language="cs"><![CDATA[
+Regex ignores = null;
+if (File.Exists(BuildTxtPath))
+{
+    string line = File.ReadAllLines(BuildTxtPath).FirstOrDefault(x => x.StartsWith("buildIgnore"));
+    if (line != null)
+		ignores = new Regex("^(" + Regex.Escape(line.Replace("buildIgnore", "").Replace("=", "").Replace(" ", "")).Replace("\\?", ".").Replace("\\*", ".*").Replace(",", "|") + ")$");
+}
+IEnumerable<string> filePaths = Directory.GetFiles(ProjectPath);
+if (ignores != null)
+	filePaths = filePaths.Where(x => !ignores.IsMatch(x.Replace(ProjectPath, "").Replace("\\", "/")));
+Files = filePaths.Select(x => new TaskItem(x)).ToArray();
+			]]></Code>
+		</Task>
+    </UsingTask>
+	
 	<!-- Setup build target dependency -->
 	<PropertyGroup>
 		<BuildDependsOn>
@@ -32,8 +64,15 @@
 		</BuildDependsOn>
 	</PropertyGroup>
 	
+	<!-- List all files in build -->
+	<Target Name="tmodParseBuildFiles">
+		<tmodParseBuildFilesTask ProjectPath="$(ProjectDir)" BuildTxtPath="$(tmodBuildTxtPath)">
+			<Output TaskParameter="Files" PropertyName="tmodBuildFiles" />
+		</tmodParseBuildFilesTask>
+	</Target>
+	
 	<!-- Create .tmod file -->
-	<Target Name="tmodBuildModFile">
+	<Target Name="tmodBuildModFile" DependsOnTargets="tmodParseBuildFiles" Inputs="$(tmodBuildFiles)" Outputs="$(userprofile)/Documents/My Games/Terraria/ModLoader/Mods/$(AssemblyName).tmod">
 		<Exec Command="&quot;$(tmodTerrariaPath)\tModLoaderServer.exe&quot; -build &quot;$(ProjectDir.TrimEnd('\'))&quot; -eac &quot;$(TargetPath.TrimEnd('\'))&quot;" />
 	</Target>
 	
