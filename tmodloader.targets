@@ -5,8 +5,11 @@
 	 ============================================================================================== -->
 
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-
+	
 	<PropertyGroup>
+		<!-- We need to disable Visual Studio's up-to-date check, because we are including files in our build that VS doesn't know about -->
+		<DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
+	
 		<!-- Get Terraria install directory from registry for reference and post-build event -->
 		<tmodTerrariaPath>$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\re-logic\terraria@install_path)</tmodTerrariaPath>
 		
