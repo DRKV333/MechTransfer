@@ -48,7 +48,7 @@ if (File.Exists(BuildTxtPath))
     if (line != null)
 		ignores = new Regex("^(" + Regex.Escape(line.Replace("buildIgnore", "").Replace("=", "").Replace(" ", "")).Replace("\\?", ".").Replace("\\*", ".*").Replace(",", "|") + ")$");
 }
-IEnumerable<string> filePaths = Directory.GetFiles(ProjectPath);
+IEnumerable<string> filePaths = Directory.GetFiles(ProjectPath, "*.*", SearchOption.AllDirectories);
 if (ignores != null)
 	filePaths = filePaths.Where(x => !ignores.IsMatch(x.Replace(ProjectPath, "").Replace("\\", "/")));
 Files = filePaths.Select(x => new TaskItem(x)).ToArray();
