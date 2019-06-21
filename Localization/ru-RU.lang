@@ -1,0 +1,86 @@
+ItemName.PneumaticActuatorItem = Пневматический привод
+ItemTooltip.PneumaticActuatorItem = Используется в крафте устройств для перемещения предметов
+
+ItemName.BigButtonItem = Большая кнопка
+ItemName.SmallButtonItem = Маленькая кнопка
+
+ItemName.OmniTurretItem = Всенаправленная турель
+ItemTooltip.OmniTurretItem = Стреляет любыми боеприпасами
+ItemName.SuperOmniTurretItem = Ускоренная всенаправленная турель
+ItemTooltip.SuperOmniTurretItem = Стреляет любыми боеприпасами
+ItemName.MatterProjectorItem = Материальный проэктор
+ItemTooltip.MatterProjectorItem = Стреляет любыми боеприпасами очень, очень быстро
+
+ItemName.TransferPipeItem = Транспортная труба
+ItemTooltip.TransferPipeItem = Используется для подключения устройств для перемещения предметов
+
+ItemName.TransferExtractorItem = Извлекатель предметов
+ItemTooltip.TransferExtractorItem = Извлекает предметы из рядом стоящих сундуков
+
+ItemName.StackExtractorItem = Извлекатель стаков
+ItemTooltip.StackExtractorItem = Извлекает целый стак за раз
+
+ItemName.TransferInletItem = Воронка
+ItemTooltip.TransferInletItem = Собирает упавшие вещи
+
+ItemName.TransferFilterItem = Транспортный фильтр (белый список)
+ItemTooltip.TransferFilterItem = Поставьте в транспортировочную линию для фильтрации предметов\nПКМ предметом в руке для настройки фильтра
+ItemName.InverseTransferFilterItem = Транспортный фильтр (чёрный список)
+ItemTooltip.InverseTransferFilterItem = Поставьте в транспортировочную линию для фильтрации предметов\nПКМ предметом в руке для настройки фильтра
+
+ItemName.TransferGateItem = Транспортный люк
+ItemTooltip.TransferGateItem = Поставьте в транспортировочную линию для перекрытия перемещения претметов
+
+ItemName.TransferRelayItem = Транспортное реле
+ItemTooltip.TransferRelayItem = Передаёт предметы в одном направлении
+
+ItemName.TransferInjectorItem = Транспортный инжектор
+ItemTooltip.TransferInjectorItem = Передаёт предметы в рядом стоящие сундуки
+
+ItemName.TransferOutletItem = Транспортный выбрасыватель
+ItemTooltip.TransferOutletItem = Выбрасывает предметы в мир
+
+ItemName.MagicStorageInterfaceItem = Интерфейс для магического хранилища
+ItemTooltip.MagicStorageInterfaceItem = Позволяет взаимодействовать с магическим хранилищем
+
+ItemName.PlayerInterfaceItem = Интерфейс игрока
+ItemTooltip.PlayerInterfaceItem = Позволяет взаимодействовать с инвентарём игрока
+
+ItemName.TransferAssemblerItem = Сборщик
+ItemTooltip.TransferAssemblerItem = Работа в прогрессе\nАвтоматически создаёт вещи\nПКМ предметом в руке для настройки фильтра
+
+Common.ItemName.FilterItem = Предметный фильтр
+Common.ItemTooltip.FilterItem = Используется в транспортном фильтре
+ItemName.AnyFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Все)
+ItemName.Rarity-GrayFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Редкость: Серая)
+ItemName.Rarity-WhiteFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Редкость: Белая)
+ItemName.Rarity-BlueFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Редкость: Синяя)
+ItemName.Rarity-GreenFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Редкость: Зеленая)
+ItemName.Rarity-OrangeFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Редкость: Оранжевая)
+ItemName.Rarity-LightRedFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Редкость: Светло-красная)
+ItemName.Rarity-PinkFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Редкость: Розовая)
+ItemName.Rarity-LightPurpleFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Редкость: Светло-фиолетовая)
+ItemName.Rarity-LimeFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Редкость: Лаймовая)
+ItemName.Rarity-YellowFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Редкость: Желтая)
+ItemName.Rarity-CyanFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Редкость: Бирюзовая)
+ItemName.Rarity-RedFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Редкость: Красная)
+ItemName.Rarity-PurpleFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Редкость: Фиолетовая)
+ItemName.Rarity-RainbowFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Редкость: Радужная)
+ItemName.Rarity-AmberFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Редкость: Янтарная)
+ItemName.EquipableFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Надевается)
+ItemName.ArmorFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Броня)
+ItemName.VanityFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Украшения)
+ItemName.AccessoryFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Аксессуары)
+ItemName.DyeFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Красители)
+EasterEgg.ItemName.DyeFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Die)
+ItemName.AmmoFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Боеприпасы)
+ItemName.BaitFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Наживка)
+ItemName.MoneyFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Монеты)
+ItemName.BagFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Мешки с сокровищами)
+ItemName.ToolFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Инструмент)
+ItemName.WeaponFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Оружие)
+ItemName.ConsumableFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Расходуется)
+ItemName.MaterialFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Материал)
+ItemName.PotionFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Зелье)
+ItemName.TileFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Блок)
+ItemName.WallFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Стена)
