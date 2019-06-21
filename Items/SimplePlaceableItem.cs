@@ -9,12 +9,21 @@ namespace MechTransfer.Items
         public int style = 0;
         public int value = Item.sellPrice(0, 0, 50, 0);
 
+        private int autoWidth;
+        private int autoHeight;
+
         public override bool CloneNewInstances { get { return true; } }
+
+        public override void SetStaticDefaults()
+        {
+            autoWidth = Main.itemTexture[item.type].Width;
+            autoHeight = Main.itemTexture[item.type].Height;
+        }
 
         public override void SetDefaults()
         {
-            item.width = 26;
-            item.height = 26;
+            item.width = autoWidth;
+            item.height = autoHeight;
             item.value = value;
             item.maxStack = 999;
             item.useTurn = true;

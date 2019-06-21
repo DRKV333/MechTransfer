@@ -1,0 +1,97 @@
+{
+	"contentDir" : "",
+	"targetDir" : "..",
+	"preBatch" : [
+		"def ascale(i,x): return i.resize((int(i.width*x),int(i.height*x)), Image.NEAREST)",
+		"",
+		"def bettergridder(i,gridColor):",
+		"   j = Image.new(i.mode, (i.width, i.height))",
+		"   p = i.getpalette()",
+		"   if p != None: j.putpalette(p)",
+		"   j.info = i.info",
+		"   ipix = i.load()",
+		"   jpix = j.load()",
+		"   hmax = 0",
+		"   jx = 0",
+		"   for x in range(i.width):",
+		"      jy = 0",
+		"      for y in range(i.height):",
+		"         if ipix[x,y] != gridColor:",
+		"            jpix[jx,jy] = ipix[x,y]",
+		"            jy += 1",
+		"      if jy != 0: jx += 1",
+		"      hmax = max(hmax, jy)",
+		"   return j.crop((0,0,jx,hmax))"
+	],
+	"postBatch" : "pass",
+	"actionGroups" :
+	[
+		{
+			"name" : "stiles",
+			"action" : ">ascale(i,2)",
+			"files" :
+			[
+				{ "p" : "TransferPipeTile.png",          "t" : "Tiles" },
+				{ "p" : "TransferInjectorTile.png",      "t" : "Tiles" },
+				{ "p" : "TransferExtractorTile.png",     "t" : "Tiles" },
+				{ "p" : "StackExtractorTile.png",        "t" : "Tiles" },
+				{ "p" : "TransferFilterTile.png",        "t" : "Tiles" },
+				{ "p" : "TransferGateTile.png",          "t" : "Tiles" },
+				{ "p" : "TransferOutletTile.png",        "t" : "Tiles" },
+				{ "p" : "TransferRelayTile.png",         "t" : "Tiles" },
+				{ "p" : "TransferInletTile.png",         "t" : "Tiles" },
+				{ "p" : "OmniTurretTile.png",            "t" : "Tiles" },
+				{ "p" : "PlayerInterfaceTile.png",       "t" : "Tiles" },	
+				{ "p" : "MagicStorageInterfaceTile.png", "t" : "Tiles" },
+				{ "p" : "TransferAssemblerTile.png",     "t" : "Tiles" }
+			]
+		},
+		{
+			"name" : "citems",
+			"action" : ">i.crop((0,0,16,16))",
+			"files" :
+			[
+				{ "p" : ">stiles:TransferPipeTile.png",      "t" : "Items/TransferPipeItem.png"      },
+				{ "p" : ">stiles:TransferInjectorTile.png",  "t" : "Items/TransferInjectorItem.png"  },
+				{ "p" : ">stiles:TransferExtractorTile.png", "t" : "Items/TransferExtractorItem.png" },
+				{ "p" : ">stiles:StackExtractorTile.png",    "t" : "Items/StackExtractorItem.png"    },
+				{ "p" : ">stiles:TransferFilterTile.png",    "t" : "Items/TransferFilterItem.png"    },
+				{ "p" : ">stiles:TransferGateTile.png",      "t" : "Items/TransferGateItem.png"      },
+				{ "p" : ">stiles:TransferOutletTile.png",    "t" : "Items/TransferOutletItem.png"    },
+				{ "p" : ">stiles:TransferAssemblerTile.png", "t" : "Items/TransferAssemblerItem.png"    }
+			]
+		},
+		{ "name" : "cfilteraltitem", "action" : ">i.crop((0,18,16,18+16))",     "files" : [ { "p" : ">stiles:TransferFilterTile.png",    "t" : "Items/InverseTransferFilterItem.png" } ] },
+		{ "name" : "crelayitem",     "action" : ">i.crop((0,0,34,16))",	        "files" : [ { "p" : ">stiles:TransferRelayTile.png",     "t" : "$"                                   } ] },
+		{ "name" : "cturretitem1",   "action" : ">i.crop((0,0,34,36))",         "files" : [ { "p" : ">stiles:OmniTurretTile.png",        "t" : "$"                                   } ] },
+		{ "name" : "cturretitem2",   "action" : ">i.crop((36,0,36+34,36))",     "files" : [ { "p" : ">stiles:OmniTurretTile.png",        "t" : "$"                                   } ] },
+		{ "name" : "cturretitem3",   "action" : ">i.crop((72,76,72+34,76+36))", "files" : [ { "p" : ">stiles:OmniTurretTile.png",        "t" : "$"                                   } ] },
+		{
+			"name" : "remtilepad",
+			"action" : ">bettergridder(i,i.getpixel((16,0)))",
+			"files" :
+			[
+				{ "p" : ">crelayitem:TransferRelayTile.png",     "t" : "Items/TransferRelayItem.png"         },
+				{ "p" : ">stiles:MagicStorageInterfaceTile.png", "t" : "Items/MagicStorageInterfaceItem.png" },
+				{ "p" : ">cturretitem1:OmniTurretTile.png",      "t" : "Items/OmniTurretItem.png"            },
+				{ "p" : ">cturretitem2:OmniTurretTile.png",      "t" : "Items/SuperOmniTurretItem.png"       },
+				{ "p" : ">cturretitem3:OmniTurretTile.png",      "t" : "Items/MatterProjectorItem.png"       }
+				
+			]
+		},
+		{
+			"name" : "smisc",
+			"action" : ">ascale(i, 2)",
+			"files" :
+			[
+				{ "p" : "PlayerInterfaceItem.png",   "t" : "Items" },
+				{ "p" : "PneumaticActuatorItem.png", "t" : "Items" },
+				{ "p" : "TransferInletItem.png",     "t" : "Items" },
+				{ "p" : "Transitions.png",           "t" : "Tiles/Transitions/Top.png"}
+			]
+		},
+		{ "name" : "fliptransitions1", "action" : ">i.transpose(Image.ROTATE_90)", "files" : [ { "p" : ">smisc:Top.png",               "t" : "Tiles/Transitions/Left.png"   } ] },
+		{ "name" : "fliptransitions2", "action" : ">i.transpose(Image.ROTATE_90)", "files" : [ { "p" : ">fliptransitions1:Left.png",   "t" : "Tiles/Transitions/Bottom.png" } ] },
+		{ "name" : "fliptransitions3", "action" : ">i.transpose(Image.ROTATE_90)", "files" : [ { "p" : ">fliptransitions2:Bottom.png", "t" : "Tiles/Transitions/Right.png"  } ] }
+	]
+}

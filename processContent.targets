@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Just runs processContent.py on build. -->
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<!-- Setup build target dependency -->
+	<PropertyGroup>
+		<BuildDependsOn>
+			$(BuildDependsOn);
+			processContent
+		</BuildDependsOn>
+	</PropertyGroup>
+	
+	<Target Name="processContent">
+		<Exec Command="py -3 processContent.py" />
+	</Target>
+
+</Project>

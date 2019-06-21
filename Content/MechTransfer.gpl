@@ -1,0 +1,20 @@
+GIMP Palette
+Name: MechTransfer
+Columns: 1
+#
+255   0 255	Padding
+ 20  20  20	Outline
+ 56  56  56	FillDark
+ 90  90  90	FillMid
+127 127 127	FillLight
+107   0   0	Input
+  0 107   0	Output
+255 104   0	Passthrough
+ 16 182 170	Super
+ 45  45  45	FillDarkAlt
+ 73  73  73	FillMidAlt
+146 146 146	FillLightAlt
+ 68   0   0	InputAlt
+  0  68   0	OutputAlt
+164  67   0	PassthroughAlt
+ 42 139 131	SuperAlt
