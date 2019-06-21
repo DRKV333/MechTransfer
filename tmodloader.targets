@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- ==============================================================================================
+<!-- ===========================================================================================================================
 		Targets file for compiling TModLoader Mods. Now with incremental build support!
-	 ============================================================================================== -->
+		For more information visit:
+		https://forums.terraria.org/index.php?threads/guide-better-system-for-building-mods-with-visual-studio-msbuild.80009/
+	 =========================================================================================================================== -->
 
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	
