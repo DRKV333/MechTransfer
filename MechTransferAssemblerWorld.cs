@@ -1,7 +1,6 @@
 ﻿using MechTransfer.Tiles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using Terraria;
 using Terraria.GameContent.UI;
 using Terraria.ModLoader;
@@ -77,10 +76,10 @@ namespace MechTransfer
 
         private void DrawTransition(int x, int y, Texture2D texture)
         {
-            if(mod.GetModWorld<TransferAgent>().IsContainer(x, y))
+            if (mod.GetModWorld<TransferAgent>().IsContainer(x, y))
             {
-                if(Main.LocalPlayer.gravDir == 1)
-                    Main.spriteBatch.Draw(texture, new Vector2(x * 16 - Main.screenPosition.X, y * 16 - Main.screenPosition.Y), Lighting.GetColor(x,y));
+                if (Main.LocalPlayer.gravDir == 1)
+                    Main.spriteBatch.Draw(texture, new Vector2(x * 16 - Main.screenPosition.X, y * 16 - Main.screenPosition.Y), Lighting.GetColor(x, y));
                 else
                     Main.spriteBatch.Draw(texture, new Vector2(x * 16 - Main.screenPosition.X, Main.screenHeight - y * 16 + Main.screenPosition.Y - 16), null, Lighting.GetColor(x, y), 0, Vector2.Zero, 1, SpriteEffects.FlipVertically, 0);
             }

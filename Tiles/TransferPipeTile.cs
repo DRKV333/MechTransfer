@@ -1,6 +1,5 @@
 ﻿using MechTransfer.Items;
 using MechTransfer.Tiles.Simple;
-using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;

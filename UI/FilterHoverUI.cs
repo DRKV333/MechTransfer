@@ -3,8 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent.UI;
 using Terraria.GameContent.UI.Elements;
-using Terraria.UI;
 using Terraria.Localization;
+using Terraria.UI;
 
 namespace MechTransfer.UI
 {
