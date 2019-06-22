@@ -14,7 +14,7 @@ namespace MechTransfer.Tiles
     {
         public override void SetDefaults()
         {
-            AddMapEntry(new Color(200, 200, 200));
+            AddMapEntry(new Color(56, 56, 56), GetPlaceItem(0).DisplayName);
 
             mod.GetTile<TransferPipeTile>().connectedTiles.Add(Type);
 

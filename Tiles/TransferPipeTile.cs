@@ -23,7 +23,7 @@ namespace MechTransfer.Tiles
 
             mod.GetModWorld<TransferAgent>().unconditionalPassthroughType = Type;
 
-            AddMapEntry(new Color(200, 200, 200));
+            AddMapEntry(MapColors.FillMid);
         }
 
         protected override void SetTileObjectData()

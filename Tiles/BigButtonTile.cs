@@ -14,7 +14,7 @@ namespace MechTransfer.Tiles
     {
         public override void SetDefaults()
         {
-            AddMapEntry(new Color(200, 200, 200));
+            AddMapEntry(new Color(144, 148, 144), GetPlaceItem(0).DisplayName); //Same as lever
             base.SetDefaults();
         }
 

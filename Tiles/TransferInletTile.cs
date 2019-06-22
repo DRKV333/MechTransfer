@@ -17,7 +17,7 @@ namespace MechTransfer.Tiles
             Main.tileSolid[Type] = true;
             mod.GetGlobalTile<ChestPlacementFix>().AddNoChestTile(Type);
 
-            AddMapEntry(new Color(200, 200, 200));
+            AddMapEntry(MapColors.Input, GetPlaceItem(0).DisplayName);
 
             mod.GetModWorld<TransferAgent>().passthroughs.Add(Type, this);
             mod.GetTile<TransferPipeTile>().connectedTiles.Add(Type);

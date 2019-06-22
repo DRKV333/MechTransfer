@@ -16,7 +16,7 @@ namespace MechTransfer.Tiles
     {
         public override void SetDefaults()
         {
-            AddMapEntry(new Color(200, 200, 200));
+            AddMapEntry(new Color(213, 203, 204), GetPlaceItem(0).DisplayName); //Same as switch
             base.SetDefaults();
         }
 
