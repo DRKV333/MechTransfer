@@ -49,7 +49,7 @@
     <Compile Include="ContainerAdapters\WeaponRackAdapter.cs" />
     <Compile Include="Interfaces.cs" />
     <Compile Include="Items\ItemFilterItem.cs" />
-    <Compile Include="Items\SimplePlaceableItem.cs" />
+    <Compile Include="Items\SimplePrototypeItem.cs" />
     <Compile Include="LangUtils.cs" />
     <Compile Include="MapColors.cs" />
     <Compile Include="MechTransferAssemblerWorld.cs" />

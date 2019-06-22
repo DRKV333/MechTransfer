@@ -64,10 +64,7 @@ namespace MechTransfer.Tiles
 
         public override void PostLoad()
         {
-            SimplePlaceableItem i = new SimplePlaceableItem();
-            i.placeType = Type;
-            mod.AddItem("TransferRelayItem", i);
-            placeItems[0] = i;
+            placeItems[0] = SimplePrototypeItem.MakePlaceable(mod, "TransferRelayItem", Type, 32, 16);
         }
 
         public override void Addrecipes()

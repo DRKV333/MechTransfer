@@ -31,11 +31,7 @@ namespace MechTransfer.Tiles
 
         public override void PostLoad()
         {
-            SimplePlaceableItem i = new SimplePlaceableItem();
-            i.placeType = Type;
-            mod.AddItem("PlayerInterfaceItem", i);
-            i.value = Item.sellPrice(0, 1, 0, 0);
-            placeItems[0] = i;
+            placeItems[0] = SimplePrototypeItem.MakePlaceable(mod, "PlayerInterfaceItem", Type, 26, 26, 0, Item.sellPrice(0, 1, 0, 0));
         }
 
         public override void Addrecipes()

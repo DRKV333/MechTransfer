@@ -76,17 +76,10 @@ namespace MechTransfer.Tiles
             placeItems = new ModItem[2];
 
             //Filter
-            SimplePlaceableItem i = new SimplePlaceableItem();
-            i.placeType = Type;
-            mod.AddItem("TransferFilterItem", i);
-            placeItems[0] = i;
+            placeItems[0] = SimplePrototypeItem.MakePlaceable(mod, "TransferFilterItem", Type, 16, 16, 0);
 
             //InverseFilter
-            i = new SimplePlaceableItem();
-            i.placeType = Type;
-            i.style = 1;
-            mod.AddItem("InverseTransferFilterItem", i);
-            placeItems[1] = i;
+            placeItems[1] = SimplePrototypeItem.MakePlaceable(mod, "InverseTransferFilterItem", Type, 16, 16, 1);
 
             LoadFilters();
         }

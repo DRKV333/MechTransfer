@@ -73,11 +73,7 @@ namespace MechTransfer.Tiles
 
         public override void PostLoad()
         {
-            SimplePlaceableItem i = new SimplePlaceableItem();
-            i.placeType = Type;
-            i.value = Item.sellPrice(0, 0, 6, 0);
-            mod.AddItem("BigButtonItem", i);
-            placeItems[0] = i;
+            placeItems[0] = SimplePrototypeItem.MakePlaceable(mod, "BigButtonItem", Type, 24, 20);
 
             NetRouter.AddHandler(this);
         }

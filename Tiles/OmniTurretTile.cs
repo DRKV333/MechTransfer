@@ -130,28 +130,16 @@ namespace MechTransfer.Tiles
         {
             placeItems = new ModItem[3];
 
+            int sell = Item.sellPrice(0, 1, 0, 0);
+
             //Omni turret
-            SimplePlaceableItem i = new SimplePlaceableItem();
-            i.placeType = Type;
-            i.value = Item.sellPrice(0, 1, 0, 0);
-            mod.AddItem("OmniTurretItem", i);
-            placeItems[0] = i;
+            placeItems[0] = SimplePrototypeItem.MakePlaceable(mod, "OmniTurretItem", Type, 32, 32, 0, sell);
 
             //Super omni turret
-            i = new SimplePlaceableItem();
-            i.placeType = Type;
-            i.value = Item.sellPrice(0, 1, 0, 0);
-            i.style = 1;
-            mod.AddItem("SuperOmniTurretItem", i);
-            placeItems[1] = i;
+            placeItems[1] = SimplePrototypeItem.MakePlaceable(mod, "SuperOmniTurretItem", Type, 32, 32, 1, sell);
 
             //Matter projector
-            i = new SimplePlaceableItem();
-            i.placeType = Type;
-            i.value = Item.sellPrice(0, 1, 0, 0);
-            i.style = 2;
-            mod.AddItem("MatterProjectorItem", i);
-            placeItems[2] = i;
+            placeItems[2] = SimplePrototypeItem.MakePlaceable(mod, "MatterProjectorItem", Type, 32, 32, 2, sell);
 
             NetRouter.AddHandler(this);
         }

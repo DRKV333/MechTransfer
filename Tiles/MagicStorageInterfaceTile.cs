@@ -1,6 +1,7 @@
 ﻿using MechTransfer.Items;
 using MechTransfer.Tiles.Simple;
 using Terraria.DataStructures;
+using Terraria;
 using Terraria.Enums;
 using Terraria.ObjectData;
 
@@ -26,10 +27,7 @@ namespace MechTransfer.Tiles
 
         public override void PostLoad()
         {
-            SimplePlaceableItem i = new SimplePlaceableItem();
-            i.placeType = Type;
-            mod.AddItem("MagicStorageInterfaceItem", i);
-            placeItems[0] = i;
+            placeItems[0] = SimplePrototypeItem.MakePlaceable(mod, "MagicStorageInterfaceItem", Type, 32, 32);
         }
     }
 }
