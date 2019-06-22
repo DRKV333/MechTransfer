@@ -1,60 +1,60 @@
 UI.Hover.NotSet = Not set
 UI.Hover.Generic = Filter:
 
-ItemName.PneumaticActuatorItem = Pneumatic actuator
+ItemName.PneumaticActuatorItem = Pneumatic Actuator
 ItemTooltip.PneumaticActuatorItem = Used to craft item transfer devices
 
-ItemName.BigButtonItem = Big button
+ItemName.BigButtonItem = Big Button
 ItemName.SmallButtonItem = Small button
 
-ItemName.OmniTurretItem = Omni turret
+ItemName.OmniTurretItem = Omni Turret
 ItemTooltip.OmniTurretItem = Shoots any standard ammo
-ItemName.SuperOmniTurretItem = Super omni turret
+ItemName.SuperOmniTurretItem = Super Omni Turret
 ItemTooltip.SuperOmniTurretItem = Shoots any standard ammo
-ItemName.MatterProjectorItem = Matter projector
+ItemName.MatterProjectorItem = Matter Projector
 ItemTooltip.MatterProjectorItem = Shoots any standard ammo really, really fast
 
-ItemName.TransferPipeItem = Transfer pipe
+ItemName.TransferPipeItem = Transfer Pipe
 ItemTooltip.TransferPipeItem = Used to connect item transfer devices
 
-ItemName.TransferExtractorItem = Transfer extractor
+ItemName.TransferExtractorItem = Transfer Extractor
 ItemTooltip.TransferExtractorItem = Extracts items from adjacent chests
 
-ItemName.StackExtractorItem = Stack extractor
+ItemName.StackExtractorItem = Stack Extractor
 ItemTooltip.StackExtractorItem = Extracts a whole stack at once
 
-ItemName.TransferInletItem = Transfer inlet
+ItemName.TransferInletItem = Transfer Inlet
 ItemTooltip.TransferInletItem = Picks up dropped items
 
-ItemName.TransferFilterItem = Transfer filter (whitelist)
+ItemName.TransferFilterItem = Transfer Filter (Whitelist)
 ItemTooltip.TransferFilterItem = Place in line with Transfer pipe\nRight click with item in hand to set filter
 UI.Hover.TransferFilterItem = Item allowed:
-ItemName.InverseTransferFilterItem = Transfer filter (blacklist)
+ItemName.InverseTransferFilterItem = Transfer Filter (Blacklist)
 ItemTooltip.InverseTransferFilterItem = Place in line with Transfer pipe\nRight click with item in hand to set filter
 UI.Hover.InverseTransferFilterItem = Item restricted:
 
-ItemName.TransferGateItem = Transfer gate
+ItemName.TransferGateItem = Transfer Gate
 ItemTooltip.TransferGateItem = Place in line with Transfer pipe to toggle the item flow with wire
 
-ItemName.TransferRelayItem = Transfer relay
+ItemName.TransferRelayItem = Transfer Relay
 ItemTooltip.TransferRelayItem = Receives items, and sends them out again
 
 ItemName.TransferInjectorItem = Transfer Injector
 ItemTooltip.TransferInjectorItem = Injects items into adjacent chests
 
-ItemName.TransferOutletItem = Transfer outlet
+ItemName.TransferOutletItem = Transfer Outlet
 ItemTooltip.TransferOutletItem = Drops item
 
-ItemName.MagicStorageInterfaceItem = Magic storage interface
+ItemName.MagicStorageInterfaceItem = Magic Storage Interface
 ItemTooltip.MagicStorageInterfaceItem = Allows you to inject and extract items from storage systems
 
-ItemName.PlayerInterfaceItem = Player interface
+ItemName.PlayerInterfaceItem = Player Interface
 ItemTooltip.PlayerInterfaceItem = Allows you to inject and extract items from a players inventory
 
-ItemName.TransferAssemblerItem = Transfer assembler
+ItemName.TransferAssemblerItem = Transfer Assembler
 ItemTooltip.TransferAssemblerItem = WIP\nCrafts items automatically\nRight click with item in hand to set filter
 
-Common.ItemName.FilterItem = Item filter
+Common.ItemName.FilterItem = Item Filter
 Common.ItemTooltip.FilterItem = Use in Transfer filter
 ItemName.AnyFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Any)
 ItemName.Rarity-GrayFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Rarity-Gray)
