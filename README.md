@@ -19,4 +19,8 @@ Currently supported mods:
 - [Portable Storage](https://forums.terraria.org/index.php?threads/portable-storage.65161/)
 - [Magic Storage](https://forums.terraria.org/index.php?threads/magic-storage.56294/) (Support built into MechTransfer)
 
+# Special Thanks
 
+- [@Flithor](https://github.com/Flithor) for the Chinese translation
+- [@Vedomir](https://forums.terraria.org/index.php?members/vedomir.130490/) for the Russian translation
+- [@RonRicoSuave](https://github.com/RonRicoSuave) for help with spriting
