@@ -167,6 +167,12 @@ namespace MechTransfer.Tiles
             createFilter("Tool", ItemID.CopperPickaxe, x => x.pick > 0 || x.axe > 0 || x.hammer > 0);
             createFilter("Weapon", ItemID.CopperShortsword, x => x.damage > 0 && x.pick == 0 && x.axe == 0 && x.hammer == 0);
 
+            createFilter("Melee", ItemID.CopperShortsword, x => x.melee);
+            createFilter("Magic", ItemID.LesserManaPotion, x => x.magic);
+            createFilter("Ranged", ItemID.WoodenBow, x => x.ranged);
+            createFilter("Summon", ItemID.SummoningPotion, x => x.summon);
+            createFilter("Thrown", ItemID.Shuriken, x => x.thrown);
+
             createFilter("Consumable", ItemID.PumpkinPie, x => x.consumable);
             createFilter("Material", ItemID.Wood, x => x.material);
 
