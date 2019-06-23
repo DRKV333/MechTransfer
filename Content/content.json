@@ -43,7 +43,8 @@
 				{ "p" : "OmniTurretTile.png",            "t" : "Tiles" },
 				{ "p" : "PlayerInterfaceTile.png",       "t" : "Tiles" },	
 				{ "p" : "MagicStorageInterfaceTile.png", "t" : "Tiles" },
-				{ "p" : "TransferAssemblerTile.png",     "t" : "Tiles" }
+				{ "p" : "TransferAssemblerTile.png",     "t" : "Tiles" },
+				{ "p" : "LivingHellstoneTile.png",       "t" : "Tiles" } 
 			]
 		},
 		{
@@ -87,6 +88,7 @@
 				{ "p" : "PlayerInterfaceItem.png",   "t" : "Items" },
 				{ "p" : "PneumaticActuatorItem.png", "t" : "Items" },
 				{ "p" : "TransferInletItem.png",     "t" : "Items" },
+				{ "p" : "LivingHellstoneItem.png",   "t" : "Items" },
 				{ "p" : "Transitions.png",           "t" : "Tiles/Transitions/Top.png"}
 			]
 		},

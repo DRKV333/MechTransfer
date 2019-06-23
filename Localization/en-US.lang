@@ -89,3 +89,6 @@ ItemName.MaterialFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (M
 ItemName.PotionFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Potion)
 ItemName.TileFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Tile)
 ItemName.WallFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Wall)
+
+ItemName.LivingHellstoneItem = Living Hellstone
+ItemTooltip.LivingHellstoneItem = Devours any item on contact, regardless of rarity

@@ -51,10 +51,12 @@
     <Compile Include="Items\ItemFilterItem.cs" />
     <Compile Include="Items\SimplePrototypeItem.cs" />
     <Compile Include="LangUtils.cs" />
+    <Compile Include="LivingHellstoneGlobalItem.cs" />
     <Compile Include="MapColors.cs" />
     <Compile Include="MechTransferAssemblerWorld.cs" />
     <Compile Include="NetRouter.cs" />
     <Compile Include="Tiles\BigButtonTile.cs" />
+    <Compile Include="Tiles\LivingHellstoneTile.cs" />
     <Compile Include="Tiles\MagicStorageInterfaceTile.cs" />
     <Compile Include="Tiles\FilterableTile.cs" />
     <Compile Include="Tiles\OmniTurretTile.cs" />
