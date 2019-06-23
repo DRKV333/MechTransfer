@@ -55,7 +55,7 @@ ItemName.TransferAssemblerItem = Transfer Assembler
 ItemTooltip.TransferAssemblerItem = WIP\nCrafts items automatically\nRight click with item in hand to set filter
 
 Common.ItemName.FilterItem = Item Filter
-Common.ItemTooltip.FilterItem = Use in Transfer filter
+Common.ItemTooltip.FilterItem = Use in Transfer Filter
 ItemName.AnyFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Any)
 ItemName.Rarity-GrayFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Rarity-Gray)
 ItemName.Rarity-WhiteFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Rarity-White)
