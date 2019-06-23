@@ -1,5 +1,6 @@
 ﻿using System;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace MechTransfer.Items
@@ -52,6 +53,7 @@ namespace MechTransfer.Items
             i.item.mech = true;
             i.item.createTile = placeType;
             i.item.placeStyle = placeStyle;
+            i.item.rare = ItemRarityID.Blue;
 
             return i;
         }

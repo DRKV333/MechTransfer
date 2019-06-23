@@ -237,6 +237,7 @@ namespace MechTransfer.Tiles
         public override void PostLoad()
         {
             PlaceItems[0] = SimplePrototypeItem.MakePlaceable(mod, "TransferAssemblerItem", Type, 16, 16, 0, Item.sellPrice(0, 1, 0, 0));
+            PlaceItems[0].item.rare = ItemRarityID.LightRed;
         }
 
         public override void AddRecipes()

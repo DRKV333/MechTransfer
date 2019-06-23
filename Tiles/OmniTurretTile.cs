@@ -134,12 +134,15 @@ namespace MechTransfer.Tiles
 
             //Omni turret
             PlaceItems[0] = SimplePrototypeItem.MakePlaceable(mod, "OmniTurretItem", Type, 32, 32, 0, sell);
+            PlaceItems[0].item.rare = ItemRarityID.Green;
 
             //Super omni turret
             PlaceItems[1] = SimplePrototypeItem.MakePlaceable(mod, "SuperOmniTurretItem", Type, 32, 32, 1, sell);
+            PlaceItems[1].item.rare = ItemRarityID.LightRed;
 
             //Matter projector
             PlaceItems[2] = SimplePrototypeItem.MakePlaceable(mod, "MatterProjectorItem", Type, 32, 32, 2, sell);
+            PlaceItems[2].item.rare = ItemRarityID.Cyan;
 
             NetRouter.AddHandler(this);
         }
