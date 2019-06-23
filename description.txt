@@ -81,3 +81,14 @@ v1.6.1
 v1.6.2
 - Improved assembler area drawing
 - Added transition markers
+
+v1.7
+- Added localization support
+- Added Chinese translation by @Flithor
+- Added Russian translation by @Vedomir
+- Fixed various problems related to zoom
+- Fixed Extractinator mod incompatibilities
+- Improved all tile sprites
+- Tweaked tile map colors, item name capitalization, and items rarities
+- Added filter items for weapon class
+- Added Living Hellstone
