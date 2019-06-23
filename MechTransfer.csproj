@@ -93,9 +93,6 @@
       <HintPath>$(userprofile)\Documents\My Games\Terraria\ModLoader\Mods\MagicStorage.All.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="Terraria">
-      <HintPath>D:\SteamLibrary\steamapps\common\Terraria\Terraria.exe</HintPath>
-    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(ProjectDir)processContent.targets" />
