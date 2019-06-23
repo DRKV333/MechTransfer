@@ -1,6 +1,5 @@
 ﻿using MechTransfer.Items;
 using MechTransfer.Tiles.Simple;
-using Microsoft.Xna.Framework;
 using System;
 using System.IO;
 using Terraria;
@@ -15,7 +14,7 @@ namespace MechTransfer.Tiles
     {
         public override void SetDefaults()
         {
-            AddMapEntry(new Color(200, 200, 200));
+            AddMapEntry(MapColors.FillLight, GetPlaceItem(0).DisplayName);
             base.SetDefaults();
         }
 
@@ -118,7 +117,7 @@ namespace MechTransfer.Tiles
             if (tile == null || !tile.active())
                 return;
 
-            Main.LocalPlayer.showItemIcon2 = placeItems[GetDropKind(tile.frameX, tile.frameY)].item.type;
+            Main.LocalPlayer.showItemIcon2 = PlaceItems[GetDropKind(tile.frameX, tile.frameY)].item.type;
             Main.LocalPlayer.showItemIcon = true;
         }
 
@@ -129,41 +128,26 @@ namespace MechTransfer.Tiles
 
         public override void PostLoad()
         {
-            placeItems = new ModItem[3];
+            PlaceItems = new ModItem[3];
+
+            int sell = Item.sellPrice(0, 1, 0, 0);
 
             //Omni turret
-            SimplePlaceableItem i = new SimplePlaceableItem();
-            i.placeType = Type;
-            i.value = Item.sellPrice(0, 1, 0, 0);
-            mod.AddItem("OmniTurretItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Omni turret");
-            i.Tooltip.AddTranslation(LangID.English, "Shoots any standard ammo");
-            placeItems[0] = i;
+            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(mod, "OmniTurretItem", Type, 32, 32, 0, sell);
+            PlaceItems[0].item.rare = ItemRarityID.Green;
 
             //Super omni turret
-            i = new SimplePlaceableItem();
-            i.placeType = Type;
-            i.value = Item.sellPrice(0, 1, 0, 0);
-            i.style = 1;
-            mod.AddItem("SuperOmniTurretItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Super omni turret");
-            i.Tooltip.AddTranslation(LangID.English, "Shoots any standard ammo");
-            placeItems[1] = i;
+            PlaceItems[1] = SimplePrototypeItem.MakePlaceable(mod, "SuperOmniTurretItem", Type, 32, 32, 1, sell);
+            PlaceItems[1].item.rare = ItemRarityID.LightRed;
 
             //Matter projector
-            i = new SimplePlaceableItem();
-            i.placeType = Type;
-            i.value = Item.sellPrice(0, 1, 0, 0);
-            i.style = 2;
-            mod.AddItem("MatterProjectorItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Matter projector");
-            i.Tooltip.AddTranslation(LangID.English, "Shoots any standard ammo really, really fast");
-            placeItems[2] = i;
+            PlaceItems[2] = SimplePrototypeItem.MakePlaceable(mod, "MatterProjectorItem", Type, 32, 32, 2, sell);
+            PlaceItems[2].item.rare = ItemRarityID.Cyan;
 
             NetRouter.AddHandler(this);
         }
 
-        public override void Addrecipes()
+        public override void AddRecipes()
         {
             //Omni turret
             ModRecipe r = new ModRecipe(mod);
@@ -171,7 +155,7 @@ namespace MechTransfer.Tiles
             r.AddIngredient(ItemID.IllegalGunParts, 1);
             r.AddIngredient(ItemID.DartTrap, 1);
             r.AddTile(TileID.WorkBenches);
-            r.SetResult(placeItems[0], 1);
+            r.SetResult(PlaceItems[0], 1);
             r.AddRecipe();
 
             //Super omni turret
@@ -179,7 +163,7 @@ namespace MechTransfer.Tiles
             r.AddIngredient(mod.ItemType("OmniTurretItem"), 1);
             r.AddIngredient(ItemID.Cog, 10);
             r.AddTile(TileID.WorkBenches);
-            r.SetResult(placeItems[1], 1);
+            r.SetResult(PlaceItems[1], 1);
             r.AddRecipe();
 
             //Matter projector
@@ -188,7 +172,7 @@ namespace MechTransfer.Tiles
             r.AddIngredient(ItemID.FragmentVortex, 5);
             r.AddIngredient(ItemID.LunarBar, 5);
             r.AddTile(TileID.LunarCraftingStation);
-            r.SetResult(placeItems[2], 1);
+            r.SetResult(PlaceItems[2], 1);
             r.AddRecipe();
         }
 

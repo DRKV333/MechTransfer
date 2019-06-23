@@ -14,7 +14,7 @@ namespace MechTransfer.Tiles
     {
         public override void SetDefaults()
         {
-            AddMapEntry(new Color(200, 200, 200));
+            AddMapEntry(MapColors.Output, GetPlaceItem(0).DisplayName);
 
             mod.GetModWorld<TransferAgent>().targets.Add(Type, this);
             mod.GetTile<TransferPipeTile>().connectedTiles.Add(Type);
@@ -51,20 +51,15 @@ namespace MechTransfer.Tiles
 
         public override void PostLoad()
         {
-            SimplePlaceableItem i = new SimplePlaceableItem();
-            i.placeType = Type;
-            mod.AddItem("TransferOutletItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Transfer outlet");
-            i.Tooltip.AddTranslation(LangID.English, "Drops item");
-            placeItems[0] = i;
+            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(mod, "TransferOutletItem", Type);
         }
 
-        public override void Addrecipes()
+        public override void AddRecipes()
         {
             ModRecipe r = new ModRecipe(mod);
             r.AddIngredient(mod.ItemType<PneumaticActuatorItem>(), 1);
             r.AddIngredient(ItemID.OutletPump, 1);
-            r.SetResult(placeItems[0].item.type, 1);
+            r.SetResult(PlaceItems[0].item.type, 1);
             r.AddTile(TileID.WorkBenches);
             r.AddRecipe();
         }

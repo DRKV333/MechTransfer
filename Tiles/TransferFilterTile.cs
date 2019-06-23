@@ -1,10 +1,10 @@
 ﻿using MechTransfer.Items;
-using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
@@ -18,7 +18,7 @@ namespace MechTransfer.Tiles
 
         public override void SetDefaults()
         {
-            AddMapEntry(new Color(200, 200, 200));
+            AddMapEntry(MapColors.Passthrough, GetPlaceItem(0).DisplayName);
 
             mod.GetModWorld<TransferAgent>().passthroughs.Add(Type, this);
             mod.GetTile<TransferPipeTile>().connectedTiles.Add(Type);
@@ -61,9 +61,9 @@ namespace MechTransfer.Tiles
         {
             Tile tile = Main.tile[entity.Position.X, entity.Position.Y];
             if (tile.frameY == 0)
-                return "Item allowed:";
+                return Language.GetTextValue("Mods.MechTransfer.UI.Hover.TransferFilterItem");
             else
-                return "Item restricted:";
+                return Language.GetTextValue("Mods.MechTransfer.UI.Hover.InverseTransferFilterItem");
         }
 
         public override int GetDropKind(int Fx, int Fy)
@@ -73,29 +73,18 @@ namespace MechTransfer.Tiles
 
         public override void PostLoad()
         {
-            placeItems = new ModItem[2];
+            PlaceItems = new ModItem[2];
 
             //Filter
-            SimplePlaceableItem i = new SimplePlaceableItem();
-            i.placeType = Type;
-            mod.AddItem("TransferFilterItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Transfer filter (whitelist)");
-            i.Tooltip.AddTranslation(LangID.English, "Place in line with Transfer pipe\nRight click with item in hand to set filter");
-            placeItems[0] = i;
+            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(mod, "TransferFilterItem", Type, 16, 16, 0);
 
             //InverseFilter
-            i = new SimplePlaceableItem();
-            i.placeType = Type;
-            i.style = 1;
-            mod.AddItem("InverseTransferFilterItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Transfer filter (blacklist)");
-            i.Tooltip.AddTranslation(LangID.English, "Place in line with Transfer pipe\nRight click with item in hand to set filter");
-            placeItems[1] = i;
+            PlaceItems[1] = SimplePrototypeItem.MakePlaceable(mod, "InverseTransferFilterItem", Type, 16, 16, 1);
 
             LoadFilters();
         }
 
-        public override void Addrecipes()
+        public override void AddRecipes()
         {
             //Filter
             ModRecipe r = new ModRecipe(mod);
@@ -103,8 +92,12 @@ namespace MechTransfer.Tiles
             r.AddIngredient(ItemID.Actuator, 1);
             r.AddIngredient(ItemID.ItemFrame, 1);
             r.AddTile(TileID.WorkBenches);
-            r.SetResult(placeItems[0], 1);
+            r.SetResult(PlaceItems[0], 1);
             r.AddRecipe();
+            ModRecipe r2 = new ModRecipe(mod);
+            r2.AddIngredient(PlaceItems[1]);
+            r2.SetResult(PlaceItems[0], 1);
+            r2.AddRecipe();
 
             //InverseFilter
             r = new ModRecipe(mod);
@@ -112,8 +105,12 @@ namespace MechTransfer.Tiles
             r.AddIngredient(ItemID.Actuator, 1);
             r.AddIngredient(ItemID.ItemFrame, 1);
             r.AddTile(TileID.WorkBenches);
-            r.SetResult(placeItems[1], 1);
+            r.SetResult(PlaceItems[1], 1);
             r.AddRecipe();
+            r2 = new ModRecipe(mod);
+            r2.AddIngredient(PlaceItems[0]);
+            r2.SetResult(PlaceItems[1], 1);
+            r2.AddRecipe();
 
             LoadBagFilter();
             //LogFilterTets();
@@ -125,10 +122,11 @@ namespace MechTransfer.Tiles
             i.recipeItem = recipeItem;
             mod.AddItem(type + "FilterItem", i);
             if (Main.halloween && type == "Dye")
-                i.DisplayName.AddTranslation(LangID.English, string.Format("Item filter (Die)", type));
-            else
-                i.DisplayName.AddTranslation(LangID.English, string.Format("Item filter ({0})", type));
-            i.Tooltip.AddTranslation(LangID.English, "Use in Transfer filter");
+            {
+                i.DisplayName.SwapTranslation(mod.GetModTranslation("Mods.MechTransfer.EasterEgg.ItemName.DyeFilterItem"));
+            }
+            i.Tooltip.SwapTranslation(mod.GetModTranslation("Mods.MechTransfer.Common.ItemTooltip.FilterItem"));
+
             filterItems.Add(i.item.type, i);
 
             return i;
@@ -158,6 +156,7 @@ namespace MechTransfer.Tiles
             createFilter("Armor", ItemID.WoodBreastplate, x => ((x.headSlot >= 0 || x.bodySlot >= 0 || x.legSlot >= 0) && !x.vanity));
             createFilter("Vanity", ItemID.FamiliarWig, x => (x.vanity));
             createFilter("Accessory", ItemID.Shackle, x => (x.accessory));
+            Main.checkHalloween();
             createFilter("Dye", ItemID.SilverDye, x => (x.dye > 0));
 
             createFilter("Ammo", ItemID.MusketBall, x => x.ammo != 0);
@@ -167,6 +166,12 @@ namespace MechTransfer.Tiles
 
             createFilter("Tool", ItemID.CopperPickaxe, x => x.pick > 0 || x.axe > 0 || x.hammer > 0);
             createFilter("Weapon", ItemID.CopperShortsword, x => x.damage > 0 && x.pick == 0 && x.axe == 0 && x.hammer == 0);
+
+            createFilter("Melee", ItemID.CopperShortsword, x => x.melee);
+            createFilter("Magic", ItemID.LesserManaPotion, x => x.magic);
+            createFilter("Ranged", ItemID.WoodenBow, x => x.ranged);
+            createFilter("Summon", ItemID.SummoningPotion, x => x.summon);
+            createFilter("Thrown", ItemID.Shuriken, x => x.thrown);
 
             createFilter("Consumable", ItemID.PumpkinPie, x => x.consumable);
             createFilter("Material", ItemID.Wood, x => x.material);

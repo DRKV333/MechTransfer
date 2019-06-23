@@ -170,7 +170,7 @@ namespace MechTransfer
                     SimpleTile tile = (SimpleTile)Activator.CreateInstance(item);
                     AddTile(item.Name, tile, item.FullName.Replace('.', '/'));
                     tile.PostLoad();
-                    simpleTileAddRecipequeue.Add(new Action(tile.Addrecipes));
+                    simpleTileAddRecipequeue.Add(new Action(tile.AddRecipes));
 
                     Type TEType;
                     if (IsTETile(item, out TEType))
@@ -357,7 +357,7 @@ namespace MechTransfer
         public static ModItem GetPlaceItem<T>(this Mod mod) where T : SimplePlaceableTile
         {
             SimplePlaceableTile tile = mod.GetTile<T>();
-            return tile.placeItem;
+            return tile.PlaceItem;
         }
 
         public static ModItem GetPlaceItem<T>(this Mod mod, int kind) where T : SimpleTileObject

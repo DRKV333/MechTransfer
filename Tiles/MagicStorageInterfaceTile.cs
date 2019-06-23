@@ -1,9 +1,8 @@
 ﻿using MechTransfer.Items;
 using MechTransfer.Tiles.Simple;
-using Microsoft.Xna.Framework;
 using Terraria.DataStructures;
+using Terraria;
 using Terraria.Enums;
-using Terraria.ID;
 using Terraria.ObjectData;
 
 namespace MechTransfer.Tiles
@@ -12,7 +11,7 @@ namespace MechTransfer.Tiles
     {
         public override void SetDefaults()
         {
-            AddMapEntry(new Color(200, 200, 200));
+            AddMapEntry(MapColors.FillDark, GetPlaceItem(0).DisplayName);
 
             base.SetDefaults();
         }
@@ -28,12 +27,7 @@ namespace MechTransfer.Tiles
 
         public override void PostLoad()
         {
-            SimplePlaceableItem i = new SimplePlaceableItem();
-            i.placeType = Type;
-            mod.AddItem("MagicStorageInterfaceItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Magic storage interface");
-            i.Tooltip.AddTranslation(LangID.English, "Allows you to inject and extract items from storage systems");
-            placeItems[0] = i;
+            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(mod, "MagicStorageInterfaceItem", Type, 32, 32);
         }
     }
 }

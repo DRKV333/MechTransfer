@@ -14,7 +14,7 @@ namespace MechTransfer.Tiles
     {
         public override void SetDefaults()
         {
-            AddMapEntry(new Color(200, 200, 200));
+            AddMapEntry(new Color(56, 56, 56), GetPlaceItem(0).DisplayName);
 
             mod.GetTile<TransferPipeTile>().connectedTiles.Add(Type);
 
@@ -52,21 +52,16 @@ namespace MechTransfer.Tiles
 
         public override void PostLoad()
         {
-            SimplePlaceableItem i = new SimplePlaceableItem();
-            i.placeType = Type;
-            i.value = Item.sellPrice(0, 1, 0, 0);
-            mod.AddItem("StackExtractorItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Stack extractor");
-            i.Tooltip.AddTranslation(LangID.English, "Extracts a whole stack at once");
-            placeItems[0] = i;
+            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(mod, "StackExtractorItem", Type, 16, 16, 0, Item.sellPrice(0, 1, 0, 0));
+            PlaceItems[0].item.rare = ItemRarityID.LightRed;
         }
 
-        public override void Addrecipes()
+        public override void AddRecipes()
         {
             ModRecipe r = new ModRecipe(mod);
             r.AddIngredient(mod.ItemType("TransferExtractorItem"), 1);
             r.AddIngredient(ItemID.Nanites, 10);
-            r.SetResult(placeItems[0], 1);
+            r.SetResult(PlaceItems[0], 1);
             r.AddTile(TileID.WorkBenches);
             r.AddRecipe();
         }

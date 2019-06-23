@@ -1,6 +1,5 @@
 ﻿using MechTransfer.Items;
 using MechTransfer.Tiles.Simple;
-using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
@@ -14,7 +13,7 @@ namespace MechTransfer.Tiles
     {
         public override void SetDefaults()
         {
-            AddMapEntry(new Color(200, 200, 200));
+            AddMapEntry(MapColors.Output, GetPlaceItem(0).DisplayName);
 
             mod.GetModWorld<TransferAgent>().targets.Add(Type, this);
             mod.GetTile<TransferPipeTile>().connectedTiles.Add(Type);
@@ -49,21 +48,16 @@ namespace MechTransfer.Tiles
 
         public override void PostLoad()
         {
-            SimplePlaceableItem i = new SimplePlaceableItem();
-            i.placeType = Type;
-            mod.AddItem("TransferInjectorItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Transfer Injector");
-            i.Tooltip.AddTranslation(LangID.English, "Injects items into adjacent chests");
-            placeItems[0] = i;
+            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(mod, "TransferInjectorItem", Type);
         }
 
-        public override void Addrecipes()
+        public override void AddRecipes()
         {
             ModRecipe r = new ModRecipe(mod);
             r.AddIngredient(mod.ItemType<PneumaticActuatorItem>(), 1);
             r.AddIngredient(ItemID.GoldenKey, 1);
             r.AddIngredient(ItemID.Wire, 2);
-            r.SetResult(placeItems[0], 1);
+            r.SetResult(PlaceItems[0], 1);
             r.AddTile(TileID.WorkBenches);
             r.AddRecipe();
         }

@@ -345,11 +345,21 @@ namespace MechTransfer.ContainerAdapters
                     num5 += Main.rand.Next(0, 6);
                 }
             }
+
+            int tempTargetX = Player.tileTargetX;
+            Player.tileTargetX = x;
+
+            int tempTargetY = Player.tileTargetY;
+            Player.tileTargetY = y;
+
             ItemLoader.ExtractinatorUse(ref num6, ref num5, extractType);
             if (num6 > 0)
             {
                 Item.NewItem(x * 16, y * 16, 1, 1, num6, num5, false, -1, false, false);
             }
+
+            Player.tileTargetX = tempTargetX;
+            Player.tileTargetY = tempTargetY;
         }
 
         public bool InjectItem(int x, int y, Item item)

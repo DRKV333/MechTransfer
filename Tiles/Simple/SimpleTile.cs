@@ -8,7 +8,7 @@ namespace MechTransfer.Tiles.Simple
         {
         }
 
-        public virtual void Addrecipes()
+        public virtual void AddRecipes()
         {
         }
 

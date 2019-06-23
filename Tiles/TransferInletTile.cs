@@ -1,6 +1,5 @@
 ﻿using MechTransfer.Items;
 using MechTransfer.Tiles.Simple;
-using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
@@ -17,7 +16,7 @@ namespace MechTransfer.Tiles
             Main.tileSolid[Type] = true;
             mod.GetGlobalTile<ChestPlacementFix>().AddNoChestTile(Type);
 
-            AddMapEntry(new Color(200, 200, 200));
+            AddMapEntry(MapColors.Input, GetPlaceItem(0).DisplayName);
 
             mod.GetModWorld<TransferAgent>().passthroughs.Add(Type, this);
             mod.GetTile<TransferPipeTile>().connectedTiles.Add(Type);
@@ -47,20 +46,15 @@ namespace MechTransfer.Tiles
 
         public override void PostLoad()
         {
-            SimplePlaceableItem i = new SimplePlaceableItem();
-            i.placeType = Type;
-            mod.AddItem("TransferInletItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Transfer inlet");
-            i.Tooltip.AddTranslation(LangID.English, "Picks up dropped items");
-            placeItems[0] = i;
+            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(mod, "TransferInletItem", Type, 32, 14);
         }
 
-        public override void Addrecipes()
+        public override void AddRecipes()
         {
             ModRecipe r = new ModRecipe(mod);
             r.AddIngredient(mod.ItemType<PneumaticActuatorItem>(), 1);
             r.AddIngredient(ItemID.InletPump, 1);
-            r.SetResult(placeItems[0].item.type, 1);
+            r.SetResult(PlaceItems[0].item.type, 1);
             r.AddTile(TileID.WorkBenches);
             r.AddRecipe();
 

@@ -16,7 +16,7 @@ namespace MechTransfer.Tiles
     {
         public override void SetDefaults()
         {
-            AddMapEntry(new Color(200, 200, 200));
+            AddMapEntry(new Color(213, 203, 204), GetPlaceItem(0).DisplayName); //Same as switch
             base.SetDefaults();
         }
 
@@ -46,7 +46,7 @@ namespace MechTransfer.Tiles
         public override void MouseOver(int i, int j)
         {
             Main.LocalPlayer.showItemIcon = true;
-            Main.LocalPlayer.showItemIcon2 = placeItems[0].item.type;
+            Main.LocalPlayer.showItemIcon2 = PlaceItems[0].item.type;
             Main.LocalPlayer.noThrow = 2;
         }
 
@@ -78,25 +78,21 @@ namespace MechTransfer.Tiles
 
         public override void PostLoad()
         {
-            SimplePlaceableItem i = new SimplePlaceableItem();
-            i.placeType = Type;
-            i.value = Item.sellPrice(0, 0, 4, 0);
-            mod.AddItem("SmallButtonItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Small button");
-            placeItems[0] = i;
+            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(mod, "SmallButtonItem", Type, 20, 20, 0, Item.sellPrice(0, 0, 4, 0));
+            PlaceItems[0].item.rare = ItemRarityID.White;
 
             NetRouter.AddHandler(this);
         }
 
-        public override void Addrecipes()
+        public override void AddRecipes()
         {
             ModRecipe r = new ModRecipe(mod);
             r.AddIngredient(ItemID.Switch, 1);
-            r.SetResult(placeItems[0], 1);
+            r.SetResult(PlaceItems[0], 1);
             r.AddRecipe();
 
             r = new ModRecipe(mod);
-            r.AddIngredient(placeItems[0], 1);
+            r.AddIngredient(PlaceItems[0], 1);
             r.SetResult(ItemID.Switch, 1);
             r.AddRecipe();
         }

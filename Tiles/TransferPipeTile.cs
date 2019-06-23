@@ -1,6 +1,5 @@
 ﻿using MechTransfer.Items;
 using MechTransfer.Tiles.Simple;
-using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
@@ -23,7 +22,7 @@ namespace MechTransfer.Tiles
 
             mod.GetModWorld<TransferAgent>().unconditionalPassthroughType = Type;
 
-            AddMapEntry(new Color(200, 200, 200));
+            AddMapEntry(MapColors.FillMid);
         }
 
         protected override void SetTileObjectData()
@@ -65,22 +64,17 @@ namespace MechTransfer.Tiles
 
         public override void PostLoad()
         {
-            SimplePlaceableItem i = new SimplePlaceableItem();
-            i.placeType = Type;
-            mod.AddItem("TransferPipeItem", i);
-            i.DisplayName.AddTranslation(LangID.English, "Transfer pipe");
-            i.Tooltip.AddTranslation(LangID.English, "Used to connect item transfer devices");
-            placeItems[0] = i;
+            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(mod, "TransferPipeItem", Type);
         }
 
-        public override void Addrecipes()
+        public override void AddRecipes()
         {
             ModRecipe r = new ModRecipe(mod);
             r.AddIngredient(mod.ItemType<PneumaticActuatorItem>(), 1);
             r.AddIngredient(ItemID.IronBar, 1);
             r.anyIronBar = true;
             r.AddTile(TileID.Anvils);
-            r.SetResult(placeItems[0].item.type, 25);
+            r.SetResult(PlaceItems[0].item.type, 25);
             r.AddRecipe();
         }
     }
