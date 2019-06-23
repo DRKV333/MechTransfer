@@ -38,7 +38,7 @@ namespace MechTransfer.Tiles
         public override void MouseOver(int i, int j)
         {
             Main.LocalPlayer.showItemIcon = true;
-            Main.LocalPlayer.showItemIcon2 = placeItems[0].item.type;
+            Main.LocalPlayer.showItemIcon2 = PlaceItems[0].item.type;
             Main.LocalPlayer.noThrow = 2;
         }
 
@@ -73,20 +73,20 @@ namespace MechTransfer.Tiles
 
         public override void PostLoad()
         {
-            placeItems[0] = SimplePrototypeItem.MakePlaceable(mod, "BigButtonItem", Type, 24, 20);
+            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(mod, "BigButtonItem", Type, 24, 20);
 
             NetRouter.AddHandler(this);
         }
 
-        public override void Addrecipes()
+        public override void AddRecipes()
         {
             ModRecipe r = new ModRecipe(mod);
             r.AddIngredient(ItemID.Lever, 1);
-            r.SetResult(placeItems[0], 1);
+            r.SetResult(PlaceItems[0], 1);
             r.AddRecipe();
 
             r = new ModRecipe(mod);
-            r.AddIngredient(placeItems[0], 1);
+            r.AddIngredient(PlaceItems[0], 1);
             r.SetResult(ItemID.Lever, 1);
             r.AddRecipe();
         }

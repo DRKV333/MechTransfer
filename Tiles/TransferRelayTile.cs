@@ -64,17 +64,17 @@ namespace MechTransfer.Tiles
 
         public override void PostLoad()
         {
-            placeItems[0] = SimplePrototypeItem.MakePlaceable(mod, "TransferRelayItem", Type, 32, 16);
+            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(mod, "TransferRelayItem", Type, 32, 16);
         }
 
-        public override void Addrecipes()
+        public override void AddRecipes()
         {
             ModRecipe r = new ModRecipe(mod);
             r.AddIngredient(mod.ItemType<PneumaticActuatorItem>(), 1);
             r.AddIngredient(ItemID.RedPressurePlate, 1);
             r.anyPressurePlate = true;
             r.AddTile(TileID.WorkBenches);
-            r.SetResult(placeItems[0], 1);
+            r.SetResult(PlaceItems[0], 1);
             r.AddRecipe();
         }
     }

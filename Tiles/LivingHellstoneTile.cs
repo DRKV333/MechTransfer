@@ -47,20 +47,20 @@ namespace MechTransfer.Tiles
 
         public override void PostLoad()
         {
-            placeItem = SimplePrototypeItem.MakePlaceable(mod, "LivingHellstoneItem", Type);
-            placeItem.item.rare = ItemRarityID.Green;
-            placeItem.item.mech = false;
+            PlaceItem = SimplePrototypeItem.MakePlaceable(mod, "LivingHellstoneItem", Type);
+            PlaceItem.item.rare = ItemRarityID.Green;
+            PlaceItem.item.mech = false;
         }
 
 
-        public override void Addrecipes()
+        public override void AddRecipes()
         {
             ModRecipe r = new ModRecipe(mod);
             r.AddIngredient(ItemID.HellstoneBar, 5);
             r.AddIngredient(ItemID.Obsidian, 5);
             r.AddIngredient(ItemID.LavaBucket, 1);
             r.AddTile(TileID.Anvils);
-            r.SetResult(placeItem.item.type, 1);
+            r.SetResult(PlaceItem.item.type, 1);
             r.AddRecipe();
         }
     }

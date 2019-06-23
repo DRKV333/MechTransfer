@@ -27,7 +27,7 @@ namespace MechTransfer.Tiles
 
         public override void PostLoad()
         {
-            placeItems[0] = SimplePrototypeItem.MakePlaceable(mod, "MagicStorageInterfaceItem", Type, 32, 32);
+            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(mod, "MagicStorageInterfaceItem", Type, 32, 32);
         }
     }
 }

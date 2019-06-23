@@ -117,7 +117,7 @@ namespace MechTransfer.Tiles
             if (tile == null || !tile.active())
                 return;
 
-            Main.LocalPlayer.showItemIcon2 = placeItems[GetDropKind(tile.frameX, tile.frameY)].item.type;
+            Main.LocalPlayer.showItemIcon2 = PlaceItems[GetDropKind(tile.frameX, tile.frameY)].item.type;
             Main.LocalPlayer.showItemIcon = true;
         }
 
@@ -128,23 +128,23 @@ namespace MechTransfer.Tiles
 
         public override void PostLoad()
         {
-            placeItems = new ModItem[3];
+            PlaceItems = new ModItem[3];
 
             int sell = Item.sellPrice(0, 1, 0, 0);
 
             //Omni turret
-            placeItems[0] = SimplePrototypeItem.MakePlaceable(mod, "OmniTurretItem", Type, 32, 32, 0, sell);
+            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(mod, "OmniTurretItem", Type, 32, 32, 0, sell);
 
             //Super omni turret
-            placeItems[1] = SimplePrototypeItem.MakePlaceable(mod, "SuperOmniTurretItem", Type, 32, 32, 1, sell);
+            PlaceItems[1] = SimplePrototypeItem.MakePlaceable(mod, "SuperOmniTurretItem", Type, 32, 32, 1, sell);
 
             //Matter projector
-            placeItems[2] = SimplePrototypeItem.MakePlaceable(mod, "MatterProjectorItem", Type, 32, 32, 2, sell);
+            PlaceItems[2] = SimplePrototypeItem.MakePlaceable(mod, "MatterProjectorItem", Type, 32, 32, 2, sell);
 
             NetRouter.AddHandler(this);
         }
 
-        public override void Addrecipes()
+        public override void AddRecipes()
         {
             //Omni turret
             ModRecipe r = new ModRecipe(mod);
@@ -152,7 +152,7 @@ namespace MechTransfer.Tiles
             r.AddIngredient(ItemID.IllegalGunParts, 1);
             r.AddIngredient(ItemID.DartTrap, 1);
             r.AddTile(TileID.WorkBenches);
-            r.SetResult(placeItems[0], 1);
+            r.SetResult(PlaceItems[0], 1);
             r.AddRecipe();
 
             //Super omni turret
@@ -160,7 +160,7 @@ namespace MechTransfer.Tiles
             r.AddIngredient(mod.ItemType("OmniTurretItem"), 1);
             r.AddIngredient(ItemID.Cog, 10);
             r.AddTile(TileID.WorkBenches);
-            r.SetResult(placeItems[1], 1);
+            r.SetResult(PlaceItems[1], 1);
             r.AddRecipe();
 
             //Matter projector
@@ -169,7 +169,7 @@ namespace MechTransfer.Tiles
             r.AddIngredient(ItemID.FragmentVortex, 5);
             r.AddIngredient(ItemID.LunarBar, 5);
             r.AddTile(TileID.LunarCraftingStation);
-            r.SetResult(placeItems[2], 1);
+            r.SetResult(PlaceItems[2], 1);
             r.AddRecipe();
         }
 

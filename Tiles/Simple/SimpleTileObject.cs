@@ -11,7 +11,7 @@ namespace MechTransfer.Tiles.Simple
     {
         //Actually, It's not simple at all...
 
-        protected ModItem[] placeItems = new ModItem[1];
+        protected ModItem[] PlaceItems = new ModItem[1];
 
         public TileObjectData tileObjectData { get; protected set; }
         protected bool simpleHeigth;
@@ -38,7 +38,7 @@ namespace MechTransfer.Tiles.Simple
 
         public ModItem GetPlaceItem(int kind)
         {
-            return placeItems[kind];
+            return PlaceItems[kind];
         }
 
         public int GetStyle(Tile tile)
@@ -67,7 +67,7 @@ namespace MechTransfer.Tiles.Simple
 
         protected virtual void DropItem(int i, int j, int Fx, int Fy)
         {
-            Item.NewItem(new Rectangle(i * 16, j * 16, 16, 16), placeItems[GetDropKind(Fx, Fy)].item.type);
+            Item.NewItem(new Rectangle(i * 16, j * 16, 16, 16), PlaceItems[GetDropKind(Fx, Fy)].item.type);
         }
 
         public Point16 GetOrigin(int x, int y)

@@ -73,18 +73,18 @@ namespace MechTransfer.Tiles
 
         public override void PostLoad()
         {
-            placeItems = new ModItem[2];
+            PlaceItems = new ModItem[2];
 
             //Filter
-            placeItems[0] = SimplePrototypeItem.MakePlaceable(mod, "TransferFilterItem", Type, 16, 16, 0);
+            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(mod, "TransferFilterItem", Type, 16, 16, 0);
 
             //InverseFilter
-            placeItems[1] = SimplePrototypeItem.MakePlaceable(mod, "InverseTransferFilterItem", Type, 16, 16, 1);
+            PlaceItems[1] = SimplePrototypeItem.MakePlaceable(mod, "InverseTransferFilterItem", Type, 16, 16, 1);
 
             LoadFilters();
         }
 
-        public override void Addrecipes()
+        public override void AddRecipes()
         {
             //Filter
             ModRecipe r = new ModRecipe(mod);
@@ -92,11 +92,11 @@ namespace MechTransfer.Tiles
             r.AddIngredient(ItemID.Actuator, 1);
             r.AddIngredient(ItemID.ItemFrame, 1);
             r.AddTile(TileID.WorkBenches);
-            r.SetResult(placeItems[0], 1);
+            r.SetResult(PlaceItems[0], 1);
             r.AddRecipe();
             ModRecipe r2 = new ModRecipe(mod);
-            r2.AddIngredient(placeItems[1]);
-            r2.SetResult(placeItems[0], 1);
+            r2.AddIngredient(PlaceItems[1]);
+            r2.SetResult(PlaceItems[0], 1);
             r2.AddRecipe();
 
             //InverseFilter
@@ -105,11 +105,11 @@ namespace MechTransfer.Tiles
             r.AddIngredient(ItemID.Actuator, 1);
             r.AddIngredient(ItemID.ItemFrame, 1);
             r.AddTile(TileID.WorkBenches);
-            r.SetResult(placeItems[1], 1);
+            r.SetResult(PlaceItems[1], 1);
             r.AddRecipe();
             r2 = new ModRecipe(mod);
-            r2.AddIngredient(placeItems[0]);
-            r2.SetResult(placeItems[1], 1);
+            r2.AddIngredient(PlaceItems[0]);
+            r2.SetResult(PlaceItems[1], 1);
             r2.AddRecipe();
 
             LoadBagFilter();
