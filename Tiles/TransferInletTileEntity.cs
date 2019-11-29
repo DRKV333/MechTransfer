@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace MechTransfer.Tiles
 {
@@ -25,7 +26,7 @@ namespace MechTransfer.Tiles
 
                     if (!PickupBlacklist.Contains(item.type) && PickupArea().Intersects(item.getRect()))
                     {
-                        item.stack -= mod.GetModWorld<TransferAgent>().StartTransfer(Position.X, Position.Y, item);
+                        item.stack -= ModContent.GetInstance<TransferAgent>().StartTransfer(Position.X, Position.Y, item);
                         if (item.stack < 1)
                             Main.item[i] = new Item();
 
@@ -52,7 +53,7 @@ namespace MechTransfer.Tiles
                     {
                         Item item = new Item();
                         item.SetDefaults(npc.catchItem);
-                        if (mod.GetModWorld<TransferAgent>().StartTransfer(Position.X, Position.Y, item) > 0)
+                        if (ModContent.GetInstance<TransferAgent>().StartTransfer(Position.X, Position.Y, item) > 0)
                             remove = true;
                     }
                     if (remove)

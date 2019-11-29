@@ -15,7 +15,7 @@ namespace MechTransfer.Tiles
         {
             if (Main.netMode == 1)
             {
-                ModPacket packet = NetRouter.GetPacketTo(mod.GetTileEntity<TransferFilterTileEntity>(), mod);
+                ModPacket packet = NetRouter.GetPacketTo(ModContent.GetInstance<TransferFilterTileEntity>(), mod);
                 packet.Write(ID);
                 packet.WriteItem(item);
                 packet.Send();

@@ -50,7 +50,7 @@ namespace MechTransfer.Tiles
             Main.LocalPlayer.noThrow = 2;
         }
 
-        public override void RightClick(int i, int j)
+        public override bool NewRightClick(int i, int j)
         {
             if (Main.netMode == 0)
             {
@@ -63,14 +63,15 @@ namespace MechTransfer.Tiles
                 packet.Write((Int16)j);
                 packet.Send();
             }
-            mod.GetModWorld<ButtonDelayWorld>().setPoint(new Point16(i, j));
+            ModContent.GetInstance<ButtonDelayWorld>().setPoint(new Point16(i, j));
 
             Main.PlaySound(SoundID.MenuTick);
+			return true;
         }
 
         public override void AnimateIndividualTile(int type, int i, int j, ref int frameXOffset, ref int frameYOffset)
         {
-            if (mod.GetModWorld<ButtonDelayWorld>().isPoint(new Point16(i, j), 1, 1))
+            if (ModContent.GetInstance<ButtonDelayWorld>().isPoint(new Point16(i, j), 1, 1))
             {
                 frameYOffset = 18;
             }

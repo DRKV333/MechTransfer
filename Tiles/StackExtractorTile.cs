@@ -16,7 +16,7 @@ namespace MechTransfer.Tiles
         {
             AddMapEntry(new Color(56, 56, 56), GetPlaceItem(0).DisplayName);
 
-            mod.GetTile<TransferPipeTile>().connectedTiles.Add(Type);
+            ModContent.GetInstance<TransferPipeTile>().connectedTiles.Add(Type);
 
             base.SetDefaults();
         }
@@ -32,14 +32,14 @@ namespace MechTransfer.Tiles
             if (Main.netMode == 1)
                 return;
 
-            foreach (var c in mod.GetModWorld<TransferAgent>().FindContainerAdjacent(i, j))
+            foreach (var c in ModContent.GetInstance<TransferAgent>().FindContainerAdjacent(i, j))
             {
                 foreach (var item in c.EnumerateItems())
                 {
                     if (!item.Item1.IsAir)
                     {
                         Item clone = item.Item1.Clone();
-                        int numTook = mod.GetModWorld<TransferAgent>().StartTransfer(i, j, clone);
+                        int numTook = ModContent.GetInstance<TransferAgent>().StartTransfer(i, j, clone);
                         if (numTook > 0)
                         {
                             c.TakeItem(item.Item2, numTook);

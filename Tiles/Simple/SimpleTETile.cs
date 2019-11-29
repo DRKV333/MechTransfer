@@ -1,5 +1,6 @@
 ﻿using System;
 using Terraria.DataStructures;
+using Terraria.ModLoader;
 using Terraria.ObjectData;
 
 namespace MechTransfer.Tiles.Simple
@@ -8,20 +9,20 @@ namespace MechTransfer.Tiles.Simple
     {
         protected override void SetTileObjectData()
         {
-            TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(mod.GetTileEntity<TEntity>().Hook_AfterPlacement, -1, 0, false);
+            TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(ModContent.GetInstance<TEntity>().Hook_AfterPlacement, -1, 0, false);
         }
 
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
         {
             if (OneByOne && !effectOnly)
-                mod.GetTileEntity<TEntity>().Kill(i, j);
+                ModContent.GetInstance<TEntity>().Kill(i, j);
             base.KillTile(i, j, ref fail, ref effectOnly, ref noItem);
         }
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
             Point16 origin = GetOrigin(i, j, frameX, frameY);
-            mod.GetTileEntity<TEntity>().Kill(origin.X, origin.Y);
+            ModContent.GetInstance<TEntity>().Kill(origin.X, origin.Y);
             base.KillMultiTile(i, j, frameX, frameY);
         }
 
@@ -37,7 +38,7 @@ namespace MechTransfer.Tiles.Simple
 
         public bool TryGetEntity(int x, int y, out TEntity entity)
         {
-            int id = mod.GetTileEntity<TEntity>().Find(x, y);
+            int id = ModContent.GetInstance<TEntity>().Find(x, y);
             if (id == -1)
             {
                 entity = null;

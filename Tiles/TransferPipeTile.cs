@@ -20,7 +20,7 @@ namespace MechTransfer.Tiles
 
             Main.tileFrameImportant[Type] = false;
 
-            mod.GetModWorld<TransferAgent>().unconditionalPassthroughType = Type;
+            ModContent.GetInstance<TransferAgent>().unconditionalPassthroughType = Type;
 
             AddMapEntry(MapColors.FillMid);
         }
@@ -70,7 +70,7 @@ namespace MechTransfer.Tiles
         public override void AddRecipes()
         {
             ModRecipe r = new ModRecipe(mod);
-            r.AddIngredient(mod.ItemType<PneumaticActuatorItem>(), 1);
+            r.AddIngredient(ModContent.ItemType<PneumaticActuatorItem>(), 1);
             r.AddIngredient(ItemID.IronBar, 1);
             r.anyIronBar = true;
             r.AddTile(TileID.Anvils);

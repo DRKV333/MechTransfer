@@ -19,7 +19,7 @@ namespace MechTransfer
             foreach (var p in Collision.GetEntityEdgeTiles(item))
             {
                 if (p.X > 0 && p.X < Main.maxTilesX && p.Y > 0 && p.Y < Main.maxTilesY &&
-                    Main.tile[p.X, p.Y].active() && Main.tile[p.X, p.Y].type == mod.TileType<LivingHellstoneTile>())
+                    Main.tile[p.X, p.Y].active() && Main.tile[p.X, p.Y].type == ModContent.TileType<LivingHellstoneTile>())
                 {
                     if (++burnTime > 0)
                     {

@@ -31,12 +31,14 @@ namespace MechTransfer.Tiles
             Rotate(i, j, true);
         }
 
-        public override void RightClick(int i, int j)
+        public override bool NewRightClick(int i, int j)
         {
             if (Main.netMode == 1)
                 RequestRotate(i, j);
             else
                 Rotate(i, j, false);
+
+			return true;
         }
 
         public void Rotate(int i, int j, bool skipWires)
@@ -151,7 +153,7 @@ namespace MechTransfer.Tiles
         {
             //Omni turret
             ModRecipe r = new ModRecipe(mod);
-            r.AddIngredient(mod.ItemType<PneumaticActuatorItem>(), 5);
+            r.AddIngredient(ModContent.ItemType<PneumaticActuatorItem>(), 5);
             r.AddIngredient(ItemID.IllegalGunParts, 1);
             r.AddIngredient(ItemID.DartTrap, 1);
             r.AddTile(TileID.WorkBenches);

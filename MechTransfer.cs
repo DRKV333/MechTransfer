@@ -47,7 +47,7 @@ namespace MechTransfer
             {
                 if (args.Length != 5)
                 {
-                    ErrorLogger.Log(callErorPrefix + "Invalid number of arguments at " + registerAdapter);
+                    this.Logger.Error(callErorPrefix + "Invalid number of arguments at " + registerAdapter);
                     return null;
                 }
 
@@ -55,7 +55,7 @@ namespace MechTransfer
 
                 if (!(args[1] is InjectItemDelegate))
                 {
-                    ErrorLogger.Log(callErorPrefix + "Invalid argument 2 InjectItem at " + registerAdapter);
+                    this.Logger.Error(callErorPrefix + "Invalid argument 2 InjectItem at " + registerAdapter);
                     return null;
                 }
 
@@ -63,7 +63,7 @@ namespace MechTransfer
 
                 if (!(args[2] is EnumerateItemsDelegate))
                 {
-                    ErrorLogger.Log(callErorPrefix + "Invalid argument 3 EnumerateItems at " + registerAdapter);
+                    this.Logger.Error(callErorPrefix + "Invalid argument 3 EnumerateItems at " + registerAdapter);
                     return null;
                 }
 
@@ -71,7 +71,7 @@ namespace MechTransfer
 
                 if (!(args[3] is TakeItemDelegate))
                 {
-                    ErrorLogger.Log(callErorPrefix + "Invalid argument 4 TakeItem at " + registerAdapter);
+                    this.Logger.Error(callErorPrefix + "Invalid argument 4 TakeItem at " + registerAdapter);
                     return null;
                 }
 
@@ -79,14 +79,14 @@ namespace MechTransfer
 
                 if (!(args[4] is int[]))
                 {
-                    ErrorLogger.Log(callErorPrefix + "Invalid argument 5 TileType at " + registerAdapter);
+                    this.Logger.Error(callErorPrefix + "Invalid argument 5 TileType at " + registerAdapter);
                     return null;
                 }
 
                 foreach (var type in (int[])args[4])
                 {
-                    if (!GetModWorld<TransferAgent>().ContainerAdapters.ContainsKey(type))
-                        GetModWorld<TransferAgent>().ContainerAdapters.Add(type, definition);
+                    if (!ModContent.GetInstance<TransferAgent>().ContainerAdapters.ContainsKey(type))
+						ModContent.GetInstance<TransferAgent>().ContainerAdapters.Add(type, definition);
                 }
                 return definition;
             }
@@ -125,25 +125,25 @@ namespace MechTransfer
 
                     if (!(args[2] is int[]))
                     {
-                        ErrorLogger.Log(callErorPrefix + "Invalid argument 5 TileType at " + registerAdapterReflection);
+                        this.Logger.Error(callErorPrefix + "Invalid argument 5 TileType at " + registerAdapterReflection);
                         return null;
                     }
 
                     foreach (var t in (int[])args[2])
                     {
-                        if (!GetModWorld<TransferAgent>().ContainerAdapters.ContainsKey(t))
-                            GetModWorld<TransferAgent>().ContainerAdapters.Add(t, definition);
+                        if (!ModContent.GetInstance<TransferAgent>().ContainerAdapters.ContainsKey(t))
+                            ModContent.GetInstance<TransferAgent>().ContainerAdapters.Add(t, definition);
                     }
                     return definition;
                 }
                 catch (Exception e)
                 {
-                    ErrorLogger.Log(callErorPrefix + "An exception has occurred while loading adapter at " + registerAdapterReflection);
-                    ErrorLogger.Log(e.Message);
+                    this.Logger.Error(callErorPrefix + "An exception has occurred while loading adapter at " + registerAdapterReflection);
+                    this.Logger.Error(e.Message);
                     return null;
                 }
             }
-            ErrorLogger.Log(callErorPrefix + "Invalid command");
+            this.Logger.Error(callErorPrefix + "Invalid command");
             return null;
         }
 
@@ -285,7 +285,7 @@ namespace MechTransfer
 
             //Omni turret
             OmniTurretAdapter omniTurretAdapter = new OmniTurretAdapter(this);
-            Call(registerAdapterReflection, omniTurretAdapter, new int[] { TileType<OmniTurretTile>() });
+            Call(registerAdapterReflection, omniTurretAdapter, new int[] { ModContent.TileType<OmniTurretTile>() });
 
             //Extractinator
             ExtractinatorAdapter extractinatorAdapter = new ExtractinatorAdapter();
@@ -293,13 +293,13 @@ namespace MechTransfer
 
             //Player interface
             PlayerInterfaceAdapter playerInterfaceAdapter = new PlayerInterfaceAdapter(this);
-            Call(registerAdapterReflection, playerInterfaceAdapter, new int[] { TileType<PlayerInterfaceTile>() });
+            Call(registerAdapterReflection, playerInterfaceAdapter, new int[] { ModContent.TileType<PlayerInterfaceTile>() });
 
             if (modMagicStorage != null)
             {
                 //Magic storage interface
                 MagicStorageInterfaceAdapter magicStorageInterfaceAdapter = new MagicStorageInterfaceAdapter();
-                Call(registerAdapterReflection, magicStorageInterfaceAdapter, new int[] { TileType<MagicStorageInterfaceTile>() });
+                Call(registerAdapterReflection, magicStorageInterfaceAdapter, new int[] { ModContent.TileType<MagicStorageInterfaceTile>() });
             }
         }
 
@@ -332,7 +332,7 @@ namespace MechTransfer
                 ModRecipe r = new ModRecipe(this);
                 r.AddIngredient(modMagicStorage.ItemType("StorageComponent"));
                 r.AddRecipeGroup("MagicStorage:AnyDiamond", 1);
-                r.AddIngredient(ItemType<PneumaticActuatorItem>(), 1);
+                r.AddIngredient(ModContent.ItemType<PneumaticActuatorItem>(), 1);
                 r.AddTile(TileID.WorkBenches);
                 r.SetResult(ItemType("MagicStorageInterfaceItem"));
                 r.AddRecipe();
@@ -356,13 +356,13 @@ namespace MechTransfer
     {
         public static ModItem GetPlaceItem<T>(this Mod mod) where T : SimplePlaceableTile
         {
-            SimplePlaceableTile tile = mod.GetTile<T>();
+            SimplePlaceableTile tile = ModContent.GetInstance<T>();
             return tile.PlaceItem;
         }
 
         public static ModItem GetPlaceItem<T>(this Mod mod, int kind) where T : SimpleTileObject
         {
-            SimpleTileObject tile = mod.GetTile<T>();
+            SimpleTileObject tile = ModContent.GetInstance<T>();
             return tile.GetPlaceItem(kind);
         }
 
