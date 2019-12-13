@@ -24,3 +24,4 @@ Currently supported mods:
 - [@Flithor](https://github.com/Flithor) for the Chinese translation
 - [@Vedomir](https://forums.terraria.org/index.php?members/vedomir.130490/) for the Russian translation
 - [@RonRicoSuave](https://github.com/RonRicoSuave) for help with spriting
+- [@speeder](https://github.com/speeder) for the TModLoader 0.11.5 port
