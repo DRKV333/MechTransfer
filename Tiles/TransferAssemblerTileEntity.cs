@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
 namespace MechTransfer.Tiles
@@ -25,7 +26,7 @@ namespace MechTransfer.Tiles
 
             if (stock.stack > 0)
             {
-                foreach (var container in mod.GetModWorld<TransferAgent>().FindContainerAdjacent(Position.X, Position.Y))
+                foreach (var container in ModContent.GetInstance<TransferAgent>().FindContainerAdjacent(Position.X, Position.Y))
                 {
                     container.InjectItem(stock);
 

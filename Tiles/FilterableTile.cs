@@ -7,7 +7,7 @@ namespace MechTransfer.Tiles
 {
     public abstract class FilterableTile<T> : SimpleTETile<T> where T : TransferFilterTileEntity
     {
-        public override void RightClick(int i, int j)
+        public override bool NewRightClick(int i, int j)
         {
             if (!Main.LocalPlayer.HeldItem.IsAir)
             {
@@ -17,8 +17,10 @@ namespace MechTransfer.Tiles
                     tileEntity.item = Main.LocalPlayer.HeldItem.Clone();
                     tileEntity.item.stack = 1;
                     tileEntity.SyncData();
+					return true;
                 }
             }
+			return false;
         }
 
         public override void MouseOverFar(int i, int j)

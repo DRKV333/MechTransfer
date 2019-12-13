@@ -42,7 +42,7 @@ namespace MechTransfer.Tiles
             Main.LocalPlayer.noThrow = 2;
         }
 
-        public override void RightClick(int i, int j)
+        public override bool NewRightClick(int i, int j)
         {
             Point16 origin = GetOrigin(i, j);
             Point16 topLeft = origin - tileObjectData.Origin;
@@ -58,14 +58,16 @@ namespace MechTransfer.Tiles
                 packet.Write(topLeft.Y);
                 packet.Send();
             }
-            mod.GetModWorld<ButtonDelayWorld>().setPoint(topLeft);
+			ModContent.GetInstance<ButtonDelayWorld>().setPoint(topLeft);
 
             Main.PlaySound(SoundID.MenuTick);
+
+			return true;
         }
 
         public override void AnimateIndividualTile(int type, int i, int j, ref int frameXOffset, ref int frameYOffset)
         {
-            if (mod.GetModWorld<ButtonDelayWorld>().isPoint(new Point16(i, j), 2, 2))
+            if (ModContent.GetInstance<ButtonDelayWorld>().isPoint(new Point16(i, j), 2, 2))
             {
                 frameXOffset = 36;
             }

@@ -53,7 +53,7 @@ namespace MechTransfer.Tiles
                 return;
 
             inventory.Clear();
-            foreach (var c in mod.GetModWorld<TransferAgent>().FindContainerAdjacent(i, j))
+            foreach (var c in ModContent.GetInstance<TransferAgent>().FindContainerAdjacent(i, j))
             {
                 inventory.RegisterContainer(c);
             }
@@ -243,7 +243,7 @@ namespace MechTransfer.Tiles
         public override void AddRecipes()
         {
             ModRecipe r = new ModRecipe(mod);
-            r.AddIngredient(mod.ItemType<PneumaticActuatorItem>(), 1);
+            r.AddIngredient(ModContent.ItemType<PneumaticActuatorItem>(), 1);
             r.AddIngredient(ItemID.Cog, 10);
             r.AddTile(TileID.WorkBenches);
             r.SetResult(PlaceItems[0], 1);

@@ -15,8 +15,8 @@ namespace MechTransfer.Tiles
         {
             AddMapEntry(MapColors.Passthrough, GetPlaceItem(0).DisplayName);
 
-            mod.GetModWorld<TransferAgent>().passthroughs.Add(Type, this);
-            mod.GetTile<TransferPipeTile>().connectedTiles.Add(Type);
+            ModContent.GetInstance<TransferAgent>().passthroughs.Add(Type, this);
+            ModContent.GetInstance<TransferPipeTile>().connectedTiles.Add(Type);
 
             base.SetDefaults();
         }
@@ -56,7 +56,7 @@ namespace MechTransfer.Tiles
         public override void AddRecipes()
         {
             ModRecipe r = new ModRecipe(mod);
-            r.AddIngredient(mod.ItemType<PneumaticActuatorItem>(), 1);
+            r.AddIngredient(ModContent.ItemType<PneumaticActuatorItem>(), 1);
             r.AddIngredient(ItemID.Actuator, 1);
             r.AddTile(TileID.WorkBenches);
             r.SetResult(PlaceItems[0], 1);

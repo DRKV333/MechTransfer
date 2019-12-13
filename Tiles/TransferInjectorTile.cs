@@ -15,8 +15,8 @@ namespace MechTransfer.Tiles
         {
             AddMapEntry(MapColors.Output, GetPlaceItem(0).DisplayName);
 
-            mod.GetModWorld<TransferAgent>().targets.Add(Type, this);
-            mod.GetTile<TransferPipeTile>().connectedTiles.Add(Type);
+            ModContent.GetInstance<TransferAgent>().targets.Add(Type, this);
+            ModContent.GetInstance<TransferPipeTile>().connectedTiles.Add(Type);
 
             base.SetDefaults();
         }
@@ -31,7 +31,7 @@ namespace MechTransfer.Tiles
         {
             bool success = false;
 
-            foreach (var container in mod.GetModWorld<TransferAgent>().FindContainerAdjacent(location.X, location.Y))
+            foreach (var container in ModContent.GetInstance<TransferAgent>().FindContainerAdjacent(location.X, location.Y))
             {
                 if (container.InjectItem(item))
                     success = true;
@@ -41,7 +41,7 @@ namespace MechTransfer.Tiles
             }
 
             if (success)
-                mod.GetModWorld<TransferAgent>().TripWireDelayed(location.X, location.Y, 1, 1);
+                ModContent.GetInstance<TransferAgent>().TripWireDelayed(location.X, location.Y, 1, 1);
 
             return success;
         }
@@ -54,7 +54,7 @@ namespace MechTransfer.Tiles
         public override void AddRecipes()
         {
             ModRecipe r = new ModRecipe(mod);
-            r.AddIngredient(mod.ItemType<PneumaticActuatorItem>(), 1);
+            r.AddIngredient(ModContent.ItemType<PneumaticActuatorItem>(), 1);
             r.AddIngredient(ItemID.GoldenKey, 1);
             r.AddIngredient(ItemID.Wire, 2);
             r.SetResult(PlaceItems[0], 1);
