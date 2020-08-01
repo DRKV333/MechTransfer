@@ -51,7 +51,8 @@ namespace MechTransfer.Tiles
         public override TagCompound Save()
         {
             TagCompound tags = base.Save();
-            tags.Add("stck", ItemIO.Save(stock));
+            if (stock.stack > 0)
+                tags.Add("stck", ItemIO.Save(stock));
             return tags;
         }
 
