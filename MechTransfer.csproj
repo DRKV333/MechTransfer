@@ -42,6 +42,7 @@
     <Compile Include="ContainerAdapters\CrystalStandAdapter.cs" />
     <Compile Include="ContainerAdapters\ExtractinatorAdapter.cs" />
     <Compile Include="ContainerAdapters\ItemFrameAdapter.cs" />
+    <Compile Include="ContainerAdapters\MagicStorageExtraInterfaceAdapter.cs" />
     <Compile Include="ContainerAdapters\MagicStorageInterfaceAdapter.cs" />
     <Compile Include="ContainerAdapters\OmniTurretAdapter.cs" />
     <Compile Include="ContainerAdapters\PlayerInterfaceAdapter.cs" />
@@ -57,6 +58,7 @@
     <Compile Include="NetRouter.cs" />
     <Compile Include="Tiles\BigButtonTile.cs" />
     <Compile Include="Tiles\LivingHellstoneTile.cs" />
+    <Compile Include="Tiles\MagicStorageExtraInterfaceTile.cs" />
     <Compile Include="Tiles\MagicStorageInterfaceTile.cs" />
     <Compile Include="Tiles\FilterableTile.cs" />
     <Compile Include="Tiles\OmniTurretTile.cs" />
