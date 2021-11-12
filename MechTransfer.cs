@@ -30,6 +30,7 @@ namespace MechTransfer
         private List<Action> simpleTileAddRecipequeue;
 
         private Mod modMagicStorage = null;
+        private Mod modMagicStorageExtra = null;
 
         public MechTransfer()
         {
