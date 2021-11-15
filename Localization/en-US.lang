@@ -48,6 +48,9 @@ ItemTooltip.TransferOutletItem = Drops item
 ItemName.MagicStorageInterfaceItem = Magic Storage Interface
 ItemTooltip.MagicStorageInterfaceItem = Allows you to inject and extract items from storage systems
 
+ItemName.MagicStorageExtraInterfaceItem = Magic Storage Extra Interface
+ItemTooltip.MagicStorageExtraInterfaceItem = Allows you to inject and extract items from your storage systems
+
 ItemName.PlayerInterfaceItem = Player Interface
 ItemTooltip.PlayerInterfaceItem = Allows you to inject and extract items from a players inventory
 

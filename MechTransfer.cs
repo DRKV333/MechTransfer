@@ -30,6 +30,7 @@ namespace MechTransfer
         private List<Action> simpleTileAddRecipequeue;
 
         private Mod modMagicStorage = null;
+        private Mod modMagicStorageExtra = null;
 
         public MechTransfer()
         {
@@ -155,6 +156,7 @@ namespace MechTransfer
         public override void Load()
         {
             modMagicStorage = ModLoader.GetMod("MagicStorage");
+            modMagicStorageExtra = ModLoader.GetMod("MagicStorageExtra");
 
             Assembly asm = Assembly.GetExecutingAssembly();
             simpleTileAddRecipequeue = new List<Action>();
@@ -301,6 +303,13 @@ namespace MechTransfer
                 MagicStorageInterfaceAdapter magicStorageInterfaceAdapter = new MagicStorageInterfaceAdapter();
                 Call(registerAdapterReflection, magicStorageInterfaceAdapter, new int[] { ModContent.TileType<MagicStorageInterfaceTile>() });
             }
+
+            if (modMagicStorageExtra != null)
+            {
+                //Magic storage extra interface
+                MagicStorageExtraInterfaceAdapter magicStorageExtraInterfaceAdapter = new MagicStorageExtraInterfaceAdapter();
+                Call(registerAdapterReflection, magicStorageExtraInterfaceAdapter, new int[] { TileType<MagicStorageExtraInterfaceTile>() });
+            }
         }
 
         //This needs to be called from SetupRecipies, because chests are made in SetupContent.
@@ -335,6 +344,18 @@ namespace MechTransfer
                 r.AddIngredient(ModContent.ItemType<PneumaticActuatorItem>(), 1);
                 r.AddTile(TileID.WorkBenches);
                 r.SetResult(ItemType("MagicStorageInterfaceItem"));
+                r.AddRecipe();
+            }
+
+            if (modMagicStorageExtra != null)
+            {
+                //Magic storage extra interface
+                ModRecipe r = new ModRecipe(this);
+                r.AddIngredient(modMagicStorageExtra.ItemType("StorageComponent"));
+                r.AddRecipeGroup("MagicStorageExtra:AnyDiamond", 1);
+                r.AddIngredient(ItemType<PneumaticActuatorItem>(), 1);
+                r.AddTile(TileID.WorkBenches);
+                r.SetResult(ItemType("MagicStorageExtraInterfaceItem"));
                 r.AddRecipe();
             }
 
