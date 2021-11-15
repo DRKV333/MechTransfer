@@ -8,6 +8,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="$(tmodSavePath)/References/mods/MagicStorage*.dll" />
+    <Reference Include="$(tmodSavePath)/References/mods/MagicStorageExtra*.dll" />
   </ItemGroup>
   <Import Project="processContent.targets" />
   <Import Project="tmodloader.targets" />

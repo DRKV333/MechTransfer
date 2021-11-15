@@ -308,7 +308,7 @@ namespace MechTransfer
             {
                 //Magic storage extra interface
                 MagicStorageExtraInterfaceAdapter magicStorageExtraInterfaceAdapter = new MagicStorageExtraInterfaceAdapter();
-                Call(registerAdapterReflection, magicStorageExtraInterfaceAdapter, new int[] { TileType<MagicStorageExtraInterfaceTile>() });
+                Call(registerAdapterReflection, magicStorageExtraInterfaceAdapter, new int[] { ModContent.TileType<MagicStorageExtraInterfaceTile>() });
             }
         }
 
@@ -353,7 +353,7 @@ namespace MechTransfer
                 ModRecipe r = new ModRecipe(this);
                 r.AddIngredient(modMagicStorageExtra.ItemType("StorageComponent"));
                 r.AddRecipeGroup("MagicStorageExtra:AnyDiamond", 1);
-                r.AddIngredient(ItemType<PneumaticActuatorItem>(), 1);
+                r.AddIngredient(ModContent.ItemType<PneumaticActuatorItem>(), 1);
                 r.AddTile(TileID.WorkBenches);
                 r.SetResult(ItemType("MagicStorageExtraInterfaceItem"));
                 r.AddRecipe();
