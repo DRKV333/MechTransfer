@@ -67,7 +67,7 @@ Files = filePaths.Select(x => new TaskItem(x)).ToArray();
 	<Target Name="tmodBuildModFile" AfterTargets="Build" DependsOnTargets="tmodParseBuildFiles" Inputs="$(tmodBuildFiles)" Outputs="$(tmodSavePath)/Mods/$(AssemblyName).tmod">
 		<!-- If the Import fails msbuild should give an error, but VS can be a weird sometimes, it's best to do a quick check -->
 		<Error Condition="$(tMLBuildServerPath)==''" Text="tMLBuildServerPath not set! (Try restarting your IDE)" />
-		<Exec Command="&quot;$(tMLBuildServerPath)&quot; -build $(ProjectDir) -eac $(TargetPath) -define $(DefineConstants) -unsafe $(AllowUnsafeBlocks)" />
+		<Exec Command="&quot;$(tMLBuildServerPath)&quot; -build $(ProjectDir) -eac $(TargetPath) -define $(DefineConstants.Replace(';;', ';')) -unsafe $(AllowUnsafeBlocks)" />
 	</Target>
 	
 </Project>
