@@ -87,7 +87,7 @@ namespace MechTransfer
                 foreach (var type in (int[])args[4])
                 {
                     if (!ModContent.GetInstance<TransferAgent>().ContainerAdapters.ContainsKey(type))
-						ModContent.GetInstance<TransferAgent>().ContainerAdapters.Add(type, definition);
+                        ModContent.GetInstance<TransferAgent>().ContainerAdapters.Add(type, definition);
                 }
                 return definition;
             }
