@@ -1,3 +1,6 @@
+UI.Hover.NotSet = Не задано
+UI.Hover.Generic = Фильтр:
+
 ItemName.PneumaticActuatorItem = Пневматический привод
 ItemTooltip.PneumaticActuatorItem = Используется в крафте устройств для перемещения предметов
 
@@ -25,8 +28,10 @@ ItemTooltip.TransferInletItem = Собирает упавшие вещи
 
 ItemName.TransferFilterItem = Транспортный фильтр (белый список)
 ItemTooltip.TransferFilterItem = Поставьте в транспортировочную линию для фильтрации предметов\nПКМ предметом в руке для настройки фильтра
+UI.Hover.TransferFilterItem = Предметы разрешены:
 ItemName.InverseTransferFilterItem = Транспортный фильтр (чёрный список)
 ItemTooltip.InverseTransferFilterItem = Поставьте в транспортировочную линию для фильтрации предметов\nПКМ предметом в руке для настройки фильтра
+UI.Hover.InverseTransferFilterItem = Предметы блокируются:
 
 ItemName.TransferGateItem = Транспортный люк
 ItemTooltip.TransferGateItem = Поставьте в транспортировочную линию для перекрытия перемещения претметов
@@ -79,8 +84,16 @@ ItemName.MoneyFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Мо
 ItemName.BagFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Мешки с сокровищами)
 ItemName.ToolFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Инструмент)
 ItemName.WeaponFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Оружие)
+ItemName.MeleeFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Ближний бой)
+ItemName.MagicFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Магическое оружие)
+ItemName.RangedFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Дистанционное оружие)
+ItemName.SummonFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Оружие призывателя)
+ItemName.ThrownFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Оружие метателя)
 ItemName.ConsumableFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Расходуется)
 ItemName.MaterialFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Материал)
 ItemName.PotionFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Зелье)
 ItemName.TileFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Блок)
 ItemName.WallFilterItem = {$Mods.MechTransfer.Common.ItemName.FilterItem} (Стена)
+
+ItemName.LivingHellstoneItem = Живой адский камень
+ItemTooltip.LivingHellstoneItem = Уничтожает любой предмет при контакте, независимо от редкости

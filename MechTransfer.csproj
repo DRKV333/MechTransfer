@@ -1,108 +1,15 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8298EAB6-0586-4BDA-9483-83624B66B13A}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MechTransfer</RootNamespace>
     <AssemblyName>MechTransfer</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <TargetFramework>net45</TargetFramework>
     <PlatformTarget>x86</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ButtonDelayWorld.cs" />
-    <Compile Include="ChestPlacementFix.cs" />
-    <Compile Include="ContainerAdapters\CannonAdapter.cs" />
-    <Compile Include="ContainerAdapters\ChestAdapter.cs" />
-    <Compile Include="ContainerAdapters\ContainerAdapter.cs" />
-    <Compile Include="ContainerAdapters\CrystalStandAdapter.cs" />
-    <Compile Include="ContainerAdapters\ExtractinatorAdapter.cs" />
-    <Compile Include="ContainerAdapters\ItemFrameAdapter.cs" />
-    <Compile Include="ContainerAdapters\MagicStorageInterfaceAdapter.cs" />
-    <Compile Include="ContainerAdapters\OmniTurretAdapter.cs" />
-    <Compile Include="ContainerAdapters\PlayerInterfaceAdapter.cs" />
-    <Compile Include="ContainerAdapters\SnowballLauncherAdapter.cs" />
-    <Compile Include="ContainerAdapters\WeaponRackAdapter.cs" />
-    <Compile Include="Interfaces.cs" />
-    <Compile Include="Items\ItemFilterItem.cs" />
-    <Compile Include="Items\SimplePrototypeItem.cs" />
-    <Compile Include="LangUtils.cs" />
-    <Compile Include="LivingHellstoneGlobalItem.cs" />
-    <Compile Include="MapColors.cs" />
-    <Compile Include="MechTransferAssemblerWorld.cs" />
-    <Compile Include="NetRouter.cs" />
-    <Compile Include="Tiles\BigButtonTile.cs" />
-    <Compile Include="Tiles\LivingHellstoneTile.cs" />
-    <Compile Include="Tiles\MagicStorageInterfaceTile.cs" />
-    <Compile Include="Tiles\FilterableTile.cs" />
-    <Compile Include="Tiles\OmniTurretTile.cs" />
-    <Compile Include="Tiles\PlayerInterfaceTile.cs" />
-    <Compile Include="Tiles\Simple\SimplePlaceableTile.cs" />
-    <Compile Include="Tiles\Simple\SimpleTETile.cs" />
-    <Compile Include="Tiles\Simple\SimpleTile.cs" />
-    <Compile Include="Tiles\Simple\SimpleTileEntity.cs" />
-    <Compile Include="Tiles\Simple\SimpleTileObject.cs" />
-    <Compile Include="Tiles\SmallButtonTile.cs" />
-    <Compile Include="Tiles\StackExtractorTile.cs" />
-    <Compile Include="Tiles\TransferAssemblerTileEntity.cs" />
-    <Compile Include="ItemInventory.cs" />
-    <Compile Include="Items\PneumaticActuatorItem.cs" />
-    <Compile Include="MechTransfer.cs" />
-    <Compile Include="MechTransferMechanic.cs" />
-    <Compile Include="Tiles\TransferAssemblerTile.cs" />
-    <Compile Include="Tiles\TransferFilterTile.cs" />
-    <Compile Include="Tiles\TransferFilterTileEntity.cs" />
-    <Compile Include="Tiles\TransferRelayTile.cs" />
-    <Compile Include="Tiles\TransferExtractorTile.cs" />
-    <Compile Include="Tiles\TransferGateTile.cs" />
-    <Compile Include="Tiles\TransferInjectorTile.cs" />
-    <Compile Include="Tiles\TransferInletTile.cs" />
-    <Compile Include="Tiles\TransferInletTileEntity.cs" />
-    <Compile Include="Tiles\TransferOutletTile.cs" />
-    <Compile Include="Tiles\TransferPipeTile.cs" />
-    <Compile Include="TransferAgent.cs" />
-    <Compile Include="UI\FilterHoverUI.cs" />
-    <Compile Include="VisualUtils.cs" />
+    <Reference Include="$(tmodSavePath)/References/mods/MagicStorage*.dll" />
+    <Reference Include="$(tmodSavePath)/References/mods/MagicStorageExtra*.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="MagicStorage.All">
-      <HintPath>$(userprofile)\Documents\My Games\Terraria\ModLoader\Mods\MagicStorage.All.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(ProjectDir)processContent.targets" />
-  <Import Project="$(ProjectDir)tmodloader.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-  </PropertyGroup>
+  <Import Project="processContent.targets" />
+  <Import Project="tmodloader.targets" />
 </Project>

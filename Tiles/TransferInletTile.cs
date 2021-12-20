@@ -14,12 +14,12 @@ namespace MechTransfer.Tiles
         public override void SetDefaults()
         {
             Main.tileSolid[Type] = true;
-            mod.GetGlobalTile<ChestPlacementFix>().AddNoChestTile(Type);
+			ModContent.GetInstance<ChestPlacementFix>().AddNoChestTile(Type);
 
             AddMapEntry(MapColors.Input, GetPlaceItem(0).DisplayName);
 
-            mod.GetModWorld<TransferAgent>().passthroughs.Add(Type, this);
-            mod.GetTile<TransferPipeTile>().connectedTiles.Add(Type);
+            ModContent.GetInstance<TransferAgent>().passthroughs.Add(Type, this);
+            ModContent.GetInstance<TransferPipeTile>().connectedTiles.Add(Type);
 
             base.SetDefaults();
         }
@@ -52,7 +52,7 @@ namespace MechTransfer.Tiles
         public override void AddRecipes()
         {
             ModRecipe r = new ModRecipe(mod);
-            r.AddIngredient(mod.ItemType<PneumaticActuatorItem>(), 1);
+            r.AddIngredient(ModContent.ItemType<PneumaticActuatorItem>(), 1);
             r.AddIngredient(ItemID.InletPump, 1);
             r.SetResult(PlaceItems[0].item.type, 1);
             r.AddTile(TileID.WorkBenches);

@@ -1,8 +1,8 @@
 author = DRKV
-version = 1.7
+version = 1.7.1
 displayName = MechTransfer
 includePDB = false
-weakReferences = MagicStorage@0.4.3.1
+weakReferences = MagicStorage@0.4.3.1, MagicStorageExtra@0.5.5.9
 buildIgnore = .gitignore, .gitattributes, *.csproj*, *.sln, *.targets, *.py, .git/*, .vs/*, bin/*, obj/*, *.xcf, lib/ReLogic.dll, Content/*
 hideCode = false
 hideResources = false

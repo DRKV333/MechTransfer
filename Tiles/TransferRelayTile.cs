@@ -15,8 +15,8 @@ namespace MechTransfer.Tiles
         {
             AddMapEntry(MapColors.Passthrough, GetPlaceItem(0).DisplayName);
 
-            mod.GetModWorld<TransferAgent>().targets.Add(Type, this);
-            mod.GetTile<TransferPipeTile>().connectedTiles.Add(Type);
+            ModContent.GetInstance<TransferAgent>().targets.Add(Type, this);
+            ModContent.GetInstance<TransferPipeTile>().connectedTiles.Add(Type);
 
             base.SetDefaults();
         }
@@ -34,7 +34,7 @@ namespace MechTransfer.Tiles
 
         public bool Receive(Point16 location, Item item)
         {
-            TransferAgent agent = mod.GetModWorld<TransferAgent>();
+            TransferAgent agent = ModContent.GetInstance<TransferAgent>();
 
             Tile tile = Main.tile[location.X, location.Y];
 
@@ -70,7 +70,7 @@ namespace MechTransfer.Tiles
         public override void AddRecipes()
         {
             ModRecipe r = new ModRecipe(mod);
-            r.AddIngredient(mod.ItemType<PneumaticActuatorItem>(), 1);
+            r.AddIngredient(ModContent.ItemType<PneumaticActuatorItem>(), 1);
             r.AddIngredient(ItemID.RedPressurePlate, 1);
             r.anyPressurePlate = true;
             r.AddTile(TileID.WorkBenches);

@@ -52,7 +52,7 @@ namespace MechTransfer.ContainerAdapters
 
         public IEnumerable<Tuple<Item, object>> EnumerateItems(int x, int y)
         {
-            Point16 origin = mod.GetTile<PlayerInterfaceTile>().GetOrigin(x, y);
+            Point16 origin = ModContent.GetInstance<PlayerInterfaceTile>().GetOrigin(x, y);
             int p = FindInside(origin.X, origin.Y);
 
             if (p == -1)
@@ -108,7 +108,7 @@ namespace MechTransfer.ContainerAdapters
         //I should be handling achievements here, like in ItemSlot.SwapEquip, but meh... :/
         public bool InjectItem(int x, int y, Item item)
         {
-            Point16 origin = mod.GetTile<PlayerInterfaceTile>().GetOrigin(x, y);
+            Point16 origin = ModContent.GetInstance<PlayerInterfaceTile>().GetOrigin(x, y);
             int p = FindInside(origin.X, origin.Y);
 
             if (p == -1)

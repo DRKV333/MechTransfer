@@ -92,3 +92,7 @@ v1.7
 - Tweaked tile map colors, item name capitalization, and items rarities
 - Added filter items for weapon class
 - Added Living Hellstone
+
+v1.7.1
+- Fixed a duplication glitch with the Transfer Assembler
+- Added MagicStorageExtra support

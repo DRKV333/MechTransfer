@@ -20,8 +20,8 @@ namespace MechTransfer.Tiles
         {
             AddMapEntry(MapColors.Passthrough, GetPlaceItem(0).DisplayName);
 
-            mod.GetModWorld<TransferAgent>().passthroughs.Add(Type, this);
-            mod.GetTile<TransferPipeTile>().connectedTiles.Add(Type);
+            ModContent.GetInstance<TransferAgent>().passthroughs.Add(Type, this);
+            ModContent.GetInstance<TransferPipeTile>().connectedTiles.Add(Type);
 
             base.SetDefaults();
         }
@@ -88,7 +88,7 @@ namespace MechTransfer.Tiles
         {
             //Filter
             ModRecipe r = new ModRecipe(mod);
-            r.AddIngredient(mod.ItemType<PneumaticActuatorItem>(), 1);
+            r.AddIngredient(ModContent.ItemType<PneumaticActuatorItem>(), 1);
             r.AddIngredient(ItemID.Actuator, 1);
             r.AddIngredient(ItemID.ItemFrame, 1);
             r.AddTile(TileID.WorkBenches);
@@ -101,7 +101,7 @@ namespace MechTransfer.Tiles
 
             //InverseFilter
             r = new ModRecipe(mod);
-            r.AddIngredient(mod.ItemType<PneumaticActuatorItem>(), 1);
+            r.AddIngredient(ModContent.ItemType<PneumaticActuatorItem>(), 1);
             r.AddIngredient(ItemID.Actuator, 1);
             r.AddIngredient(ItemID.ItemFrame, 1);
             r.AddTile(TileID.WorkBenches);
@@ -236,23 +236,23 @@ namespace MechTransfer.Tiles
 
         private void LogFilterTets()
         {
-            ErrorLogger.Log("---BEGIN FILTER LISTING---");
+            mod.Logger.Debug("---BEGIN FILTER LISTING---");
             foreach (var item in filterItems)
             {
-                //if (item.Value.Name != "BagFilterItem")
-                //    continue;
+				//if (item.Value.Name != "BagFilterItem")
+				//    continue;
 
-                ErrorLogger.Log("----" + item.Value.DisplayName.GetDefault());
+				mod.Logger.Debug("----" + item.Value.DisplayName.GetDefault());
                 for (int i = 0; i < ItemLoader.ItemCount; i++)
                 {
                     Item testItem = new Item();
                     testItem.SetDefaults(i);
 
                     if (item.Value.MatchesItem(testItem))
-                        ErrorLogger.Log(testItem.Name);
+						mod.Logger.Debug(testItem.Name);
                 }
             }
-            ErrorLogger.Log("---END FILTER LISTING---");
+			mod.Logger.Debug("---END FILTER LISTING---");
         }
     }
 }

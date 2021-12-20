@@ -50,9 +50,9 @@ namespace MechTransfer
             catch (Exception e)
             {
                 Main.NewText("An exception has occurred at MechTransfer.TransferUtils.SearchForTarget (Please look at the log in Documents/My Games/Terraria/ModLoader/Logs)", Color.Red);
-                ErrorLogger.Log("\nMechTransfer has logged an exception:");
-                ErrorLogger.Log(e.ToString());
-                ErrorLogger.Log("Please report it on the MechTransfer forum page.\n");
+                mod.Logger.Error("\nMechTransfer has logged an exception:");
+                mod.Logger.Error(e.ToString());
+                mod.Logger.Error("Please report it on the MechTransfer forum page.\n");
             }
             finally
             {

@@ -16,8 +16,8 @@ namespace MechTransfer.Tiles
         {
             AddMapEntry(MapColors.Output, GetPlaceItem(0).DisplayName);
 
-            mod.GetModWorld<TransferAgent>().targets.Add(Type, this);
-            mod.GetTile<TransferPipeTile>().connectedTiles.Add(Type);
+            ModContent.GetInstance<TransferAgent>().targets.Add(Type, this);
+            ModContent.GetInstance<TransferPipeTile>().connectedTiles.Add(Type);
 
             base.SetDefaults();
         }
@@ -45,7 +45,7 @@ namespace MechTransfer.Tiles
                 Main.item[dropTarget].velocity = Vector2.Zero;
             }
             item.stack = 0;
-            mod.GetModWorld<TransferAgent>().TripWireDelayed(location.X, location.Y, 1, 1);
+            ModContent.GetInstance<TransferAgent>().TripWireDelayed(location.X, location.Y, 1, 1);
             return true;
         }
 
@@ -57,7 +57,7 @@ namespace MechTransfer.Tiles
         public override void AddRecipes()
         {
             ModRecipe r = new ModRecipe(mod);
-            r.AddIngredient(mod.ItemType<PneumaticActuatorItem>(), 1);
+            r.AddIngredient(ModContent.ItemType<PneumaticActuatorItem>(), 1);
             r.AddIngredient(ItemID.OutletPump, 1);
             r.SetResult(PlaceItems[0].item.type, 1);
             r.AddTile(TileID.WorkBenches);

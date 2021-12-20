@@ -44,7 +44,7 @@ namespace MechTransfer
                 {
                     if (Main.tile[x, y] != null && Main.tile[x, y].active())
                     {
-                        if (Main.tile[x, y].type == mod.TileType<TransferInjectorTile>() || Main.tile[x, y].type == mod.TileType<TransferExtractorTile>() || Main.tile[x, y].type == mod.TileType<StackExtractorTile>() || Main.tile[x, y].type == mod.TileType<TransferAssemblerTile>())
+                        if (Main.tile[x, y].type == ModContent.TileType<TransferInjectorTile>() || Main.tile[x, y].type == ModContent.TileType<TransferExtractorTile>() || Main.tile[x, y].type == ModContent.TileType<StackExtractorTile>() || Main.tile[x, y].type == ModContent.TileType<TransferAssemblerTile>())
                         {
                             DrawTransition(x, y - 1, mod.GetTexture("Tiles/Transitions/Top"));
                             DrawTransition(x, y + 1, mod.GetTexture("Tiles/Transitions/Bottom"));
@@ -52,7 +52,7 @@ namespace MechTransfer
                             DrawTransition(x + 1, y, mod.GetTexture("Tiles/Transitions/Right"));
                         }
 
-                        if (WiresUI.Settings.DrawWires && Main.tile[x, y].type == mod.TileType<TransferAssemblerTile>())
+                        if (WiresUI.Settings.DrawWires && Main.tile[x, y].type == ModContent.TileType<TransferAssemblerTile>())
                         {
                             DrawRectFast(x * 16 - 80 - (int)Main.screenPosition.X, y * 16 - 80 - (int)Main.screenPosition.Y, 176, 176);
                         }
@@ -76,7 +76,7 @@ namespace MechTransfer
 
         private void DrawTransition(int x, int y, Texture2D texture)
         {
-            if (mod.GetModWorld<TransferAgent>().IsContainer(x, y))
+            if (ModContent.GetInstance<TransferAgent>().IsContainer(x, y))
             {
                 if (Main.LocalPlayer.gravDir == 1)
                     Main.spriteBatch.Draw(texture, new Vector2(x * 16 - Main.screenPosition.X, y * 16 - Main.screenPosition.Y), Lighting.GetColor(x, y));
