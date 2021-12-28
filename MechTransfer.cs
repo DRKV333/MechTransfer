@@ -25,7 +25,9 @@ namespace MechTransfer
         private const string registerAdapterReflection = "RegisterAdapterReflection";
 
         private GameInterfaceLayer interfaceLayer;
+
         public FilterHoverUI filterHoverUI;
+        public AssemblerHoverUI assemblerHoverUI;
 
         private List<Action> simpleTileAddRecipequeue;
 
@@ -254,10 +256,14 @@ namespace MechTransfer
             filterHoverUI = new FilterHoverUI();
             filterHoverUI.Activate();
 
+            assemblerHoverUI = new AssemblerHoverUI();
+            assemblerHoverUI.Activate();
+
             interfaceLayer = new LegacyGameInterfaceLayer("MechTransfer: UI",
                                                             delegate
                                                             {
                                                                 filterHoverUI.Draw(Main.spriteBatch);
+                                                                assemblerHoverUI.Draw(Main.spriteBatch);
                                                                 return true;
                                                             },
                                                             InterfaceScaleType.UI);
@@ -365,6 +371,8 @@ namespace MechTransfer
         public override void PostAddRecipes()
         {
             NetRouter.Init(0);
+
+
         }
 
         public override void Unload()

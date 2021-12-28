@@ -13,8 +13,19 @@ namespace MechTransfer.Tiles
         public StatusKind Status = StatusKind.Ready;
         public int MissingItemType = 0;
         public Item stock = new Item();
+        public int selectedRecipeHash = 0;
 
         private int timer = 0;
+
+        public override void SyncSpecificData(ModPacket packet)
+        {
+            packet.Write(selectedRecipeHash);
+        }
+
+        public override void HandleSpecificData(BinaryReader reader, int WhoAmI)
+        {
+            selectedRecipeHash = reader.ReadInt32();
+        }
 
         public override void Update()
         {
@@ -53,6 +64,9 @@ namespace MechTransfer.Tiles
             TagCompound tags = base.Save();
             if (stock.stack > 0)
                 tags.Add("stck", ItemIO.Save(stock));
+            if (selectedRecipeHash != 0)
+                tags.Add("rechsh", selectedRecipeHash);
+
             return tags;
         }
 
@@ -60,6 +74,8 @@ namespace MechTransfer.Tiles
         {
             if (tag.ContainsKey("stck"))
                 stock = ItemIO.Load((TagCompound)tag["stck"]);
+            if (tag.ContainsKey("rechsh"))
+                selectedRecipeHash = (int)tag["rechsh"];
             base.Load(tag);
         }
 
