@@ -18,9 +18,12 @@ namespace MechTransfer.Tiles
                 ModPacket packet = NetRouter.GetPacketTo(ModContent.GetInstance<TransferFilterTileEntity>(), mod);
                 packet.Write(ID);
                 packet.WriteItem(item);
+                SyncSpecificData(packet);
                 packet.Send();
             }
         }
+
+        public virtual void SyncSpecificData(ModPacket packet) { }
 
         public override TagCompound Save()
         {
@@ -61,7 +64,10 @@ namespace MechTransfer.Tiles
 
             TransferFilterTileEntity FilterEntity = (TransferFilterTileEntity)ByID[reader.ReadInt32()];
             FilterEntity.item = ItemIO.Receive(reader);
+            HandleSpecificData(reader, WhoAmI);
             NetMessage.SendData(MessageID.TileEntitySharing, -1, WhoAmI, null, FilterEntity.ID, FilterEntity.Position.X, FilterEntity.Position.Y);
         }
+
+        public virtual void HandleSpecificData(BinaryReader reader, int WhoAmI) { }
     }
 }
