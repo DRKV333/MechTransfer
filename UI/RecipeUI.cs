@@ -22,8 +22,12 @@ namespace MechTransfer.UI
 
             int ing;
             for (ing = 0; ing < recipe.requiredItem.Length; ing++)
+            {
                 if (recipe.requiredItem[ing].IsAir)
+                {
                     break;
+                }
+            }
 
             Height.Pixels = Main.inventoryBackTexture.Height * Main.inventoryScale + 10;
             Width.Pixels = Main.inventoryBackTexture.Width * ing * Main.inventoryScale + 10;

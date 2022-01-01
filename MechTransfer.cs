@@ -267,6 +267,7 @@ namespace MechTransfer
                                                                 return true;
                                                             },
                                                             InterfaceScaleType.UI);
+            UIHooks.Load(this);
         }
 
         private void LoadAdapters()
@@ -371,13 +372,12 @@ namespace MechTransfer
         public override void PostAddRecipes()
         {
             NetRouter.Init(0);
-
-
         }
 
         public override void Unload()
         {
             NetRouter.Unload();
+            UIHooks.Unload();
         }
     }
 

@@ -1,5 +1,6 @@
 ﻿using MechTransfer.Items;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
@@ -63,7 +64,7 @@ namespace MechTransfer.Tiles
             bool foundRecipe = false;
             for (int r = 0; r < Recipe.maxRecipes && !Main.recipe[r].createItem.IsAir; r++)
             {
-                if (Main.recipe[r].createItem.type == entity.item.type && 
+                if (Main.recipe[r].createItem.type == entity.item.type &&
                     (entity.selectedRecipeHash == 0 || RecipeUtils.HashRecipe(Main.recipe[r]) == entity.selectedRecipeHash))
                 {
                     foundRecipe = true;
@@ -180,59 +181,67 @@ namespace MechTransfer.Tiles
 
         public override void DisplayTooltip(int i, int j)
         {
-            if (!TryGetEntity(i, j, out TransferAssemblerTileEntity entity)) return;
-
-            if (PlayerInput.ScrollWheelDeltaForUI != 0)
+            if (!TryGetEntity(i, j, out TransferAssemblerTileEntity entity))
             {
-            StartScrollHandling:
+                return;
+            }
 
+            if (Main.keyState.IsKeyDown(Keys.LeftAlt) && PlayerInput.ScrollWheelDeltaForUI != 0 && recipes.Count > 0)
+            {
                 Main.PlaySound(SoundID.MenuTick);
-
-                if (entity.selectedRecipeHash == 0)
-                {
-                    if (PlayerInput.ScrollWheelDeltaForUI < 0)
-                        entity.selectedRecipeHash = RecipeUtils.HashRecipe(recipes[0]);
-                    else
-                        entity.selectedRecipeHash = RecipeUtils.HashRecipe(recipes[recipes.Count - 1]);
-                }
-                else
-                {
-                    int[] hashes = new int[recipes.Count];
-
-                    for (int r = 0; r < hashes.Length; r++)
-                        hashes[r] = RecipeUtils.HashRecipe(recipes[r]);
-
-                    int index = -1;
-
-                    for (int c = 0; c < hashes.Length; c++)
-                        if (hashes[c] == entity.selectedRecipeHash)
-                        {
-                            index = c;
-                            break;
-                        }
-
-                    if (index == -1)
-                    {
-                        entity.selectedRecipeHash = 0;
-                        goto StartScrollHandling;
-                    }
-
-                    if (PlayerInput.ScrollWheelDeltaForUI < 0)
-                        index++;
-                    else
-                    {
-                        index--;
-                    }
-
-                    if (index < 0 || index >= hashes.Length)
-                        entity.selectedRecipeHash = 0;
-                    else
-                        entity.selectedRecipeHash = hashes[index];
-                }
+                HandleWheel(PlayerInput.ScrollWheelDelta / 120, entity);
                 entity.SyncData();
             }
 
             ((MechTransfer)mod).assemblerHoverUI.Display(entity.item, HoverText(entity), HoverColor(entity), entity.selectedRecipeHash, recipes);
+        }
+
+        private void HandleWheel(int delta, TransferAssemblerTileEntity entity)
+        {
+            if (entity.selectedRecipeHash == 0)
+            {
+                if (delta < 0)
+                    entity.selectedRecipeHash = RecipeUtils.HashRecipe(recipes[0]);
+                else
+                    entity.selectedRecipeHash = RecipeUtils.HashRecipe(recipes[recipes.Count - 1]);
+            }
+            else
+            {
+                int[] hashes = new int[recipes.Count];
+
+                for (int r = 0; r < hashes.Length; r++)
+                    hashes[r] = RecipeUtils.HashRecipe(recipes[r]);
+
+                int index = -1;
+
+                for (int c = 0; c < hashes.Length; c++)
+                    if (hashes[c] == entity.selectedRecipeHash)
+                    {
+                        index = c;
+                        break;
+                    }
+
+                if (index == -1)
+                {
+                    entity.selectedRecipeHash = 0;
+                    HandleWheel(delta, entity);
+                    return;
+                }
+
+                if (delta < 0)
+                {
+                    index++;
+                }
+                else
+                {
+                    index--;
+                }
+
+                if (index < 0 || index >= hashes.Length)
+                    entity.selectedRecipeHash = 0;
+                else
+                    entity.selectedRecipeHash = hashes[index];
+            }
         }
 
         public override string HoverText(TransferAssemblerTileEntity entity)

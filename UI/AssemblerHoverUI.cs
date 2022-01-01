@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent.UI;
@@ -20,6 +21,9 @@ namespace MechTransfer.UI
         private List<RecipeUI> recipes = new List<RecipeUI>();
 
         private const string NotSetTextKey = "Mods.MechTransfer.UI.Hover.NotSet";
+
+        public bool drawnLastFrame = false;
+        public bool PressingAlt => Main.keyState.IsKeyDown(Keys.LeftAlt);
 
         public override void OnInitialize()
         {
@@ -47,6 +51,7 @@ namespace MechTransfer.UI
         public void Display(Item type, string text, Color textColor, int selectedHash, List<Recipe> foundRecipes)
         {
             visible = true;
+            drawnLastFrame = false;
 
             titleText.SetText(text);
             titleText.TextColor = textColor;
@@ -65,24 +70,27 @@ namespace MechTransfer.UI
 
             foundRecipes.Clear();
 
-            for (int r = 0; r < Recipe.maxRecipes && !Main.recipe[r].createItem.IsAir; r++)
+            if (PressingAlt)
             {
-                if (Main.recipe[r].createItem.type == type.type)
+                for (int r = 0; r < Recipe.maxRecipes && !Main.recipe[r].createItem.IsAir; r++)
                 {
-                    if (recipes.Count <= i)
+                    if (Main.recipe[r].createItem.type == type.type)
                     {
-                        RecipeUI recipe = new RecipeUI();
-                        recipes.Add(recipe);
-                        Append(recipe);
+                        if (recipes.Count <= i)
+                        {
+                            RecipeUI recipe = new RecipeUI();
+                            recipes.Add(recipe);
+                            Append(recipe);
+                        }
+                        foundRecipes.Add(Main.recipe[r]);
+                        recipes[i].recipe = Main.recipe[r];
+
+                        recipes[i].highlight = false;
+
+                        if (selectedHash != 0 && selectedHash == RecipeUtils.HashRecipe(Main.recipe[r])) recipes[i].highlight = true;
+
+                        i++;
                     }
-                    foundRecipes.Add(Main.recipe[r]);
-                    recipes[i].recipe = Main.recipe[r];
-
-                    recipes[i].highlight = false;
-
-                    if (selectedHash != 0 && selectedHash == RecipeUtils.HashRecipe(Main.recipe[r])) recipes[i].highlight = true;
-
-                    i++;
                 }
             }
 
@@ -98,21 +106,31 @@ namespace MechTransfer.UI
                 recipes[j].Left.Pixels = 0;
             }
 
+
             Recalculate();
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            drawnLastFrame = visible;
+
             if (!visible)
                 return;
+
+            if (!drawnLastFrame)
+                drawnLastFrame = true;
 
             float oldScale = Main.inventoryScale;
             Main.inventoryScale = 0.5f;
 
             base.Draw(spriteBatch);
             ItemSlot.Draw(spriteBatch, fakeInv, ItemSlot.Context.InventoryItem, 10, new Vector2(Left.Pixels + 5, Top.Pixels + 30));
-            Utils.DrawBorderString(spriteBatch, "Scroll to select recipe", 
-                new Vector2(Left.Pixels + Main.inventoryBackTexture.Width * 0.5f * Main.UIScale + 15, Top.Pixels + 65), Color.White, Main.UIScale);
+
+            string recipesString = PressingAlt ? "Scroll to select recipe" : "Hold Alt to wiew recipes";
+            float stringOffset = PressingAlt ? Main.inventoryBackTexture.Width * 0.5f * Main.UIScale + 15 : 0;
+
+            Utils.DrawBorderString(spriteBatch, recipesString,
+                new Vector2(Left.Pixels + stringOffset, Top.Pixels + 65), Color.White, Main.UIScale);
 
             Main.inventoryScale = oldScale;
 
