@@ -12,11 +12,11 @@ namespace MechTransfer.ContainerAdapters
         private TEItemFrame FindItemFrame(int x, int y)
         {
             Tile tile = Main.tile[x, y];
-            if (tile == null || !tile.active())
+            if (tile == null || !tile.HasTile)
                 return null;
 
-            int originX = x - tile.frameX % 36 / 18;
-            int originY = y - tile.frameY / 18;
+            int originX = x - tile.TileFrameX % 36 / 18;
+            int originY = y - tile.TileFrameY / 18;
 
             int id = TEItemFrame.Find(originX, originY);
             if (id == -1)

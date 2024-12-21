@@ -10,16 +10,17 @@ using Terraria.ObjectData;
 
 namespace MechTransfer.Tiles
 {
+    [Autoload(false)]
     public class TransferOutletTile : SimpleTileObject, ITransferTarget
     {
-        public override void SetDefaults()
+        public override void PostSetDefaults()
         {
             AddMapEntry(MapColors.Output, GetPlaceItem(0).DisplayName);
 
             ModContent.GetInstance<TransferAgent>().targets.Add(Type, this);
             ModContent.GetInstance<TransferPipeTile>().connectedTiles.Add(Type);
 
-            base.SetDefaults();
+            base.PostSetDefaults();
         }
 
         protected override void SetTileObjectData()
@@ -34,14 +35,14 @@ namespace MechTransfer.Tiles
             {
                 for (int i = 0; i < item.stack; i++)
                 {
-                    int id = NPC.NewNPC(location.X * 16, location.Y * 16, item.makeNPC);
+                    int id = NPC.NewNPC(null, location.X * 16, location.Y * 16, item.makeNPC);
                     Main.npc[id].velocity = Main.rand.NextVector2Circular(3f, 3f);
                     NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, id);
                 }
             }
             else
             {
-                int dropTarget = Item.NewItem(location.X * 16, location.Y * 16, 16, 16, item.type, item.stack, false, item.prefix);
+                int dropTarget = Item.NewItem(null, location.X * 16, location.Y * 16, 16, 16, item.type, item.stack, false, item.prefix);
                 Main.item[dropTarget].velocity = Vector2.Zero;
             }
             item.stack = 0;
@@ -51,17 +52,16 @@ namespace MechTransfer.Tiles
 
         public override void PostLoad()
         {
-            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(mod, "TransferOutletItem", Type);
+            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(Mod, "TransferOutletItem", Type);
         }
 
         public override void AddRecipes()
         {
-            ModRecipe r = new ModRecipe(mod);
+            Recipe r = Recipe.Create(PlaceItems[0].Item.type, 1);
             r.AddIngredient(ModContent.ItemType<PneumaticActuatorItem>(), 1);
             r.AddIngredient(ItemID.OutletPump, 1);
-            r.SetResult(PlaceItems[0].item.type, 1);
             r.AddTile(TileID.WorkBenches);
-            r.AddRecipe();
+            r.Register();
         }
     }
 }

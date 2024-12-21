@@ -12,12 +12,13 @@ using Terraria.ObjectData;
 
 namespace MechTransfer.Tiles
 {
+    [Autoload(false)]
     public class SmallButtonTile : SimpleTileObject, INetHandler
     {
-        public override void SetDefaults()
+        public override void PostSetDefaults()
         {
             AddMapEntry(new Color(213, 203, 204), GetPlaceItem(0).DisplayName); //Same as switch
-            base.SetDefaults();
+            base.PostSetDefaults();
         }
 
         protected override void SetTileObjectData()
@@ -45,12 +46,14 @@ namespace MechTransfer.Tiles
 
         public override void MouseOver(int i, int j)
         {
-            Main.LocalPlayer.showItemIcon = true;
-            Main.LocalPlayer.showItemIcon2 = PlaceItems[0].item.type;
+            // TODO
+            // Main.LocalPlayer.showItemIcon = true;
+            // Main.LocalPlayer.showItemIcon2 = PlaceItems[0].Item.type;
+            
             Main.LocalPlayer.noThrow = 2;
         }
 
-        public override bool NewRightClick(int i, int j)
+        public override bool RightClick(int i, int j)
         {
             if (Main.netMode == 0)
             {
@@ -58,14 +61,16 @@ namespace MechTransfer.Tiles
             }
             else
             {
-                ModPacket packet = NetRouter.GetPacketTo(this, mod);
+                ModPacket packet = NetRouter.GetPacketTo(this, Mod);
                 packet.Write((Int16)i);
                 packet.Write((Int16)j);
                 packet.Send();
             }
             ModContent.GetInstance<ButtonDelayWorld>().setPoint(new Point16(i, j));
 
-            Main.PlaySound(SoundID.MenuTick);
+            // TODO: Figure out how to play sound.
+            // Main.PlaySound(SoundID.MenuTick);
+
 			return true;
         }
 
@@ -79,23 +84,21 @@ namespace MechTransfer.Tiles
 
         public override void PostLoad()
         {
-            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(mod, "SmallButtonItem", Type, 20, 20, 0, Item.sellPrice(0, 0, 4, 0));
-            PlaceItems[0].item.rare = ItemRarityID.White;
+            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(Mod, "SmallButtonItem", Type, 20, 20, 0, Item.sellPrice(0, 0, 4, 0));
+            PlaceItems[0].Item.rare = ItemRarityID.White;
 
             NetRouter.AddHandler(this);
         }
 
         public override void AddRecipes()
         {
-            ModRecipe r = new ModRecipe(mod);
+            Recipe r = Recipe.Create(PlaceItems[0].Item.type, 1);
             r.AddIngredient(ItemID.Switch, 1);
-            r.SetResult(PlaceItems[0], 1);
-            r.AddRecipe();
+            r.Register();
 
-            r = new ModRecipe(mod);
+            r = Recipe.Create(ItemID.Switch, 1);
             r.AddIngredient(PlaceItems[0], 1);
-            r.SetResult(ItemID.Switch, 1);
-            r.AddRecipe();
+            r.Register();
         }
 
         public void HandlePacket(BinaryReader reader, int WhoAmI)

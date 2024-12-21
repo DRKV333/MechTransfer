@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.GameContent.UI;
 using Terraria.GameContent.UI.Elements;
 using Terraria.Localization;
@@ -32,10 +33,10 @@ namespace MechTransfer.UI
             panel.Left.Set(0, 0);
             panel.Top.Set(25, 0);
             panel.Width.Set(200, 0);
-            panel.Height.Set(Main.inventoryBackTexture.Height * 0.5f * Main.UIScale + 10, 0);
+            panel.Height.Set(TextureAssets.InventoryBack.Value.Height * 0.5f * Main.UIScale + 10, 0);
 
             itemText = new UIText(Language.GetTextValue(NotSetTextKey));
-            itemText.Left.Set(Main.inventoryBackTexture.Width * 0.5f * Main.UIScale, 0);
+            itemText.Left.Set(TextureAssets.InventoryBack.Value.Width * 0.5f * Main.UIScale, 0);
             itemText.Top.Set(0, 0);
             panel.Append(itemText);
 
@@ -52,7 +53,7 @@ namespace MechTransfer.UI
             fakeInv[10] = type;
             itemText.SetText(type.IsAir ? Language.GetTextValue(NotSetTextKey) : fakeInv[10].Name);
             itemText.TextColor = type.IsAir ? Color.Red : ItemRarity.GetColor(fakeInv[10].rare);
-            panel.Width.Pixels = itemText.MinWidth.Pixels + Main.inventoryBackTexture.Width * 0.5f * Main.UIScale + 20;
+            panel.Width.Pixels = itemText.MinWidth.Pixels + TextureAssets.InventoryBack.Value.Width * 0.5f * Main.UIScale + 20;
 
             Vector2 pos = Vector2.Transform(Main.MouseScreen, Main.GameViewMatrix.TransformationMatrix);
 

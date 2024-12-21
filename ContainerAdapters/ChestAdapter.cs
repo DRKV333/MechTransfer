@@ -20,20 +20,21 @@ namespace MechTransfer.ContainerAdapters
         private int FindChest(int x, int y)
         {
             Tile tile = Main.tile[x, y];
-            if (tile == null || !tile.active())
+            if (tile == null || !tile.HasTile)
                 return -1;
 
             int originX = x;
             int originY = y;
 
-            if (TileLoader.IsDresser(tile.type))
-                originX -= tile.frameX % 54 / 18;
-            else
-                originX -= tile.frameX % 36 / 18;
+            // TODO ???
+            // if (TileLoader.IsDresser(tile.TileType))
+            //     originX -= tile.TileFrameX % 54 / 18;
+            // else
+                originX -= tile.TileFrameX% 36 / 18;
 
-            originY -= tile.frameY % 36 / 18;
+            originY -= tile.TileFrameY % 36 / 18;
 
-            if (!Chest.isLocked(originX, originY))
+            if (!Chest.IsLocked(originX, originY))
                 return Chest.FindChest(originX, originY);
             else
                 return -1;
@@ -147,7 +148,9 @@ namespace MechTransfer.ContainerAdapters
         {
             Main.LocalPlayer.chest = -1;
             Recipe.FindRecipes();
-            Main.PlaySound(SoundID.MenuClose);
+
+            // TODO: Figure out how to play sound.
+            // Main.PlaySound(SoundID.MenuClose);
         }
     }
 }

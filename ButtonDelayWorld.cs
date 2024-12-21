@@ -3,7 +3,7 @@ using Terraria.ModLoader;
 
 namespace MechTransfer
 {
-    internal class ButtonDelayWorld : ModWorld
+    internal class ButtonDelayWorld : ModSystem
     {
         private Point16? buttonPosition = null;
         private int delay;

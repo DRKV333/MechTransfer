@@ -176,9 +176,9 @@ namespace MechTransfer
 
             foreach (var item in catalogs)
             {
-                if (recipe.useWood(item.Key, type) || recipe.useSand(item.Key, type) || recipe.useIronBar(item.Key, type)
-                    || recipe.useFragment(item.Key, type) || recipe.AcceptedByItemGroups(item.Key, type) || recipe.usePressurePlate(item.Key, type)
-                    || item.Key == type)
+                // useWood, useSand, useIronBar, useFragment and usePressurePlate are no longer accessible,
+                // but tModLoader convers to item groups now, so this should be fine.
+                if (recipe.AcceptedByItemGroups(item.Key, type) || item.Key == type)
                 {
                     int total = item.Value.Total();
                     if (total >= need)

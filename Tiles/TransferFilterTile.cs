@@ -10,20 +10,21 @@ using Terraria.ObjectData;
 
 namespace MechTransfer.Tiles
 {
+    [Autoload(false)]
     public class TransferFilterTile : FilterableTile<TransferFilterTileEntity>, ITransferPassthrough
     {
         private Dictionary<int, ItemFilterItem> filterItems = new Dictionary<int, ItemFilterItem>();
 
         private HashSet<int> Bags;
 
-        public override void SetDefaults()
+        public override void PostSetDefaults()
         {
             AddMapEntry(MapColors.Passthrough, GetPlaceItem(0).DisplayName);
 
             ModContent.GetInstance<TransferAgent>().passthroughs.Add(Type, this);
             ModContent.GetInstance<TransferPipeTile>().connectedTiles.Add(Type);
 
-            base.SetDefaults();
+            base.PostSetDefaults();
         }
 
         protected override void SetTileObjectData()
@@ -41,14 +42,14 @@ namespace MechTransfer.Tiles
                 ItemFilterItem filterItem;
                 if (filterItems.TryGetValue(TE.item.type, out filterItem))
                 {
-                    if (Main.tile[location.X, location.Y].frameY == 0)
+                    if (Main.tile[location.X, location.Y].TileFrameY == 0)
                         return filterItem.MatchesItem(item);
                     else
                         return !filterItem.MatchesItem(item);
                 }
                 else
                 {
-                    if (Main.tile[location.X, location.Y].frameY == 0)
+                    if (Main.tile[location.X, location.Y].TileFrameY == 0)
                         return TE.item.type == item.type;
                     else
                         return TE.item.type != item.type;
@@ -60,7 +61,7 @@ namespace MechTransfer.Tiles
         public override string HoverText(TransferFilterTileEntity entity)
         {
             Tile tile = Main.tile[entity.Position.X, entity.Position.Y];
-            if (tile.frameY == 0)
+            if (tile.TileFrameY == 0)
                 return Language.GetTextValue("Mods.MechTransfer.UI.Hover.TransferFilterItem");
             else
                 return Language.GetTextValue("Mods.MechTransfer.UI.Hover.InverseTransferFilterItem");
@@ -76,10 +77,10 @@ namespace MechTransfer.Tiles
             PlaceItems = new ModItem[2];
 
             //Filter
-            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(mod, "TransferFilterItem", Type, 16, 16, 0);
+            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(Mod, "TransferFilterItem", Type, 16, 16, 0);
 
             //InverseFilter
-            PlaceItems[1] = SimplePrototypeItem.MakePlaceable(mod, "InverseTransferFilterItem", Type, 16, 16, 1);
+            PlaceItems[1] = SimplePrototypeItem.MakePlaceable(Mod, "InverseTransferFilterItem", Type, 16, 16, 1);
 
             LoadFilters();
         }
@@ -87,30 +88,26 @@ namespace MechTransfer.Tiles
         public override void AddRecipes()
         {
             //Filter
-            ModRecipe r = new ModRecipe(mod);
+            Recipe r = Recipe.Create(PlaceItems[0].Item.type, 1);
             r.AddIngredient(ModContent.ItemType<PneumaticActuatorItem>(), 1);
             r.AddIngredient(ItemID.Actuator, 1);
             r.AddIngredient(ItemID.ItemFrame, 1);
             r.AddTile(TileID.WorkBenches);
-            r.SetResult(PlaceItems[0], 1);
-            r.AddRecipe();
-            ModRecipe r2 = new ModRecipe(mod);
+            r.Register();
+            Recipe r2 = Recipe.Create(PlaceItems[0].Item.type, 1);
             r2.AddIngredient(PlaceItems[1]);
-            r2.SetResult(PlaceItems[0], 1);
-            r2.AddRecipe();
+            r2.Register();
 
             //InverseFilter
-            r = new ModRecipe(mod);
+            r = Recipe.Create(PlaceItems[1].Item.type, 1);
             r.AddIngredient(ModContent.ItemType<PneumaticActuatorItem>(), 1);
             r.AddIngredient(ItemID.Actuator, 1);
             r.AddIngredient(ItemID.ItemFrame, 1);
             r.AddTile(TileID.WorkBenches);
-            r.SetResult(PlaceItems[1], 1);
-            r.AddRecipe();
-            r2 = new ModRecipe(mod);
+            r.Register();
+            r2 = Recipe.Create(PlaceItems[1].Item.type, 1);
             r2.AddIngredient(PlaceItems[0]);
-            r2.SetResult(PlaceItems[1], 1);
-            r2.AddRecipe();
+            r2.Register();
 
             LoadBagFilter();
             //LogFilterTets();
@@ -118,16 +115,21 @@ namespace MechTransfer.Tiles
 
         private ItemFilterItem createFilter(string type, int recipeItem, ItemFilterItem.MatchConditionn condition)
         {
-            ItemFilterItem i = new ItemFilterItem(condition);
+            ItemFilterItem i = new ItemFilterItem(type + "FilterItem", condition);
             i.recipeItem = recipeItem;
-            mod.AddItem(type + "FilterItem", i);
+            Mod.AddContent(i);
+
+            // TODO: Not sure how to do this with the "overhauled" localization system.
+
+            /*
             if (Main.halloween && type == "Dye")
             {
-                i.DisplayName.SwapTranslation(mod.GetModTranslation("Mods.MechTransfer.EasterEgg.ItemName.DyeFilterItem"));
+                i.DisplayName.SwapTranslation(Mod.GetModTranslation("Mods.MechTransfer.EasterEgg.ItemName.DyeFilterItem"));
             }
-            i.Tooltip.SwapTranslation(mod.GetModTranslation("Mods.MechTransfer.Common.ItemTooltip.FilterItem"));
+            i.Tooltip.SwapTranslation(Mod.GetModTranslation("Mods.MechTransfer.Common.ItemTooltip.FilterItem"));
+            */
 
-            filterItems.Add(i.item.type, i);
+            filterItems.Add(i.Item.type, i);
 
             return i;
         }
@@ -167,11 +169,11 @@ namespace MechTransfer.Tiles
             createFilter("Tool", ItemID.CopperPickaxe, x => x.pick > 0 || x.axe > 0 || x.hammer > 0);
             createFilter("Weapon", ItemID.CopperShortsword, x => x.damage > 0 && x.pick == 0 && x.axe == 0 && x.hammer == 0);
 
-            createFilter("Melee", ItemID.CopperShortsword, x => x.melee);
-            createFilter("Magic", ItemID.LesserManaPotion, x => x.magic);
-            createFilter("Ranged", ItemID.WoodenBow, x => x.ranged);
-            createFilter("Summon", ItemID.SummoningPotion, x => x.summon);
-            createFilter("Thrown", ItemID.Shuriken, x => x.thrown);
+            createFilter("Melee", ItemID.CopperShortsword, x => x.DamageType == DamageClass.Melee);
+            createFilter("Magic", ItemID.LesserManaPotion, x => x.DamageType == DamageClass.Magic);
+            createFilter("Ranged", ItemID.WoodenBow, x => x.DamageType == DamageClass.Ranged);
+            createFilter("Summon", ItemID.SummoningPotion, x => x.DamageType == DamageClass.Summon);
+            createFilter("Thrown", ItemID.Shuriken, x => x.DamageType == DamageClass.Throwing);
 
             createFilter("Consumable", ItemID.PumpkinPie, x => x.consumable);
             createFilter("Material", ItemID.Wood, x => x.material);
@@ -184,46 +186,52 @@ namespace MechTransfer.Tiles
 
         private void LoadBagFilter()
         {
-            Bags = new HashSet<int>();
+            Bags =
+            [
+                ItemID.HerbBag,
 
-            Bags.Add(ItemID.HerbBag);
+                ItemID.GoodieBag,
+                ItemID.Present,
+                ItemID.BluePresent,
+                ItemID.GreenPresent,
+                ItemID.YellowPresent,
 
-            Bags.Add(ItemID.GoodieBag);
-            Bags.Add(ItemID.Present);
-            Bags.Add(ItemID.BluePresent);
-            Bags.Add(ItemID.GreenPresent);
-            Bags.Add(ItemID.YellowPresent);
+                ItemID.KingSlimeBossBag,
+                ItemID.EyeOfCthulhuBossBag,
+                ItemID.EaterOfWorldsBossBag,
+                ItemID.BrainOfCthulhuBossBag,
+                ItemID.QueenBeeBossBag,
+                ItemID.DeerclopsBossBag,
+                ItemID.WallOfFleshBossBag,
+                ItemID.SkeletronBossBag,
+                ItemID.DestroyerBossBag,
+                ItemID.TwinsBossBag,
+                ItemID.SkeletronPrimeBossBag,
+                ItemID.PlanteraBossBag,
+                ItemID.GolemBossBag,
+                ItemID.FishronBossBag,
+                ItemID.CultistBossBag,
+                ItemID.MoonLordBossBag,
+                ItemID.BossBagBetsy,
+                ItemID.FairyQueenBossBag,
+                ItemID.QueenSlimeBossBag,
+                ItemID.BossBagDarkMage,
+                ItemID.BossBagOgre,
 
-            Bags.Add(ItemID.KingSlimeBossBag);
-            Bags.Add(ItemID.EyeOfCthulhuBossBag);
-            Bags.Add(ItemID.EaterOfWorldsBossBag);
-            Bags.Add(ItemID.BrainOfCthulhuBossBag);
-            Bags.Add(ItemID.QueenBeeBossBag);
-            Bags.Add(ItemID.WallOfFleshBossBag);
-            Bags.Add(ItemID.SkeletronBossBag);
-            Bags.Add(ItemID.DestroyerBossBag);
-            Bags.Add(ItemID.TwinsBossBag);
-            Bags.Add(ItemID.SkeletronPrimeBossBag);
-            Bags.Add(ItemID.PlanteraBossBag);
-            Bags.Add(ItemID.GolemBossBag);
-            Bags.Add(ItemID.FishronBossBag);
-            Bags.Add(ItemID.CultistBossBag);
-            Bags.Add(ItemID.MoonLordBossBag);
-            Bags.Add(ItemID.BossBagBetsy);
-            Bags.Add(ItemID.BossBagDarkMage);
-            Bags.Add(ItemID.BossBagOgre);
+                ItemID.LockBox,
+                ItemID.WoodenCrate,
+                ItemID.IronCrate,
+                ItemID.GoldenCrate,
+                ItemID.JungleFishingCrate,
+                ItemID.FloatingIslandFishingCrate,
+                ItemID.CorruptFishingCrate,
+                ItemID.CrimsonFishingCrate,
+                ItemID.HallowedFishingCrate,
+                ItemID.DungeonFishingCrate,
+            ];
 
-            Bags.Add(ItemID.LockBox);
-            Bags.Add(ItemID.WoodenCrate);
-            Bags.Add(ItemID.IronCrate);
-            Bags.Add(ItemID.GoldenCrate);
-            Bags.Add(ItemID.JungleFishingCrate);
-            Bags.Add(ItemID.FloatingIslandFishingCrate);
-            Bags.Add(ItemID.CorruptFishingCrate);
-            Bags.Add(ItemID.CrimsonFishingCrate);
-            Bags.Add(ItemID.HallowedFishingCrate);
-            Bags.Add(ItemID.DungeonFishingCrate);
-
+            // TODO: How do modded boss bags work?
+            /*
             for (int i = 0; i < ItemLoader.ItemCount; i++)
             {
                 ModItem item = ItemLoader.GetItem(i);
@@ -232,27 +240,28 @@ namespace MechTransfer.Tiles
                     Bags.Add(i);
                 }
             }
+            */
         }
 
         private void LogFilterTets()
         {
-            mod.Logger.Debug("---BEGIN FILTER LISTING---");
+            Mod.Logger.Debug("---BEGIN FILTER LISTING---");
             foreach (var item in filterItems)
             {
 				//if (item.Value.Name != "BagFilterItem")
 				//    continue;
 
-				mod.Logger.Debug("----" + item.Value.DisplayName.GetDefault());
+				Mod.Logger.Debug("----" + item.Value.DisplayName.Value);
                 for (int i = 0; i < ItemLoader.ItemCount; i++)
                 {
                     Item testItem = new Item();
                     testItem.SetDefaults(i);
 
                     if (item.Value.MatchesItem(testItem))
-						mod.Logger.Debug(testItem.Name);
+						Mod.Logger.Debug(testItem.Name);
                 }
             }
-			mod.Logger.Debug("---END FILTER LISTING---");
+			Mod.Logger.Debug("---END FILTER LISTING---");
         }
     }
 }

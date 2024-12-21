@@ -7,10 +7,10 @@ namespace MechTransfer.Items
     {
         public override void SetDefaults()
         {
-            item.width = 26;
-            item.height = 26;
-            item.maxStack = 999;
-            item.value = Item.buyPrice(0, 0, 50, 0);
+            Item.width = 26;
+            Item.height = 26;
+            Item.maxStack = 999;
+            Item.value = Item.buyPrice(0, 0, 50, 0);
         }
     }
 }

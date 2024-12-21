@@ -1,14 +1,10 @@
-﻿using MagicStorage;
-using MagicStorage.Components;
-using System;
-using System.Collections.Generic;
-using Terraria;
-using Terraria.DataStructures;
-
-namespace MechTransfer.ContainerAdapters
+﻿namespace MechTransfer.ContainerAdapters
 {
     internal class MagicStorageInterfaceAdapter
     {
+        // TODO
+
+        /*
         private TEStorageHeart FindHeart(int x, int y)
         {
             Tile tile = Main.tile[x, y];
@@ -80,5 +76,6 @@ namespace MechTransfer.ContainerAdapters
 
             HandleStorageItemChange(targetHeart);
         }
+        */
     }
 }

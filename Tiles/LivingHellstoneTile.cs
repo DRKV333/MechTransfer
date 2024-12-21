@@ -6,23 +6,23 @@ using Terraria.ID;
 
 namespace MechTransfer.Tiles
 {
+    [Autoload(false)]
     public class LivingHellstoneTile : SimplePlaceableTile
     {
-        public override void SetDefaults()
+        public override void PostSetDefaults()
         {
             Main.tileSolid[Type] = true;
             Main.tileBlockLight[Type] = true;
             Main.tileLighted[Type] = true;
-            TileID.Sets.TouchDamageHot[Type] = 20;
+            TileID.Sets.TouchDamageHot[Type] = true;
 
-            animationFrameHeight = 90;
+            AnimationFrameHeight = 90;
 
-            dustType = 6;
-            soundType = 21;
-            soundStyle = 1;
-            mineResist = 2;
+            DustType = 6;
+            HitSound = SoundID.Tink;
+            MineResist = 2;
 
-            base.SetDefaults();
+            base.PostSetDefaults();
         }
 
         public override void AnimateTile(ref int frame, ref int frameCounter)
@@ -47,21 +47,20 @@ namespace MechTransfer.Tiles
 
         public override void PostLoad()
         {
-            PlaceItem = SimplePrototypeItem.MakePlaceable(mod, "LivingHellstoneItem", Type);
-            PlaceItem.item.rare = ItemRarityID.Green;
-            PlaceItem.item.mech = false;
+            PlaceItem = SimplePrototypeItem.MakePlaceable(Mod, "LivingHellstoneItem", Type);
+            PlaceItem.Item.rare = ItemRarityID.Green;
+            PlaceItem.Item.mech = false;
         }
 
 
         public override void AddRecipes()
         {
-            ModRecipe r = new ModRecipe(mod);
+            Recipe r = Recipe.Create(PlaceItem.Item.type, 1);
             r.AddIngredient(ItemID.HellstoneBar, 5);
             r.AddIngredient(ItemID.Obsidian, 5);
             r.AddIngredient(ItemID.LavaBucket, 1);
             r.AddTile(TileID.Anvils);
-            r.SetResult(PlaceItem.item.type, 1);
-            r.AddRecipe();
+            r.Register();
         }
     }
 }

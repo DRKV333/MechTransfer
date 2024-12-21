@@ -9,13 +9,14 @@ using Terraria.ObjectData;
 
 namespace MechTransfer.Tiles
 {
+    [Autoload(false)]
     public class PlayerInterfaceTile : SimpleTileObject
     {
-        public override void SetDefaults()
+        public override void PostSetDefaults()
         {
             AddMapEntry(MapColors.FillDark, GetPlaceItem(0).DisplayName);
 
-            base.SetDefaults();
+            base.PostSetDefaults();
         }
 
         protected override void SetTileObjectData()
@@ -31,20 +32,19 @@ namespace MechTransfer.Tiles
 
         public override void PostLoad()
         {
-            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(mod, "PlayerInterfaceItem", Type, 26, 26, 0, Item.sellPrice(0, 1, 0, 0));
-            PlaceItems[0].item.rare = ItemRarityID.LightRed;
+            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(Mod, "PlayerInterfaceItem", Type, 26, 26, 0, Item.sellPrice(0, 1, 0, 0));
+            PlaceItems[0].Item.rare = ItemRarityID.LightRed;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe r = new ModRecipe(mod);
-            r.AddIngredient(mod.PlaceItemType<TransferExtractorTile>(0), 1);
-            r.AddIngredient(mod.PlaceItemType<TransferInjectorTile>(0), 1);
+            Recipe r = Recipe.Create(PlaceItems[0].Item.type, 1);
+            r.AddIngredient(Mod.PlaceItemType<TransferExtractorTile>(0), 1);
+            r.AddIngredient(Mod.PlaceItemType<TransferInjectorTile>(0), 1);
             r.AddIngredient(ItemID.Mannequin, 1);
             r.AddIngredient(ItemID.Cog, 10);
             r.AddTile(TileID.WorkBenches);
-            r.SetResult(PlaceItems[0]);
-            r.AddRecipe();
+            r.Register();
         }
     }
 }

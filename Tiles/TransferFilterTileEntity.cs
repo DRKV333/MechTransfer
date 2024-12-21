@@ -15,19 +15,19 @@ namespace MechTransfer.Tiles
         {
             if (Main.netMode == 1)
             {
-                ModPacket packet = NetRouter.GetPacketTo(ModContent.GetInstance<TransferFilterTileEntity>(), mod);
+                ModPacket packet = NetRouter.GetPacketTo(ModContent.GetInstance<TransferFilterTileEntity>(), Mod);
                 packet.Write(ID);
-                packet.WriteItem(item);
+                ItemIO.Send(item, packet);
                 packet.Send();
             }
         }
 
-        public override TagCompound Save()
+        public override void SaveData(TagCompound tag)
         {
-            return new TagCompound() { { "Item", ItemIO.Save(item) } };
+            tag["item"] = ItemIO.Save(item);
         }
 
-        public override void Load(TagCompound tag)
+        public override void LoadData(TagCompound tag)
         {
             if (tag.ContainsKey("Item"))
             {
@@ -39,12 +39,12 @@ namespace MechTransfer.Tiles
             }
         }
 
-        public override void NetSend(BinaryWriter writer, bool lightSend)
+        public override void NetSend(BinaryWriter writer)
         {
             ItemIO.Send(item, writer);
         }
 
-        public override void NetReceive(BinaryReader reader, bool lightReceive)
+        public override void NetReceive(BinaryReader reader)
         {
             item = ItemIO.Receive(reader);
         }

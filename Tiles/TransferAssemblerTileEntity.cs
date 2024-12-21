@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using Stubble.Core.Classes;
+using System.IO;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -48,35 +49,34 @@ namespace MechTransfer.Tiles
             }
         }
 
-        public override TagCompound Save()
+        public override void SaveData(TagCompound tag)
         {
-            TagCompound tags = base.Save();
+            base.SaveData(tag);
             if (stock.stack > 0)
-                tags.Add("stck", ItemIO.Save(stock));
-            return tags;
+                tag.Add("stck", ItemIO.Save(stock));
         }
 
-        public override void Load(TagCompound tag)
+        public override void LoadData(TagCompound tag)
         {
             if (tag.ContainsKey("stck"))
                 stock = ItemIO.Load((TagCompound)tag["stck"]);
-            base.Load(tag);
+            base.LoadData(tag);
         }
 
-        public override void NetSend(BinaryWriter writer, bool lightSend)
+        public override void NetSend(BinaryWriter writer)
         {
-            base.NetSend(writer, lightSend);
+            base.NetSend(writer);
             writer.Write((byte)Status);
             writer.Write(MissingItemType);
-            writer.WriteItem(stock, true);
+            ItemIO.Send(stock, writer, true);
         }
 
-        public override void NetReceive(BinaryReader reader, bool lightReceive)
+        public override void NetReceive(BinaryReader reader)
         {
-            base.NetReceive(reader, lightReceive);
+            base.NetReceive(reader);
             Status = (StatusKind)reader.ReadByte();
             MissingItemType = reader.ReadInt32();
-            stock = reader.ReadItem(true);
+            stock = ItemIO.Receive(reader, true);
         }
     }
 }

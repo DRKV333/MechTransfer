@@ -6,6 +6,7 @@ namespace MechTransfer
 {
     internal static class LangUtils
     {
+        /*
         public static ModTranslation GetModTranslation(this Mod mod, string key)
         {
             IDictionary<string, ModTranslation> translations = (IDictionary<string, ModTranslation>)(typeof(Mod).GetField("translations", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(mod));
@@ -22,5 +23,6 @@ namespace MechTransfer
                     target.AddTranslation(i, translation);
             }
         }
+        */
     }
 }

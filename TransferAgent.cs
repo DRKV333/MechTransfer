@@ -10,7 +10,7 @@ using Terraria.ModLoader;
 
 namespace MechTransfer
 {
-    public class TransferAgent : ModWorld, INetHandler
+    public class TransferAgent : ModSystem, INetHandler
     {
         private class delayedTrip
         {
@@ -50,9 +50,9 @@ namespace MechTransfer
             catch (Exception e)
             {
                 Main.NewText("An exception has occurred at MechTransfer.TransferUtils.SearchForTarget (Please look at the log in Documents/My Games/Terraria/ModLoader/Logs)", Color.Red);
-                mod.Logger.Error("\nMechTransfer has logged an exception:");
-                mod.Logger.Error(e.ToString());
-                mod.Logger.Error("Please report it on the MechTransfer forum page.\n");
+                Mod.Logger.Error("\nMechTransfer has logged an exception:");
+                Mod.Logger.Error(e.ToString());
+                Mod.Logger.Error("Please report it on the MechTransfer forum page.\n");
             }
             finally
             {
@@ -96,12 +96,12 @@ namespace MechTransfer
                     visited.Add(searchP, (byte)dir);// 00000VDD
 
                     Tile tile = Main.tile[searchP.X, searchP.Y];
-                    if (tile == null || !tile.active())
+                    if (tile == null || !tile.HasTile)
                         continue;
 
                     //checking for targets
                     ITransferTarget target;
-                    if (!TargetTriggered.Contains(searchP) && targets.TryGetValue(tile.type, out target))
+                    if (!TargetTriggered.Contains(searchP) && targets.TryGetValue(tile.TileType, out target))
                     {
                         TargetTriggered.Add(searchP);
                         if (target.Receive(searchP, IToTransfer))
@@ -112,14 +112,14 @@ namespace MechTransfer
                         return;
 
                     //checking for pipes
-                    if (tile.type == unconditionalPassthroughType)
+                    if (tile.TileType == unconditionalPassthroughType)
                     {
                         searchQ.Enqueue(searchP);
                     }
                     else
                     {
                         ITransferPassthrough passthrough;
-                        if (passthroughs.TryGetValue(tile.type, out passthrough))
+                        if (passthroughs.TryGetValue(tile.TileType, out passthrough))
                         {
                             if (passthrough.ShouldPassthrough(searchP, IToTransfer))
                                 searchQ.Enqueue(searchP);
@@ -152,7 +152,7 @@ namespace MechTransfer
         {
             ContainerAdapterDefinition c;
             Tile tile = Main.tile[x, y];
-            if (tile != null && tile.active() && ContainerAdapters.TryGetValue(tile.type, out c))
+            if (tile != null && tile.HasTile && ContainerAdapters.TryGetValue(tile.TileType, out c))
                 return c.GetAdapter(x, y);
             return null;
         }
@@ -160,7 +160,7 @@ namespace MechTransfer
         public bool IsContainer(int x, int y)
         {
             Tile tile = Main.tile[x, y];
-            return (tile != null && tile.active() && ContainerAdapters.ContainsKey(tile.type));
+            return (tile != null && tile.HasTile && ContainerAdapters.ContainsKey(tile.TileType));
         }
 
         //trigger wire on the new update, to stop infinite wire loops
@@ -177,7 +177,7 @@ namespace MechTransfer
             wireTriggerQ.Add(trip);
         }
 
-        public override void PostUpdate()
+        public override void PostUpdateWorld()
         {
             List<delayedTrip> temp = wireTriggerQ;
             wireTriggerQ = new List<delayedTrip>();

@@ -6,11 +6,12 @@ using Terraria.ModLoader;
 
 namespace MechTransfer.Tiles.Simple
 {
+    [Autoload(false)]
     public class SimpleTileEntity : ModTileEntity
     {
         internal static Dictionary<int, int[]> validTiles;// :/
 
-        public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction)
+        public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternate)
         {
             if (Main.netMode == 1)
             {
@@ -21,19 +22,14 @@ namespace MechTransfer.Tiles.Simple
             return Place(i, j);
         }
 
-        public override bool ValidTile(int i, int j)
+        public override bool IsTileValidForEntity(int x, int y)
         {
-            Tile tile = Main.tile[i, j];
-            return tile != null && tile.active() && validTiles[Type].Contains(tile.type);
+            Tile tile = Main.tile[x, y];
+            return tile != null && tile.HasTile && validTiles[Type].Contains(tile.TileType);
         }
 
         public virtual void PostLoadPrototype()
         {
-        }
-
-        public override bool Autoload(ref string name)
-        {
-            return false;
         }
     }
 }

@@ -10,12 +10,13 @@ using Terraria.ObjectData;
 
 namespace MechTransfer.Tiles
 {
+    [Autoload(false)]
     public class OmniTurretTile : SimpleTileObject, INetHandler
     {
-        public override void SetDefaults()
+        public override void PostSetDefaults()
         {
             AddMapEntry(MapColors.FillLight, GetPlaceItem(0).DisplayName);
-            base.SetDefaults();
+            base.PostSetDefaults();
         }
 
         protected override void SetTileObjectData()
@@ -31,7 +32,7 @@ namespace MechTransfer.Tiles
             Rotate(i, j, true);
         }
 
-        public override bool NewRightClick(int i, int j)
+        public override bool RightClick(int i, int j)
         {
             if (Main.netMode == 1)
                 RequestRotate(i, j);
@@ -44,7 +45,7 @@ namespace MechTransfer.Tiles
         public void Rotate(int i, int j, bool skipWires)
         {
             Tile tile = Main.tile[i, j];
-            if (tile == null || !tile.active())
+            if (tile == null || !tile.HasTile)
                 return;
 
             Point16 originLoc = GetOrigin(i, j);
@@ -53,41 +54,41 @@ namespace MechTransfer.Tiles
             int TopY = originLoc.Y - 1;
 
             Tile origin = Main.tile[LeftX, TopY];
-            if (origin == null || !origin.active())
+            if (origin == null || !origin.HasTile)
                 return;
 
-            if (tile.frameX % 36 == 0)
+            if (tile.TileFrameX % 36 == 0)
             {
-                if (origin.frameY > 0 && origin.frameY < 228)
+                if (origin.TileFrameY > 0 && origin.TileFrameY < 228)
                 {
-                    origin.frameY -= 38;
-                    Main.tile[LeftX + 1, TopY].frameY -= 38;
-                    Main.tile[LeftX, TopY + 1].frameY -= 38;
-                    Main.tile[LeftX + 1, TopY + 1].frameY -= 38;
+                    origin.TileFrameY -= 38;
+                    Main.tile[LeftX + 1, TopY].TileFrameY -= 38;
+                    Main.tile[LeftX, TopY + 1].TileFrameY -= 38;
+                    Main.tile[LeftX + 1, TopY + 1].TileFrameY -= 38;
                 }
-                else if (origin.frameY == 0)
+                else if (origin.TileFrameY == 0)
                 {
-                    origin.frameY = 228;
-                    Main.tile[LeftX + 1, TopY].frameY = 228;
-                    Main.tile[LeftX, TopY + 1].frameY = 246;
-                    Main.tile[LeftX + 1, TopY + 1].frameY = 246;
+                    origin.TileFrameY = 228;
+                    Main.tile[LeftX + 1, TopY].TileFrameY = 228;
+                    Main.tile[LeftX, TopY + 1].TileFrameY = 246;
+                    Main.tile[LeftX + 1, TopY + 1].TileFrameY = 246;
                 }
             }
             else
             {
-                if (origin.frameY < 190)
+                if (origin.TileFrameY < 190)
                 {
-                    origin.frameY += 38;
-                    Main.tile[LeftX + 1, TopY].frameY += 38;
-                    Main.tile[LeftX, TopY + 1].frameY += 38;
-                    Main.tile[LeftX + 1, TopY + 1].frameY += 38;
+                    origin.TileFrameY += 38;
+                    Main.tile[LeftX + 1, TopY].TileFrameY += 38;
+                    Main.tile[LeftX, TopY + 1].TileFrameY += 38;
+                    Main.tile[LeftX + 1, TopY + 1].TileFrameY += 38;
                 }
-                else if (origin.frameY == 228)
+                else if (origin.TileFrameY == 228)
                 {
-                    origin.frameY = 0;
-                    Main.tile[LeftX + 1, TopY].frameY = 0;
-                    Main.tile[LeftX, TopY + 1].frameY = 18;
-                    Main.tile[LeftX + 1, TopY + 1].frameY = 18;
+                    origin.TileFrameY = 0;
+                    Main.tile[LeftX + 1, TopY].TileFrameY = 0;
+                    Main.tile[LeftX, TopY + 1].TileFrameY = 18;
+                    Main.tile[LeftX + 1, TopY + 1].TileFrameY = 18;
                 }
             }
 
@@ -107,7 +108,7 @@ namespace MechTransfer.Tiles
 
         public void RequestRotate(int i, int j)
         {
-            ModPacket packet = NetRouter.GetPacketTo(this, mod);
+            ModPacket packet = NetRouter.GetPacketTo(this, Mod);
             packet.Write((Int16)i);
             packet.Write((Int16)j);
             packet.Send();
@@ -116,11 +117,12 @@ namespace MechTransfer.Tiles
         public override void MouseOver(int i, int j)
         {
             Tile tile = Main.tile[i, j];
-            if (tile == null || !tile.active())
+            if (tile == null || !tile.HasTile)
                 return;
 
-            Main.LocalPlayer.showItemIcon2 = PlaceItems[GetDropKind(tile.frameX, tile.frameY)].item.type;
-            Main.LocalPlayer.showItemIcon = true;
+            // TODO
+            // Main.LocalPlayer.showItemIcon2 = PlaceItems[GetDropKind(tile.TileFrameX, tile.TileFrameY)].item.type;
+            // Main.LocalPlayer.showItemIcon = true;
         }
 
         public override int GetDropKind(int Fx, int Fy)
@@ -135,16 +137,16 @@ namespace MechTransfer.Tiles
             int sell = Item.sellPrice(0, 1, 0, 0);
 
             //Omni turret
-            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(mod, "OmniTurretItem", Type, 32, 32, 0, sell);
-            PlaceItems[0].item.rare = ItemRarityID.Green;
+            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(Mod, "OmniTurretItem", Type, 32, 32, 0, sell);
+            PlaceItems[0].Item.rare = ItemRarityID.Green;
 
             //Super omni turret
-            PlaceItems[1] = SimplePrototypeItem.MakePlaceable(mod, "SuperOmniTurretItem", Type, 32, 32, 1, sell);
-            PlaceItems[1].item.rare = ItemRarityID.LightRed;
+            PlaceItems[1] = SimplePrototypeItem.MakePlaceable(Mod, "SuperOmniTurretItem", Type, 32, 32, 1, sell);
+            PlaceItems[1].Item.rare = ItemRarityID.LightRed;
 
             //Matter projector
-            PlaceItems[2] = SimplePrototypeItem.MakePlaceable(mod, "MatterProjectorItem", Type, 32, 32, 2, sell);
-            PlaceItems[2].item.rare = ItemRarityID.Cyan;
+            PlaceItems[2] = SimplePrototypeItem.MakePlaceable(Mod, "MatterProjectorItem", Type, 32, 32, 2, sell);
+            PlaceItems[2].Item.rare = ItemRarityID.Cyan;
 
             NetRouter.AddHandler(this);
         }
@@ -152,30 +154,27 @@ namespace MechTransfer.Tiles
         public override void AddRecipes()
         {
             //Omni turret
-            ModRecipe r = new ModRecipe(mod);
+            Recipe r = Recipe.Create(PlaceItems[0].Item.type, 1);
             r.AddIngredient(ModContent.ItemType<PneumaticActuatorItem>(), 5);
             r.AddIngredient(ItemID.IllegalGunParts, 1);
             r.AddIngredient(ItemID.DartTrap, 1);
             r.AddTile(TileID.WorkBenches);
-            r.SetResult(PlaceItems[0], 1);
-            r.AddRecipe();
+            r.Register();
 
             //Super omni turret
-            r = new ModRecipe(mod);
-            r.AddIngredient(mod.ItemType("OmniTurretItem"), 1);
+            r = Recipe.Create(PlaceItems[1].Item.type, 1);
+            r.AddIngredient(Mod.Find<ModItem>("OmniTurretItem"), 1);
             r.AddIngredient(ItemID.Cog, 10);
             r.AddTile(TileID.WorkBenches);
-            r.SetResult(PlaceItems[1], 1);
-            r.AddRecipe();
+            r.Register();
 
             //Matter projector
-            r = new ModRecipe(mod);
-            r.AddIngredient(mod.ItemType("SuperOmniTurretItem"), 1);
+            r = Recipe.Create(PlaceItems[2].Item.type, 1);
+            r.AddIngredient(Mod.Find<ModItem>("SuperOmniTurretItem"), 1);
             r.AddIngredient(ItemID.FragmentVortex, 5);
             r.AddIngredient(ItemID.LunarBar, 5);
             r.AddTile(TileID.LunarCraftingStation);
-            r.SetResult(PlaceItems[2], 1);
-            r.AddRecipe();
+            r.Register();
         }
 
         public void HandlePacket(BinaryReader reader, int WhoAmI)

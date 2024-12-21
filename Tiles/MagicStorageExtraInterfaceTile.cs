@@ -1,19 +1,20 @@
 ﻿using MechTransfer.Items;
 using MechTransfer.Tiles.Simple;
 using Terraria.DataStructures;
-using Terraria;
 using Terraria.Enums;
 using Terraria.ObjectData;
+using Terraria.ModLoader;
 
 namespace MechTransfer.Tiles
 {
+    [Autoload(false)]
     public class MagicStorageExtraInterfaceTile : SimpleTileObject
     {
-        public override void SetDefaults()
+        public override void PostSetDefaults()
         {
             AddMapEntry(MapColors.FillDark, GetPlaceItem(0).DisplayName);
 
-            base.SetDefaults();
+            base.PostSetDefaults();
         }
 
         protected override void SetTileObjectData()
@@ -27,7 +28,7 @@ namespace MechTransfer.Tiles
 
         public override void PostLoad()
         {
-            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(mod, "MagicStorageExtraInterfaceItem", Type, 32, 32);
+            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(Mod, "MagicStorageExtraInterfaceItem", Type, 32, 32);
         }
     }
 }

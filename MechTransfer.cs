@@ -2,7 +2,6 @@ using MechTransfer.ContainerAdapters;
 using MechTransfer.Items;
 using MechTransfer.Tiles;
 using MechTransfer.Tiles.Simple;
-using MechTransfer.UI;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,7 +10,6 @@ using System.Reflection;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.UI;
 using EnumerateItemsDelegate = System.Func<int, int, System.Collections.Generic.IEnumerable<System.Tuple<Terraria.Item, object>>>;
 using InjectItemDelegate = System.Func<int, int, Terraria.Item, bool>;
 using TakeItemDelegate = System.Action<int, int, object, int>;
@@ -24,23 +22,9 @@ namespace MechTransfer
         private const string registerAdapter = "RegisterAdapter";
         private const string registerAdapterReflection = "RegisterAdapterReflection";
 
-        private GameInterfaceLayer interfaceLayer;
-        public FilterHoverUI filterHoverUI;
-
         private List<Action> simpleTileAddRecipequeue;
 
         private Mod modMagicStorage = null;
-        private Mod modMagicStorageExtra = null;
-
-        public MechTransfer()
-        {
-            Properties = new ModProperties()
-            {
-                Autoload = true,
-                AutoloadGores = true,
-                AutoloadSounds = true
-            };
-        }
 
         public override object Call(params object[] args)
         {
@@ -155,8 +139,8 @@ namespace MechTransfer
 
         public override void Load()
         {
-            modMagicStorage = ModLoader.GetMod("MagicStorage");
-            modMagicStorageExtra = ModLoader.GetMod("MagicStorageExtra");
+            // TODO
+            // modMagicStorage = ModLoader.GetMod("MagicStorage");
 
             Assembly asm = Assembly.GetExecutingAssembly();
             simpleTileAddRecipequeue = new List<Action>();
@@ -170,7 +154,7 @@ namespace MechTransfer
                 if (item.IsSubclassOf(typeof(SimpleTile)))
                 {
                     SimpleTile tile = (SimpleTile)Activator.CreateInstance(item);
-                    AddTile(item.Name, tile, item.FullName.Replace('.', '/'));
+                    AddContent(tile);
                     tile.PostLoad();
                     simpleTileAddRecipequeue.Add(new Action(tile.AddRecipes));
 
@@ -190,7 +174,7 @@ namespace MechTransfer
                 if (item.IsSubclassOf(typeof(SimpleTileEntity)))
                 {
                     SimpleTileEntity TE = (SimpleTileEntity)Activator.CreateInstance(item);
-                    AddTileEntity(item.Name, TE);
+                    AddContent(TE);
 
                     if (TEValid.ContainsKey(item))
                     {
@@ -204,9 +188,6 @@ namespace MechTransfer
                     TE.PostLoadPrototype();
                 }
             }
-
-            if (!Main.dedServ)
-                LoadUI();
         }
 
         private bool IsTETile(Type type, out Type TEType)
@@ -233,34 +214,9 @@ namespace MechTransfer
             }
         }
 
-        public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
-        {
-            int index = layers.FindIndex(x => x.Name == "Vanilla: Mouse Text") + 1;
-            layers.Insert(index, interfaceLayer);
-
-            if (filterHoverUI.visible)
-            {
-                layers.Find(x => x.Name == "Vanilla: Interact Item Icon").Active = false;
-            }
-        }
-
         public override void PostSetupContent()
         {
             LoadAdapters();
-        }
-
-        private void LoadUI()
-        {
-            filterHoverUI = new FilterHoverUI();
-            filterHoverUI.Activate();
-
-            interfaceLayer = new LegacyGameInterfaceLayer("MechTransfer: UI",
-                                                            delegate
-                                                            {
-                                                                filterHoverUI.Draw(Main.spriteBatch);
-                                                                return true;
-                                                            },
-                                                            InterfaceScaleType.UI);
         }
 
         private void LoadAdapters()
@@ -303,13 +259,6 @@ namespace MechTransfer
                 MagicStorageInterfaceAdapter magicStorageInterfaceAdapter = new MagicStorageInterfaceAdapter();
                 Call(registerAdapterReflection, magicStorageInterfaceAdapter, new int[] { ModContent.TileType<MagicStorageInterfaceTile>() });
             }
-
-            if (modMagicStorageExtra != null)
-            {
-                //Magic storage extra interface
-                MagicStorageExtraInterfaceAdapter magicStorageExtraInterfaceAdapter = new MagicStorageExtraInterfaceAdapter();
-                Call(registerAdapterReflection, magicStorageExtraInterfaceAdapter, new int[] { ModContent.TileType<MagicStorageExtraInterfaceTile>() });
-            }
         }
 
         //This needs to be called from SetupRecipies, because chests are made in SetupContent.
@@ -319,7 +268,8 @@ namespace MechTransfer
             List<int> chestTypes = new List<int>();
             for (int i = 0; i < TileLoader.TileCount; i++)
             {
-                if (TileID.Sets.BasicChest[i] || TileID.Sets.BasicChestFake[i] || TileLoader.IsDresser(i))
+                // TODO: TileLoader.IsDresser?
+                if (TileID.Sets.BasicChest[i] || TileID.Sets.BasicChestFake[i])
                 {
                     chestTypes.Add(i);
                 }
@@ -338,25 +288,12 @@ namespace MechTransfer
             if (modMagicStorage != null)
             {
                 //Magic storage interface
-                ModRecipe r = new ModRecipe(this);
-                r.AddIngredient(modMagicStorage.ItemType("StorageComponent"));
+                Recipe r = Recipe.Create(Find<ModItem>("MagicStorageInterfaceItem").Item.type);
+                r.AddIngredient(modMagicStorage.Find<ModItem>("StorageComponent"));
                 r.AddRecipeGroup("MagicStorage:AnyDiamond", 1);
                 r.AddIngredient(ModContent.ItemType<PneumaticActuatorItem>(), 1);
                 r.AddTile(TileID.WorkBenches);
-                r.SetResult(ItemType("MagicStorageInterfaceItem"));
-                r.AddRecipe();
-            }
-
-            if (modMagicStorageExtra != null)
-            {
-                //Magic storage extra interface
-                ModRecipe r = new ModRecipe(this);
-                r.AddIngredient(modMagicStorageExtra.ItemType("StorageComponent"));
-                r.AddRecipeGroup("MagicStorageExtra:AnyDiamond", 1);
-                r.AddIngredient(ModContent.ItemType<PneumaticActuatorItem>(), 1);
-                r.AddTile(TileID.WorkBenches);
-                r.SetResult(ItemType("MagicStorageExtraInterfaceItem"));
-                r.AddRecipe();
+                r.Register();
             }
 
             LoadChestAdapters();
@@ -389,12 +326,12 @@ namespace MechTransfer
 
         public static int PlaceItemType<T>(this Mod mod) where T : SimplePlaceableTile
         {
-            return GetPlaceItem<T>(mod).item.type;
+            return GetPlaceItem<T>(mod).Item.type;
         }
 
         public static int PlaceItemType<T>(this Mod mod, int style) where T : SimpleTileObject
         {
-            return GetPlaceItem<T>(mod, style).item.type;
+            return GetPlaceItem<T>(mod, style).Item.type;
         }
     }
 }

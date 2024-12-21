@@ -1,13 +1,15 @@
 ﻿using MechTransfer.Tiles.Simple;
+using MechTransfer.UI;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Localization;
+using Terraria.ModLoader;
 
 namespace MechTransfer.Tiles
 {
     public abstract class FilterableTile<T> : SimpleTETile<T> where T : TransferFilterTileEntity
     {
-        public override bool NewRightClick(int i, int j)
+        public override bool RightClick(int i, int j)
         {
             if (!Main.LocalPlayer.HeldItem.IsAir)
             {
@@ -38,7 +40,7 @@ namespace MechTransfer.Tiles
         {
             T entity;
             if (TryGetEntity(i, j, out entity))
-                ((MechTransfer)mod).filterHoverUI.Display(entity.item, HoverText(entity), HoverColor(entity));
+                ModContent.GetInstance<UIModSystem>().filterHoverUI.Display(entity.item, HoverText(entity), HoverColor(entity));
         }
 
         public virtual string HoverText(T entity)

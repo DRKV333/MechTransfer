@@ -17,11 +17,11 @@ namespace MechTransfer.Tiles.Simple
         protected bool simpleHeigth;
         protected bool OneByOne;
 
-        public override void SetDefaults()
+        public override void PostSetDefaults()
         {
             Main.tileFrameImportant[Type] = true;
             Main.tileNoFail[Type] = true;
-            dustType = 1;
+            DustType = 1;
 
             TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
             SetTileObjectData();
@@ -43,7 +43,7 @@ namespace MechTransfer.Tiles.Simple
 
         public int GetStyle(Tile tile)
         {
-            return GetDropKind(tile.frameX, tile.frameY);
+            return GetDropKind(tile.TileFrameX, tile.TileFrameY);
         }
 
         public virtual int GetDropKind(int Fx, int Fy)
@@ -61,19 +61,19 @@ namespace MechTransfer.Tiles.Simple
             if (OneByOne && !effectOnly && !noItem)
             {
                 Tile tile = Main.tile[i, j];
-                DropItem(i, j, tile.frameX, tile.frameY);
+                DropItem(i, j, tile.TileFrameX, tile.TileFrameY);
             }
         }
 
         protected virtual void DropItem(int i, int j, int Fx, int Fy)
         {
-            Item.NewItem(new Rectangle(i * 16, j * 16, 16, 16), PlaceItems[GetDropKind(Fx, Fy)].item.type);
+            Item.NewItem(null, new Rectangle(i * 16, j * 16, 16, 16), PlaceItems[GetDropKind(Fx, Fy)].Item.type);
         }
 
         public Point16 GetOrigin(int x, int y)
         {
             Tile tile = Main.tile[x, y];
-            return GetOrigin(x, y, tile.frameX, tile.frameY);
+            return GetOrigin(x, y, tile.TileFrameX, tile.TileFrameY);
         }
 
         public Point16 GetOrigin(int x, int y, int Fx, int Fy)

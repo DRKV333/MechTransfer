@@ -5,8 +5,11 @@ using Terraria.ModLoader;
 
 namespace MechTransfer.Items
 {
+    [Autoload(false)]
     public class SimplePrototypeItem : ModItem
     {
+        public override string Name { get; }
+
         [Obsolete("Manually using this constructor makes no sense")]
         public SimplePrototypeItem()
         {
@@ -15,45 +18,42 @@ namespace MechTransfer.Items
 
         public SimplePrototypeItem(Mod mod, string name)
         {
-            mod.AddItem(name, this);
+            Name = name;
+            mod.AddContent(this);
         }
 
         public override ModItem NewInstance(Item itemClone)
         {
             ModItem newModItem = base.NewInstance(itemClone);
-            CopyItemFields(itemClone, item);
+            CopyItemFields(itemClone, Item);
             return newModItem;
         }
 
-        public override bool Autoload(ref string name)
-        {
-            return false;
-        }
-
+        // TODO
         //Needed to stop ModLoader from assigning a default display name
-        public override void AutoStaticDefaults()
+        /*public override void AutoStaticDefaults()
         {
             Main.itemTexture[item.type] = ModContent.GetTexture(Texture);
-        }
+        }*/
 
         public static SimplePrototypeItem MakePlaceable(Mod mod, string name, int placeType, int width = 16, int height = 16, int placeStyle = 0, int value = 50000)
         {
             SimplePrototypeItem i = new SimplePrototypeItem(mod, name);
 
-            i.item.width = width;
-            i.item.height = height;
-            i.item.value = value;
-            i.item.maxStack = 999;
-            i.item.useTurn = true;
-            i.item.autoReuse = true;
-            i.item.useAnimation = 15;
-            i.item.useTime = 10;
-            i.item.useStyle = 1;
-            i.item.consumable = true;
-            i.item.mech = true;
-            i.item.createTile = placeType;
-            i.item.placeStyle = placeStyle;
-            i.item.rare = ItemRarityID.Blue;
+            i.Item.width = width;
+            i.Item.height = height;
+            i.Item.value = value;
+            i.Item.maxStack = 999;
+            i.Item.useTurn = true;
+            i.Item.autoReuse = true;
+            i.Item.useAnimation = 15;
+            i.Item.useTime = 10;
+            i.Item.useStyle = 1;
+            i.Item.consumable = true;
+            i.Item.mech = true;
+            i.Item.createTile = placeType;
+            i.Item.placeStyle = placeStyle;
+            i.Item.rare = ItemRarityID.Blue;
 
             return i;
         }
@@ -73,7 +73,6 @@ namespace MechTransfer.Items
             i.expert = j.expert;
             i.expertOnly = j.expertOnly;
             i.instanced = j.instanced;
-            i.thrown = j.thrown;
             i.questItem = j.questItem;
             i.fishingPole = j.fishingPole;
             i.bait = j.bait;
@@ -88,10 +87,6 @@ namespace MechTransfer.Items
             i.mech = j.mech;
             i.flame = j.flame;
             i.reuseDelay = j.reuseDelay;
-            i.melee = j.melee;
-            i.magic = j.magic;
-            i.ranged = j.ranged;
-            i.summon = j.summon;
             i.placeStyle = j.placeStyle;
             i.buffTime = j.buffTime;
             i.buffType = j.buffType;
@@ -106,7 +101,6 @@ namespace MechTransfer.Items
             i.lavaWet = j.lavaWet;
             i.channel = j.channel;
             i.manaIncrease = j.manaIncrease;
-            i.release = j.release;
             i.noMelee = j.noMelee;
             i.noUseGraphic = j.noUseGraphic;
             i.lifeRegen = j.lifeRegen;

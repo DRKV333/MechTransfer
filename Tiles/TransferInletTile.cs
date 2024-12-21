@@ -9,9 +9,10 @@ using Terraria.ObjectData;
 
 namespace MechTransfer.Tiles
 {
+    [Autoload(false)]
     public class TransferInletTile : SimpleTETile<TransferInletTileEntity>, ITransferPassthrough
     {
-        public override void SetDefaults()
+        public override void PostSetDefaults()
         {
             Main.tileSolid[Type] = true;
 			ModContent.GetInstance<ChestPlacementFix>().AddNoChestTile(Type);
@@ -21,7 +22,7 @@ namespace MechTransfer.Tiles
             ModContent.GetInstance<TransferAgent>().passthroughs.Add(Type, this);
             ModContent.GetInstance<TransferPipeTile>().connectedTiles.Add(Type);
 
-            base.SetDefaults();
+            base.PostSetDefaults();
         }
 
         protected override void SetTileObjectData()
@@ -41,28 +42,29 @@ namespace MechTransfer.Tiles
         public bool ShouldPassthrough(Point16 location, Item item)
         {
             Tile tile = Main.tile[location.X, location.Y];
-            return (tile.frameX == 0 || tile.frameX == 36);
+            return (tile.TileFrameX == 0 || tile.TileFrameX == 36);
         }
 
         public override void PostLoad()
         {
-            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(mod, "TransferInletItem", Type, 32, 14);
+            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(Mod, "TransferInletItem", Type, 32, 14);
         }
 
         public override void AddRecipes()
         {
-            ModRecipe r = new ModRecipe(mod);
+            Recipe r = Recipe.Create(PlaceItems[0].Item.type, 1);
             r.AddIngredient(ModContent.ItemType<PneumaticActuatorItem>(), 1);
             r.AddIngredient(ItemID.InletPump, 1);
-            r.SetResult(PlaceItems[0].item.type, 1);
             r.AddTile(TileID.WorkBenches);
-            r.AddRecipe();
+            r.Register();
 
             LoadBlacklist();
         }
 
         private void LoadBlacklist()
         {
+            // TODO: Any more in 1.4?
+
             TransferInletTileEntity.PickupBlacklist.Add(ItemID.Heart);
             TransferInletTileEntity.PickupBlacklist.Add(ItemID.CandyApple);
             TransferInletTileEntity.PickupBlacklist.Add(ItemID.CandyCane);
@@ -84,7 +86,7 @@ namespace MechTransfer.Tiles
                    (item.GetType().GetMethod("ItemSpace").DeclaringType != typeof(ModItem) ||
                    item.GetType().GetMethod("OnPickup").DeclaringType != typeof(ModItem)))
                 {
-                    TransferInletTileEntity.PickupBlacklist.Add(item.item.type);
+                    TransferInletTileEntity.PickupBlacklist.Add(item.Item.type);
                 }
             }
         }

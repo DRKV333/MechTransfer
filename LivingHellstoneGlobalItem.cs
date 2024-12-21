@@ -1,4 +1,6 @@
 ﻿using MechTransfer.Tiles;
+using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -8,18 +10,25 @@ namespace MechTransfer
     {
         private int burnTime = 0;
 
-        public override bool InstancePerEntity { get { return true; } }
-        public override bool CloneNewInstances { get { return true; } }
+        public override bool InstancePerEntity => true;
+        protected override bool CloneNewInstances => true;
+
+        // I hope this not multithreaded.
+        private List<Point> entityEdgePoints = new List<Point>();
 
         public override void Update(Item item, ref float gravity, ref float maxFallSpeed)
         {
-            if (item.type == mod.PlaceItemType<LivingHellstoneTile>())
+            if (item.type == Mod.PlaceItemType<LivingHellstoneTile>())
                 return;
 
-            foreach (var p in Collision.GetEntityEdgeTiles(item))
+            Collision.GetEntityEdgeTiles(entityEdgePoints, item);
+
+            bool resetBurnTime = true;
+
+            foreach (var p in entityEdgePoints)
             {
                 if (p.X > 0 && p.X < Main.maxTilesX && p.Y > 0 && p.Y < Main.maxTilesY &&
-                    Main.tile[p.X, p.Y].active() && Main.tile[p.X, p.Y].type == ModContent.TileType<LivingHellstoneTile>())
+                    Main.tile[p.X, p.Y].HasTile && Main.tile[p.X, p.Y].TileType == ModContent.TileType<LivingHellstoneTile>())
                 {
                     if (++burnTime > 0)
                     {
@@ -29,10 +38,16 @@ namespace MechTransfer
                     {
                         item.active = false;
                     }
-                    return;
+
+                    resetBurnTime = false;
+                    break;
                 }
             }
-            burnTime = 0;
+
+            entityEdgePoints.Clear();
+
+            if (resetBurnTime)
+                burnTime = 0;
         }
     }
 }

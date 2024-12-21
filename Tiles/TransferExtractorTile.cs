@@ -9,15 +9,16 @@ using Terraria.ObjectData;
 
 namespace MechTransfer.Tiles
 {
+    [Autoload(false)]
     public class TransferExtractorTile : SimpleTileObject
     {
-        public override void SetDefaults()
+        public override void PostSetDefaults()
         {
             AddMapEntry(MapColors.Input, GetPlaceItem(0).DisplayName);
 
             ModContent.GetInstance<TransferPipeTile>().connectedTiles.Add(Type);
 
-            base.SetDefaults();
+            base.PostSetDefaults();
         }
 
         public override void HitWire(int i, int j)
@@ -51,18 +52,17 @@ namespace MechTransfer.Tiles
 
         public override void PostLoad()
         {
-            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(mod, "TransferExtractorItem", Type);
+            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(Mod, "TransferExtractorItem", Type);
         }
 
         public override void AddRecipes()
         {
-            ModRecipe r = new ModRecipe(mod);
+            Recipe r = Recipe.Create(PlaceItems[0].Item.type, 1);
             r.AddIngredient(ModContent.ItemType<PneumaticActuatorItem>(), 1);
             r.AddIngredient(ItemID.GoldenKey, 1);
             r.AddIngredient(ItemID.Wire, 2);
-            r.SetResult(PlaceItems[0].item.type, 1);
             r.AddTile(TileID.WorkBenches);
-            r.AddRecipe();
+            r.Register();
         }
     }
 }

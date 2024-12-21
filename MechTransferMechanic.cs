@@ -1,5 +1,4 @@
 ﻿using MechTransfer.Items;
-using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -7,12 +6,14 @@ namespace MechTransfer
 {
     internal class MechTransferMechanic : GlobalNPC
     {
-        public override void SetupShop(int type, Chest shop, ref int nextSlot)
+        public override void ModifyShop(NPCShop shop)
         {
-            if (type == NPCID.Mechanic)
+            if (shop.NpcType == NPCID.Mechanic)
             {
-                shop.item[nextSlot++].SetDefaults(ModContent.ItemType<PneumaticActuatorItem>());
-                shop.item[nextSlot++].SetDefaults(mod.ItemType("AnyFilterItem"));
+                shop.Add(
+                    new NPCShop.Entry(ModContent.ItemType<PneumaticActuatorItem>()),
+                    new NPCShop.Entry(Mod.Find<ModItem>("AnyFilterItem").Item.type)
+                );
             }
         }
     }

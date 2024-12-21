@@ -12,6 +12,7 @@ using Terraria.ObjectData;
 
 namespace MechTransfer.Tiles
 {
+    [Autoload(false)]
     public class TransferAssemblerTile : FilterableTile<TransferAssemblerTileEntity>
     {
         private ItemInventory inventory = new ItemInventory();
@@ -26,11 +27,11 @@ namespace MechTransfer.Tiles
             { 355,  new int[]{ 13, 14 } },
         };
 
-        public override void SetDefaults()
+        public override void PostSetDefaults()
         {
             AddMapEntry(MapColors.Input, GetPlaceItem(0).DisplayName);
 
-            base.SetDefaults();
+            base.PostSetDefaults();
         }
 
         protected override void SetTileObjectData()
@@ -86,7 +87,7 @@ namespace MechTransfer.Tiles
                 return false;
             }
 
-            for (int i = 0; i < Recipe.maxRequirements && !recipe.requiredItem[i].IsAir; i++)
+            for (int i = 0; i < recipe.requiredItem.Count && !recipe.requiredItem[i].IsAir; i++)
             {
                 if (!inventory.TryTakeIngredient(recipe, recipe.requiredItem[i]))
                 {
@@ -98,11 +99,12 @@ namespace MechTransfer.Tiles
 
             Item clone = recipe.createItem.Clone();
 
+
             if (!clone.IsAir)
             {
-                //these can potentially cause issues in some cases, might have to remove them
-                RecipeHooks.OnCraft(clone, recipe);
-                ItemLoader.OnCraft(clone, recipe);
+                // TODO:
+                // Not sure what to call instead of RecipeHooks.OnCraft and ItemLoader.OnCraft
+                // RecipeLoader.OnCraft maybe?
             }
 
             entity.stock = clone;
@@ -116,57 +118,63 @@ namespace MechTransfer.Tiles
         {
             alchemy = false;
 
-            bool[] tileOk = new bool[Recipe.maxRequirements];
-            bool waterOk = !recipe.needWater;
-            bool honeyOk = !recipe.needHoney;
-            bool lavaOk = !recipe.needLava;
-            bool snowOk = !recipe.needSnowBiome;
+            // TODO: It looks like tModLoader has a new Condition system for this.
+            // Vanilla recipes still use these needX fields, but they have been made inaccessible.
+            // Also, there are a few new ones in 1.4: needEverythingSeed, needGraveyardBiome
+            // The Conditions are tied to LocalPlayer, and there's like a million of them.
+            // So no fluid limitations, it would be too much effort.
+
+            bool[] tileOk = new bool[recipe.requiredTile.Count];
+            // bool waterOk = !recipe.needWater;
+            // bool honeyOk = !recipe.needHoney;
+            // bool lavaOk = !recipe.needLava;
+            // bool snowOk = !recipe.needSnowBiome;
 
             for (int i = x - 5; i <= x + 5; i++)
             {
                 for (int j = y - 5; j <= y + 5; j++)
                 {
                     Tile tile = Main.tile[i, j];
-                    if (tile != null && tile.active())
+                    if (tile != null && tile.HasTile)
                     {
-                        for (int z = 0; z < Recipe.maxRequirements && recipe.requiredTile[z] != -1; z++)
+                        for (int z = 0; z < recipe.requiredTile.Count && recipe.requiredTile[z] != -1; z++)
                         {
-                            ModTile modTile = TileLoader.GetTile(tile.type);
+                            ModTile modTile = TileLoader.GetTile(tile.TileType);
 
-                            if ((recipe.requiredTile[z] == tile.type) ||
-                                (tileRemap.ContainsKey(tile.type) && tileRemap[tile.type].Contains(recipe.requiredTile[z])) ||
-                                (modTile != null && modTile.adjTiles.Contains(recipe.requiredTile[z])))
+                            if ((recipe.requiredTile[z] == tile.TileType) ||
+                                (tileRemap.ContainsKey(tile.TileType) && tileRemap[tile.TileType].Contains(recipe.requiredTile[z])) ||
+                                (modTile != null && modTile.AdjTiles.Contains(recipe.requiredTile[z])))
                             {
                                 tileOk[z] = true;
                             }
 
                             //easier than reimplementing the zone finding logic
-                            if (tile.type == TileID.SnowBlock || tile.type == TileID.IceBlock || tile.type == TileID.HallowedIce || tile.type == TileID.FleshIce || tile.type == TileID.CorruptIce)
-                                snowOk = true;
+                            // if (tile.TileType == TileID.SnowBlock || tile.TileType == TileID.IceBlock || tile.TileType == TileID.HallowedIce || tile.TileType == TileID.FleshIce || tile.TileType == TileID.CorruptIce)
+                            //     snowOk = true;
 
-                            if (tile.type == TileID.AlchemyTable && recipe.alchemy)
-                                alchemy = true;
+                            // if (tile.TileType == TileID.AlchemyTable && recipe.alchemy)
+                            //     alchemy = true;
 
                             //can't access TileLoader.HookAdjTiles, so if a mod uses that, it won't work
                         }
                     }
 
-                    if (tile != null && tile.liquid > 200)
-                    {
-                        switch (tile.liquidType())
-                        {
-                            case 0: waterOk = true; break;
-                            case 2: honeyOk = true; break;
-                            case 1: lavaOk = true; break;
-                        }
-                    }
+                    // if (tile != null && tile.LiquidAmount > 200)
+                    // {
+                    //     switch (tile.LiquidType)
+                    //     {
+                    //         case 0: waterOk = true; break;
+                    //         case 2: honeyOk = true; break;
+                    //         case 1: lavaOk = true; break;
+                    //     }
+                    // }
                 }
             }
 
-            if (!waterOk || !honeyOk || !lavaOk || !snowOk)
-                return false;
+            // if (!waterOk || !honeyOk || !lavaOk || !snowOk)
+            //     return false;
 
-            for (int i = 0; i < Recipe.maxRequirements && recipe.requiredTile[i] != -1; i++)
+            for (int i = 0; i < recipe.requiredTile.Count && recipe.requiredTile[i] != -1; i++)
             {
                 if (!tileOk[i])
                     return false;
@@ -236,18 +244,17 @@ namespace MechTransfer.Tiles
 
         public override void PostLoad()
         {
-            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(mod, "TransferAssemblerItem", Type, 16, 16, 0, Item.sellPrice(0, 1, 0, 0));
-            PlaceItems[0].item.rare = ItemRarityID.LightRed;
+            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(Mod, "TransferAssemblerItem", Type, 16, 16, 0, Item.sellPrice(0, 1, 0, 0));
+            PlaceItems[0].Item.rare = ItemRarityID.LightRed;
         }
 
         public override void AddRecipes()
         {
-            ModRecipe r = new ModRecipe(mod);
+            Recipe r = Recipe.Create(PlaceItems[0].Item.type, 1);
             r.AddIngredient(ModContent.ItemType<PneumaticActuatorItem>(), 1);
             r.AddIngredient(ItemID.Cog, 10);
             r.AddTile(TileID.WorkBenches);
-            r.SetResult(PlaceItems[0], 1);
-            r.AddRecipe();
+            r.Register();
         }
     }
 }

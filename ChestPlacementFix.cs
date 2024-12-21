@@ -11,10 +11,11 @@ namespace MechTransfer
 
         public override bool CanPlace(int i, int j, int type)
         {
-            if (TileID.Sets.BasicChest[type] || TileID.Sets.BasicChestFake[type] || TileLoader.IsDresser(type))
+            // TODO: TileLoader.IsDresser?
+            if (TileID.Sets.BasicChest[type] || TileID.Sets.BasicChestFake[type])
             {
                 Tile bottom = Main.tile[i, j + 1];
-                if (bottom != null && bottom.active() && noChestTiles.Contains(bottom.type))
+                if (bottom != null && bottom.HasTile && noChestTiles.Contains(bottom.TileType))
                 {
                     return false;
                 }

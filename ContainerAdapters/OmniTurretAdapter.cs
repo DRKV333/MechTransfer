@@ -37,17 +37,17 @@ namespace MechTransfer.ContainerAdapters
                 return false;
 
             Tile tile = Main.tile[x, y];
-            if (tile == null || !tile.active())
+            if (tile == null || !tile.HasTile)
                 return false;
 
-            int originX = x - (tile.frameX % 36) / 18;
-            int originY = y - (tile.frameY % 36) / 18;
+            int originX = x - (tile.TileFrameX % 36) / 18;
+            int originY = y - (tile.TileFrameY % 36) / 18;
 
             Tile origin = Main.tile[originX, originY];
-            if (origin == null || !origin.active())
+            if (origin == null || !origin.HasTile)
                 return false;
 
-            int style = origin.frameX / 36;
+            int style = origin.TileFrameX / 36;
 
             if (fireRate[style] != 0 && !Wiring.CheckMech(originX, originY, fireRate[style]))
                 return false;
@@ -55,7 +55,7 @@ namespace MechTransfer.ContainerAdapters
             Vector2 position = new Vector2((originX + 1) * 16, (originY + 1) * 16);
 
             Vector2 direction = Vector2.Zero;
-            switch (origin.frameY)
+            switch (origin.TileFrameY)
             {
                 case 0: direction = new Vector2(-1f, 0f); break;
                 case 38: direction = new Vector2(-0.5f, -0.5f); break;
@@ -66,8 +66,10 @@ namespace MechTransfer.ContainerAdapters
                 case 228: direction = new Vector2(-0.5f, 0.5f); position.Y -= 8; break;
             }
 
-            Main.PlaySound(SoundID.Item11, position);
-            Projectile proj = Main.projectile[Projectile.NewProjectile(position, direction * shootSpeed[style], item.shoot, baseDamage[style] * (1 + item.damage / 100), item.knockBack, Main.myPlayer)];
+            // TODO: Figure out how to play sound.
+            // Main.PlaySound(SoundID.Item11, position);
+
+            Projectile proj = Main.projectile[Projectile.NewProjectile(null, position, direction * shootSpeed[style], item.shoot, baseDamage[style] * (1 + item.damage / 100), item.knockBack, Main.myPlayer)];
             proj.hostile = true;
 
             if (Main.netMode == 2)

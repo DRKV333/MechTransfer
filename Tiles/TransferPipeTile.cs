@@ -10,13 +10,14 @@ using Terraria.ObjectData;
 
 namespace MechTransfer.Tiles
 {
+    [Autoload(false)]
     public class TransferPipeTile : SimpleTileObject
     {
         public HashSet<int> connectedTiles = new HashSet<int>();
 
-        public override void SetDefaults()
+        public override void PostSetDefaults()
         {
-            base.SetDefaults();
+            base.PostSetDefaults();
 
             Main.tileFrameImportant[Type] = false;
 
@@ -34,20 +35,20 @@ namespace MechTransfer.Tiles
         public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
         {
             Tile tile = Main.tile[i, j];
-            tile.frameX = 0;
-            tile.frameY = 0;
+            tile.TileFrameX = 0;
+            tile.TileFrameY = 0;
 
             if (shouldConnect(i, j, 0, -1)) //Top
-                tile.frameY += 18;
+                tile.TileFrameY += 18;
 
             if (shouldConnect(i, j, 0, 1)) //Bottom
-                tile.frameX += 72;
+                tile.TileFrameX += 72;
 
             if (shouldConnect(i, j, -1, 0)) //Left
-                tile.frameX += 18;
+                tile.TileFrameX += 18;
 
             if (shouldConnect(i, j, 1, 0)) //Right
-                tile.frameX += 36;
+                tile.TileFrameX += 36;
 
             return false;
         }
@@ -55,27 +56,25 @@ namespace MechTransfer.Tiles
         private bool shouldConnect(int x, int y, int offsetX, int offsetY)
         {
             Tile tile = Main.tile[x + offsetX, y + offsetY];
-            if (tile != null && tile.active())
+            if (tile != null && tile.HasTile)
             {
-                return tile.type == Type || connectedTiles.Contains(tile.type);
+                return tile.TileType == Type || connectedTiles.Contains(tile.TileType);
             }
             return false;
         }
 
         public override void PostLoad()
         {
-            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(mod, "TransferPipeItem", Type);
+            PlaceItems[0] = SimplePrototypeItem.MakePlaceable(Mod, "TransferPipeItem", Type);
         }
 
         public override void AddRecipes()
         {
-            ModRecipe r = new ModRecipe(mod);
+            Recipe r = Recipe.Create(PlaceItems[0].Item.type, 25);
             r.AddIngredient(ModContent.ItemType<PneumaticActuatorItem>(), 1);
-            r.AddIngredient(ItemID.IronBar, 1);
-            r.anyIronBar = true;
+            r.AddRecipeGroup(RecipeGroupID.IronBar, 1);
             r.AddTile(TileID.Anvils);
-            r.SetResult(PlaceItems[0].item.type, 25);
-            r.AddRecipe();
+            r.Register();
         }
     }
 }

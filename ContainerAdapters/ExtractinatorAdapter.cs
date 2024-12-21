@@ -8,7 +8,8 @@ namespace MechTransfer.ContainerAdapters
 {
     internal class ExtractinatorAdapter
     {
-        public void Extract(int x, int y, int extractType)
+        // TODO: Check if this needs to be updated.
+        public void Extract(int x, int y, int extractType, int tileType)
         {
             int num = 5000;
             int num2 = 25;
@@ -352,10 +353,10 @@ namespace MechTransfer.ContainerAdapters
             int tempTargetY = Player.tileTargetY;
             Player.tileTargetY = y;
 
-            ItemLoader.ExtractinatorUse(ref num6, ref num5, extractType);
+            ItemLoader.ExtractinatorUse(ref num6, ref num5, extractType, tileType);
             if (num6 > 0)
             {
-                Item.NewItem(x * 16, y * 16, 1, 1, num6, num5, false, -1, false, false);
+                Item.NewItem(null, x * 16, y * 16, 1, 1, num6, num5, false, -1, false, false);
             }
 
             Player.tileTargetX = tempTargetX;
@@ -367,7 +368,7 @@ namespace MechTransfer.ContainerAdapters
             int extType = ItemID.Sets.ExtractinatorMode[item.type];
             if (extType >= 0)
             {
-                Extract(x, y, extType);
+                Extract(x, y, extType, Main.tile[x, y].TileType);
                 item.stack -= 1;
                 return true;
             }
