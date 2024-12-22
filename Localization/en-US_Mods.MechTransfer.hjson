@@ -40,7 +40,7 @@ Items: {
 	}
 
 	StackExtractorItem: {
-		DisplayName: Stack Extractor Item
+		DisplayName: Stack Extractor
 		Tooltip: Extracts a whole stack at once
 	}
 
