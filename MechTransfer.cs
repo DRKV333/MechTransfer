@@ -268,8 +268,7 @@ namespace MechTransfer
             List<int> chestTypes = new List<int>();
             for (int i = 0; i < TileLoader.TileCount; i++)
             {
-                // TODO: TileLoader.IsDresser?
-                if (TileID.Sets.BasicChest[i] || TileID.Sets.BasicChestFake[i])
+                if (TileID.Sets.BasicChest[i] || TileID.Sets.BasicChestFake[i] || TileID.Sets.BasicDresser[i]) // TileLoader.IsDresser
                 {
                     chestTypes.Add(i);
                 }
