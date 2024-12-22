@@ -3,6 +3,7 @@ using MechTransfer.Tiles.Simple;
 using Microsoft.Xna.Framework;
 using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -63,8 +64,7 @@ namespace MechTransfer.Tiles
             }
 			ModContent.GetInstance<ButtonDelayWorld>().setPoint(topLeft);
 
-            // TODO: Figure out how to play sound.
-            // Main.PlaySound(SoundID.MenuTick);
+            SoundEngine.PlaySound(SoundID.MenuTick);
 
             return true;
         }
