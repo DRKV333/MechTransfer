@@ -12,7 +12,6 @@ namespace MechTransfer.ContainerAdapters
     [JITWhenModsEnabled("MagicStorage")]
     internal class MagicStorageInterfaceAdapter
     {
-        // TODO test
         private TEStorageHeart FindHeart(int x, int y)
         {
             Tile tile = Main.tile[x, y];
