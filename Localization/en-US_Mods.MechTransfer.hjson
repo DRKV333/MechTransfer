@@ -84,7 +84,7 @@ Items: {
 	}
 
 	MagicStorageInterfaceItem: {
-		DisplayName: Magic Storage Interface Item
+		DisplayName: Magic Storage Interface
 		Tooltip: Allows you to inject and extract items from storage systems
 	}
 

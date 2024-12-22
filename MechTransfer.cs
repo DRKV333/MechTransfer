@@ -139,8 +139,7 @@ namespace MechTransfer
 
         public override void Load()
         {
-            // TODO
-            // modMagicStorage = ModLoader.GetMod("MagicStorage");
+            ModLoader.TryGetMod("MagicStorage", out modMagicStorage);
 
             Assembly asm = Assembly.GetExecutingAssembly();
             simpleTileAddRecipequeue = new List<Action>();
