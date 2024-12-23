@@ -88,11 +88,6 @@ Items: {
 		Tooltip: Allows you to inject and extract items from storage systems
 	}
 
-	MagicStorageExtraInterfaceItem: {
-		DisplayName: Magic Storage Extra Interface
-		Tooltip: Allows you to inject and extract items from your storage systems
-	}
-
 	PlayerInterfaceItem: {
 		DisplayName: Player Interface
 		Tooltip: Allows you to inject and extract items from a player's inventory
