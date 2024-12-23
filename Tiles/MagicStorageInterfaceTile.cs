@@ -4,6 +4,8 @@ using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ObjectData;
 using Terraria.ModLoader;
+using Terraria;
+using MagicStorage.Items;
 
 namespace MechTransfer.Tiles
 {
@@ -29,6 +31,17 @@ namespace MechTransfer.Tiles
         public override void PostLoad()
         {
             PlaceItems[0] = SimplePrototypeItem.MakePlaceable(Mod, "MagicStorageInterfaceItem", Type, 32, 32);
+        }
+
+        public override void AddRecipes()
+        {
+            if(ModLoader.TryGetMod("MagicStorage", out _))
+            {
+                Recipe.Create(PlaceItems[0].Item.type, 1)
+                    .AddIngredient<StorageComponent>(1)
+                    .AddRecipeGroup("MagicStorage:AnyDiamond")
+                    .AddIngredient<PneumaticActuatorItem>(1);
+            }
         }
     }
 }
