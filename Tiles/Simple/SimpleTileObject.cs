@@ -53,6 +53,7 @@ namespace MechTransfer.Tiles.Simple
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
+            DropItem(i, j, frameX, frameY);
         }
 
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
@@ -60,6 +61,7 @@ namespace MechTransfer.Tiles.Simple
             if (OneByOne && !effectOnly && !noItem)
             {
                 Tile tile = Main.tile[i, j];
+                DropItem(i, j, tile.TileFrameX, tile.TileFrameY);
             }
         }
 

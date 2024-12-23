@@ -1,4 +1,6 @@
-﻿using Terraria.ModLoader;
+﻿using System.Collections.Generic;
+using Terraria;
+using Terraria.ModLoader;
 
 namespace MechTransfer.Tiles.Simple
 {
@@ -15,6 +17,10 @@ namespace MechTransfer.Tiles.Simple
 
         public virtual void AddRecipes()
         {
+        }
+        public override IEnumerable<Item> GetItemDrops(int i, int j)
+        {
+            return [];
         }
     }
 }
