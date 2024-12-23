@@ -43,7 +43,6 @@
 				{ "p" : "OmniTurretTile.png",            "t" : "Tiles" },
 				{ "p" : "PlayerInterfaceTile.png",       "t" : "Tiles" },	
 				{ "p" : "MagicStorageInterfaceTile.png", "t" : "Tiles" },
-				{ "p" : "MagicStorageInterfaceTile.png", "t" : "Tiles/MagicStorageExtraInterfaceTile.png" },
 				{ "p" : "TransferAssemblerTile.png",     "t" : "Tiles" },
 				{ "p" : "LivingHellstoneTile.png",       "t" : "Tiles" } 
 			]
@@ -75,7 +74,6 @@
 			[
 				{ "p" : ">crelayitem:TransferRelayTile.png",          "t" : "Items/TransferRelayItem.png"              },
 				{ "p" : ">stiles:MagicStorageInterfaceTile.png",      "t" : "Items/MagicStorageInterfaceItem.png"      },
-				{ "p" : ">stiles:MagicStorageExtraInterfaceTile.png", "t" : "Items/MagicStorageExtraInterfaceItem.png" },
 				{ "p" : ">cturretitem1:OmniTurretTile.png",           "t" : "Items/OmniTurretItem.png"                 },
 				{ "p" : ">cturretitem2:OmniTurretTile.png",           "t" : "Items/SuperOmniTurretItem.png"            },
 				{ "p" : ">cturretitem3:OmniTurretTile.png",           "t" : "Items/MatterProjectorItem.png"            }

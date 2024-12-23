@@ -1,16 +1,23 @@
-﻿namespace MechTransfer.ContainerAdapters
+﻿using MagicStorage;
+using MagicStorage.Components;
+using System;
+using System.Collections.Generic;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.ID;
+using Terraria.ModLoader;
+
+namespace MechTransfer.ContainerAdapters
 {
+    [JITWhenModsEnabled("MagicStorage")]
     internal class MagicStorageInterfaceAdapter
     {
-        // TODO
-
-        /*
         private TEStorageHeart FindHeart(int x, int y)
         {
             Tile tile = Main.tile[x, y];
 
-            int originX = x - tile.frameX / 18;
-            int originY = y - tile.frameY / 18;
+            int originX = x - tile.TileFrameX / 18;
+            int originY = y - tile.TileFrameY / 18;
 
             Point16 center = TEStorageComponent.FindStorageCenter(new Point16(originX, originY));
             if (center.X == -1 && center.Y == -1)
@@ -23,11 +30,11 @@
 
         private void HandleStorageItemChange(TEStorageHeart heart)
         {
-            if (Main.netMode == 2)
+            if (Main.netMode == NetmodeID.Server)
             {
-                NetHelper.SendRefreshNetworkItems(heart.ID);
+                NetHelper.SendRefreshNetworkItems(heart.Position);
             }
-            else if (Main.netMode == 0)
+            else if (Main.netMode == NetmodeID.SinglePlayer)
             {
                 StorageGUI.RefreshItems();
             }
@@ -72,10 +79,9 @@
             Item toWithdraw = ((Item)slot).Clone();
             toWithdraw.stack = amount;
 
-            targetHeart.TryWithdraw(toWithdraw);
+            targetHeart.TryWithdraw(toWithdraw, true); //TODO Nebula: decide if keepOneIfFavorite should be hardcoded or a setting
 
             HandleStorageItemChange(targetHeart);
         }
-        */
     }
 }

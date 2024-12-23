@@ -139,8 +139,7 @@ namespace MechTransfer
 
         public override void Load()
         {
-            // TODO
-            // modMagicStorage = ModLoader.GetMod("MagicStorage");
+            ModLoader.TryGetMod("MagicStorage", out modMagicStorage);
 
             Assembly asm = Assembly.GetExecutingAssembly();
             simpleTileAddRecipequeue = new List<Action>();
@@ -268,8 +267,7 @@ namespace MechTransfer
             List<int> chestTypes = new List<int>();
             for (int i = 0; i < TileLoader.TileCount; i++)
             {
-                // TODO: TileLoader.IsDresser?
-                if (TileID.Sets.BasicChest[i] || TileID.Sets.BasicChestFake[i])
+                if (TileID.Sets.BasicChest[i] || TileID.Sets.BasicChestFake[i] || TileID.Sets.BasicDresser[i]) // TileLoader.IsDresser
                 {
                     chestTypes.Add(i);
                 }

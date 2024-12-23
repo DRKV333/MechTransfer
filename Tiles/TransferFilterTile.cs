@@ -118,17 +118,7 @@ namespace MechTransfer.Tiles
             ItemFilterItem i = new ItemFilterItem(type + "FilterItem", condition);
             i.recipeItem = recipeItem;
             Mod.AddContent(i);
-
-            // TODO: Not sure how to do this with the "overhauled" localization system.
-
-            /*
-            if (Main.halloween && type == "Dye")
-            {
-                i.DisplayName.SwapTranslation(Mod.GetModTranslation("Mods.MechTransfer.EasterEgg.ItemName.DyeFilterItem"));
-            }
-            i.Tooltip.SwapTranslation(Mod.GetModTranslation("Mods.MechTransfer.Common.ItemTooltip.FilterItem"));
-            */
-
+            //Nebula: Easter egg handling is now done at runtime by ItemFilterItem.DisplayName itself
             filterItems.Add(i.Item.type, i);
 
             return i;
