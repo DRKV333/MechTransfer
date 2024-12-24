@@ -62,12 +62,5 @@ namespace MechTransfer.Items
                 r.Register();
             }
         }
-
-        // TODO
-        //Needed to stop ModLoader from assigning a default display name
-        /*public override void AutoStaticDefaults()
-        {
-            Main.itemTexture[Item.type] = ModContent.GetTexture(Texture);
-        }*/
     }
 }
