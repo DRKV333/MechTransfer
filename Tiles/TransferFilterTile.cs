@@ -179,6 +179,9 @@ namespace MechTransfer.Tiles
             Bags =
             [
                 ItemID.HerbBag,
+                ItemID.CanOfWorms,
+                ItemID.Oyster,
+                ItemID.Pigronata,
 
                 ItemID.GoodieBag,
                 ItemID.Present,
@@ -209,6 +212,7 @@ namespace MechTransfer.Tiles
                 ItemID.BossBagOgre,
 
                 ItemID.LockBox,
+                ItemID.ObsidianLockbox,
                 ItemID.WoodenCrate,
                 ItemID.IronCrate,
                 ItemID.GoldenCrate,
@@ -218,35 +222,46 @@ namespace MechTransfer.Tiles
                 ItemID.CrimsonFishingCrate,
                 ItemID.HallowedFishingCrate,
                 ItemID.DungeonFishingCrate,
+                ItemID.FrozenCrate,
+                ItemID.OasisCrate,
+                ItemID.LavaCrate,
+                ItemID.OceanCrate,
+                ItemID.WoodenCrateHard,
+                ItemID.IronCrateHard,
+                ItemID.GoldenCrateHard,
+                ItemID.JungleFishingCrateHard,
+                ItemID.FloatingIslandFishingCrateHard,
+                ItemID.CorruptFishingCrateHard,
+                ItemID.CrimsonFishingCrateHard,
+                ItemID.HallowedFishingCrateHard,
+                ItemID.DungeonFishingCrateHard,
+                ItemID.FrozenCrateHard,
+                ItemID.OasisCrateHard,
+                ItemID.LavaCrateHard,
+                ItemID.OceanCrateHard
             ];
 
-            // TODO: How do modded boss bags work?
-            /*
             for (int i = 0; i < ItemLoader.ItemCount; i++)
             {
                 ModItem item = ItemLoader.GetItem(i);
-                if (item != null && item.GetType().GetMethod("OpenBossBag").DeclaringType != typeof(ModItem))
+                if (item != null && item.GetType().GetMethod("ModifyItemLoot").DeclaringType != typeof(ModItem))
                 {
                     Bags.Add(i);
                 }
             }
-            */
         }
 
-        private void LogFilterTets()
+        public void LogFilterTets()
         {
             Mod.Logger.Debug("---BEGIN FILTER LISTING---");
             foreach (var item in filterItems)
             {
-				//if (item.Value.Name != "BagFilterItem")
-				//    continue;
+				if (item.Value.Name != "BagFilterItem")
+				    continue;
 
-				Mod.Logger.Debug("----" + item.Value.DisplayName.Value);
-                for (int i = 0; i < ItemLoader.ItemCount; i++)
+				Mod.Logger.Debug("----" + item.Value.Name);
+                foreach (Item testItem in ContentSamples.ItemsByType.Values)
                 {
-                    Item testItem = new Item();
-                    testItem.SetDefaults(i);
-
                     if (item.Value.MatchesItem(testItem))
 						Mod.Logger.Debug(testItem.Name);
                 }
