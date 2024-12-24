@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -148,8 +149,7 @@ namespace MechTransfer.ContainerAdapters
             Main.LocalPlayer.chest = -1;
             Recipe.FindRecipes();
 
-            // TODO: Figure out how to play sound.
-            // Main.PlaySound(SoundID.MenuClose);
+            SoundEngine.PlaySound(SoundID.MenuClose);
         }
     }
 }
