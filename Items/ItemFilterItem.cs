@@ -1,5 +1,6 @@
 ﻿using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace MechTransfer.Items
@@ -23,6 +24,16 @@ namespace MechTransfer.Items
         {
             Name = name;
             this.matchConditionn = matchConditionn;
+        }
+
+        public override LocalizedText DisplayName
+        {
+            get
+            {
+                if (Main.halloween && Name == "DyeFilterItem") //Easter egg name handling
+                    return Language.GetText("Mods.MechTransfer.Items.DyeFilterItem.EasterEggName");
+                return base.DisplayName;
+            }
         }
 
         public override void SetDefaults()

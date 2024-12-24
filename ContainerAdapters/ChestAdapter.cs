@@ -26,10 +26,9 @@ namespace MechTransfer.ContainerAdapters
             int originX = x;
             int originY = y;
 
-            // TODO ???
-            // if (TileLoader.IsDresser(tile.TileType))
-            //     originX -= tile.TileFrameX % 54 / 18;
-            // else
+            if (TileID.Sets.BasicDresser[tile.TileType])
+               originX -= tile.TileFrameX % 54 / 18;
+            else
                 originX -= tile.TileFrameX% 36 / 18;
 
             originY -= tile.TileFrameY % 36 / 18;

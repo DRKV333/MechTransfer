@@ -53,7 +53,7 @@ namespace MechTransfer.UI
             fakeInv[10] = type;
             itemText.SetText(type.IsAir ? Language.GetTextValue(NotSetTextKey) : fakeInv[10].Name);
             itemText.TextColor = type.IsAir ? Color.Red : ItemRarity.GetColor(fakeInv[10].rare);
-            panel.Width.Pixels = itemText.MinWidth.Pixels + TextureAssets.InventoryBack.Value.Width * 0.5f * Main.UIScale + 20;
+            panel.Width.Pixels = itemText.MinWidth.Pixels + TextureAssets.InventoryBack.Value.Width * 0.5f * Main.UIScale + 28;
 
             Vector2 pos = Vector2.Transform(Main.MouseScreen, Main.GameViewMatrix.TransformationMatrix);
 
