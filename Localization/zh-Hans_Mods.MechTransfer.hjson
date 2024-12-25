@@ -1,0 +1,325 @@
+Items: {
+	PneumaticActuatorItem: {
+		DisplayName: " 气动执行器"
+		Tooltip: " 合成物流设备的必需品"
+	}
+
+	BigButtonItem: {
+		DisplayName: " 大号按钮"
+		Tooltip: ""
+	}
+
+	SmallButtonItem: {
+		DisplayName: " 小号按钮"
+		Tooltip: ""
+	}
+
+	OmniTurretItem: {
+		DisplayName: " 全方位炮台"
+		Tooltip: " 能发射各种标准弹药，开启塔防时代"
+	}
+
+	SuperOmniTurretItem: {
+		DisplayName: " 超级全方位炮台"
+		Tooltip: " 能发射各种标准弹药，速度更快！"
+	}
+
+	MatterProjectorItem: {
+		DisplayName: " 物质投射器"
+		Tooltip: " 能发射各种标准弹药，而且它不限速！"
+	}
+
+	TransferPipeItem: {
+		DisplayName: " 物流管道"
+		Tooltip: " 用来连接物流设备和传输物品"
+	}
+
+	TransferExtractorItem: {
+		DisplayName: " 物品提取器"
+		Tooltip:
+			'''
+			从相邻的容器中提取物品
+			一次一个
+			'''
+	}
+
+	StackExtractorItem: {
+		DisplayName: " 物品提取器(组)"
+		Tooltip: " 从相邻容器取出物品，一次可以取出一组物品"
+	}
+
+	TransferInletItem: {
+		DisplayName: " 物品拾取口"
+		Tooltip: " 拾取掉落在上方的物品"
+	}
+
+	TransferFilterItem: {
+		DisplayName: " 物流过滤器(白名单)"
+		Tooltip:
+			'''
+			 将其放置在物流管道中用以过滤允许通过的物品
+			手持物品右键来设置允许通过的物品
+			可以使用过滤卡
+			'''
+	}
+
+	InverseTransferFilterItem: {
+		DisplayName: " 物流过滤器(黑名单)"
+		Tooltip:
+			'''
+			 将其放置在物流管道中用以过滤不允许通过的物品
+			手持物品右键来设置不允许通过的物品
+			可以使用过滤卡
+			'''
+	}
+
+	TransferGateItem: {
+		DisplayName: " 物流管道阀门"
+		Tooltip: " 将其放置在物流管道中使用电信号控制管道通路"
+	}
+
+	TransferRelayItem: {
+		DisplayName: " 物流中继器"
+		Tooltip: " 接收物品，然后再将其发送出去"
+	}
+
+	TransferInjectorItem: {
+		DisplayName: " 物品注入器"
+		Tooltip:
+			'''
+			 将物品放入相邻的容器中
+			它也可以被用在提取器上用于自动提取
+			'''
+	}
+
+	TransferOutletItem: {
+		DisplayName: " 物品丢弃口"
+		Tooltip: " 抛出物品"
+	}
+
+	MagicStorageInterfaceItem: {
+		DisplayName: " 魔法存储接口"
+		Tooltip: " 使物流系统可以访问魔法存储的库存"
+	}
+
+	PlayerInterfaceItem: {
+		DisplayName: " 玩家接口"
+		Tooltip: " 允许物流系统访问玩家的装备栏和库存"
+	}
+
+	TransferAssemblerItem: {
+		DisplayName: " 自动合成器"
+		Tooltip:
+			'''
+			 开发中
+			允许自动合成物品
+			手持物品右键来设置需要合成的物品
+			暂时不支持指定合成配方
+			'''
+	}
+
+	FilterItem: {
+		DisplayName: " 物品过滤卡"
+		Tooltip: " 手持它右键物流过滤器来设置指定类型的过滤条件"
+	}
+
+	AnyFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(任意)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-GrayFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(稀有度-灰色)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-WhiteFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(稀有度-白色)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-BlueFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(稀有度-蓝色)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-GreenFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(稀有度-绿色)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-OrangeFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(稀有度-橙色)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-LightRedFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(稀有度-浅红色)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-PinkFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(稀有度-粉红色)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-LightPurpleFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(稀有度-浅紫色)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-LimeFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(稀有度-青柠色)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-YellowFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(稀有度-黄色)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-CyanFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(稀有度-青色)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-RedFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(稀有度-红色)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-PurpleFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(稀有度-紫色)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-RainbowFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(稀有度-彩虹色)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-AmberFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(稀有度-琥珀色)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	TileFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(图格)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	WallFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(墙)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	EquipableFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(可装备)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	ArmorFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(盔甲)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	VanityFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(时装)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	AccessoryFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(配饰)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	DyeFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(染料)"
+		EasterEggName: " {$Items.FilterItem.DisplayName}(Dye,Die,黛!)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	AmmoFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(弹药)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	BaitFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(鱼饵)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	MoneyFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(钱币)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	BagFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(宝藏袋)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	ToolFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(工具)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	WeaponFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(武器)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	MeleeFilterItem: {
+		// DisplayName: "{$Items.FilterItem.DisplayName} (Melee)"
+		// Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	MagicFilterItem: {
+		// DisplayName: "{$Items.FilterItem.DisplayName} (Magic)"
+		// Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	RangedFilterItem: {
+		// DisplayName: "{$Items.FilterItem.DisplayName} (Ranged)"
+		// Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	SummonFilterItem: {
+		// DisplayName: "{$Items.FilterItem.DisplayName} (Summon)"
+		// Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	ThrownFilterItem: {
+		// DisplayName: "{$Items.FilterItem.DisplayName} (Thrown)"
+		// Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	ConsumableFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(消耗品)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	MaterialFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(材料)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	PotionFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName}(药水)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	LivingHellstoneItem: {
+		// DisplayName: Living Hellstone
+		// Tooltip: Devours any item on contact, regardless of rarity
+	}
+}
+
+UI: {
+	Hover: {
+		// NotSet: Not set
+		// Generic: Filter:
+		// TransferFilterItem: Item allowed:
+		// InverseTransferFilterItem: Item restricted:
+	}
+}
