@@ -11,8 +11,6 @@
     <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="MagicStorage">
-      <HintPath>..\ModAssemblies\MagicStorage_v0.6.0.3.dll</HintPath>
-    </Reference>
+    <Reference Include="..\ModAssemblies\MagicStorage_v0.6.*.dll" />
   </ItemGroup>
 </Project>
