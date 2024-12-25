@@ -18,6 +18,7 @@ namespace MechTransfer.Tiles.Simple
         public virtual void AddRecipes()
         {
         }
+
         public override IEnumerable<Item> GetItemDrops(int i, int j)
         {
             return [];
