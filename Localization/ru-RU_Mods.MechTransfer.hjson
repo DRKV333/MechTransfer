@@ -1,0 +1,314 @@
+Items: {
+	PneumaticActuatorItem: {
+		DisplayName: " Пневматический привод"
+		Tooltip: " Используется в крафте устройств для перемещения предметов"
+	}
+
+	BigButtonItem: {
+		DisplayName: " Большая кнопка"
+		Tooltip: ""
+	}
+
+	SmallButtonItem: {
+		DisplayName: " Маленькая кнопка"
+		Tooltip: ""
+	}
+
+	OmniTurretItem: {
+		DisplayName: " Всенаправленная турель"
+		Tooltip: " Стреляет любыми боеприпасами"
+	}
+
+	SuperOmniTurretItem: {
+		DisplayName: " Ускоренная всенаправленная турель"
+		Tooltip: " Стреляет любыми боеприпасами"
+	}
+
+	MatterProjectorItem: {
+		DisplayName: " Материальный проэктор"
+		Tooltip: " Стреляет любыми боеприпасами очень, очень быстро"
+	}
+
+	TransferPipeItem: {
+		DisplayName: " Транспортная труба"
+		Tooltip: " Используется для подключения устройств для перемещения предметов"
+	}
+
+	TransferExtractorItem: {
+		DisplayName: " Извлекатель предметов"
+		Tooltip: " Извлекает предметы из рядом стоящих сундуков"
+	}
+
+	StackExtractorItem: {
+		DisplayName: " Извлекатель стаков"
+		Tooltip: " Извлекает целый стак за раз"
+	}
+
+	TransferInletItem: {
+		DisplayName: " Воронка"
+		Tooltip: " Собирает упавшие вещи"
+	}
+
+	TransferFilterItem: {
+		DisplayName: " Транспортный фильтр (белый список)"
+		Tooltip:
+			'''
+			 Поставьте в транспортировочную линию для фильтрации предметов
+			ПКМ предметом в руке для настройки фильтра
+			'''
+	}
+
+	InverseTransferFilterItem: {
+		DisplayName: " Транспортный фильтр (чёрный список)"
+		Tooltip:
+			'''
+			 Поставьте в транспортировочную линию для фильтрации предметов
+			ПКМ предметом в руке для настройки фильтра
+			'''
+	}
+
+	TransferGateItem: {
+		DisplayName: " Транспортный люк"
+		Tooltip: " Поставьте в транспортировочную линию для перекрытия перемещения претметов"
+	}
+
+	TransferRelayItem: {
+		DisplayName: " Транспортное реле"
+		Tooltip: " Передаёт предметы в одном направлении"
+	}
+
+	TransferInjectorItem: {
+		DisplayName: " Транспортный инжектор"
+		Tooltip: " Передаёт предметы в рядом стоящие сундуки"
+	}
+
+	TransferOutletItem: {
+		DisplayName: " Транспортный выбрасыватель"
+		Tooltip: " Выбрасывает предметы в мир"
+	}
+
+	MagicStorageInterfaceItem: {
+		DisplayName: " Интерфейс для магического хранилища"
+		Tooltip: " Позволяет взаимодействовать с магическим хранилищем"
+	}
+
+	PlayerInterfaceItem: {
+		DisplayName: " Интерфейс игрока"
+		Tooltip: " Позволяет взаимодействовать с инвентарём игрока"
+	}
+
+	TransferAssemblerItem: {
+		DisplayName: " Сборщик"
+		Tooltip:
+			'''
+				Работа в прогрессе
+			Автоматически создаёт вещи
+			ПКМ предметом в руке для настройки фильтра
+			'''
+	}
+
+	FilterItem: {
+		DisplayName: " Предметный фильтр"
+		Tooltip: " Используется в транспортном фильтре"
+	}
+
+	AnyFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Все)"
+		// Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-GrayFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Редкость: Серая)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-WhiteFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Редкость: Белая)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-BlueFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Редкость: Синяя)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-GreenFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Редкость: Зеленая)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-OrangeFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Редкость: Оранжевая)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-LightRedFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Редкость: Светло-красная)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-PinkFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Редкость: Розовая)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-LightPurpleFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Редкость: Светло-фиолетовая)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-LimeFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Редкость: Лаймовая)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-YellowFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Редкость: Желтая)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-CyanFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Редкость: Бирюзовая)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-RedFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Редкость: Красная)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-PurpleFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Редкость: Фиолетовая)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-RainbowFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Редкость: Радужная)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-AmberFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Редкость: Янтарная)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	TileFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Блок)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	WallFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Стена)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	EquipableFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Надевается)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	ArmorFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Броня)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	VanityFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Украшения)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	AccessoryFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Аксессуары)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	DyeFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Красители)"
+		EasterEggName: " {$Items.FilterItem.DisplayName} (Красители)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	AmmoFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Боеприпасы)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	BaitFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Наживка)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	MoneyFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Монеты)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	BagFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Мешки с сокровищами)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	ToolFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Инструмент)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	WeaponFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Оружие)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	MeleeFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Ближний бой)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	MagicFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Магическое оружие)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	RangedFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Дистанционное оружие)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	SummonFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Оружие призывателя)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	ThrownFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Оружие метателя)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	ConsumableFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Расходуется)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	MaterialFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Материал)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	PotionFilterItem: {
+		DisplayName: " {$Items.FilterItem.DisplayName} (Зелье)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	LivingHellstoneItem: {
+		DisplayName: " Живой адский камень"
+		Tooltip: " Уничтожает любой предмет при контакте, независимо от редкости"
+	}
+}
+
+UI: {
+	Hover: {
+		NotSet: " Не задано"
+		Generic: " Фильтр:"
+		TransferFilterItem: " Предметы разрешены:"
+		InverseTransferFilterItem: " Предметы блокируются:"
+	}
+}
