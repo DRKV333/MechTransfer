@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 
 namespace MechTransfer.ContainerAdapters
@@ -32,8 +33,7 @@ namespace MechTransfer.ContainerAdapters
             if (!Wiring.CheckMech(originX, originY, 10))
                 return false;
 
-            // TODO: Figure out how to play sound.
-            // Main.PlaySound(SoundID.Item11, x * 16, y * 16);
+            SoundEngine.PlaySound(SoundID.Item11, new Vector2(x * 16, y * 16));
 
             float velocityX = Main.rand.Next(85, 105);
             float velocityY = Main.rand.Next(-35, 11);

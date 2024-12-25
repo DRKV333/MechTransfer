@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -66,8 +67,7 @@ namespace MechTransfer.ContainerAdapters
                 case 228: direction = new Vector2(-0.5f, 0.5f); position.Y -= 8; break;
             }
 
-            // TODO: Figure out how to play sound.
-            // Main.PlaySound(SoundID.Item11, position);
+            SoundEngine.PlaySound(SoundID.Item11, position);
 
             Projectile proj = Main.projectile[Projectile.NewProjectile(null, position, direction * shootSpeed[style], item.shoot, baseDamage[style] * (1 + item.damage / 100), item.knockBack, Main.myPlayer)];
             proj.hostile = true;
