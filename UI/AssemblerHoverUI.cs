@@ -3,8 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.UI;
 using Terraria.GameContent.UI.Elements;
@@ -22,8 +22,10 @@ namespace MechTransfer.UI
         private UIText itemText;
         private UIText titleText;
         private UIText stationText;
+        private UIText atText;
         private Item[] fakeInv = new Item[11];
         private Item[] ingrRow = [];
+        private float lowestSlot;
 
         private const string NotSetTextKey = "Mods.MechTransfer.UI.Hover.NotSet";
 
@@ -47,8 +49,13 @@ namespace MechTransfer.UI
             itemText.Top.Set(0, 0);
             panel.Append(itemText);
 
+            atText = new UIText("@ ");
+            atText.Left.Set(10, 0);
+            atText.TextOriginX = 0f;
+            panel.Append(atText);
+
             stationText = new UIText("");
-            stationText.Left.Set(10, 0);
+            stationText.Left.Set(10 + atText.MinWidth.Pixels, 0);
             stationText.TextOriginX = 0f;
             panel.Append(stationText);
 
@@ -75,34 +82,38 @@ namespace MechTransfer.UI
             stationText.Width.Set(panel.GetInnerDimensions().Width-5, 0f);
 
             string statnText = "";
+            string atTextString = "";
             float statnHeight = 0;
+            int statnLines = 0;
             if (stations.Count > 0)
             {
+                UIText stationTextBox = new UIText(",");
+                float semicolonWidth = stationTextBox.MinWidth.Pixels;
+                atTextString = "@ ";
                 DynamicSpriteFont font = FontAssets.MouseText.Value;
                 float spacing = font.LineSpacing;
-                statnText = "@ ";
+                statnText = "";
                 for (int i = 0; i < stations.Count; i++)
                 {
                     int id = stations[i];
-                    if (i != 0) statnText += ", ";
-                    statnText += Lang.GetMapObjectName(MapHelper.TileToLookup(id, Recipe.GetRequiredTileStyle(id)));
-                    if (i == 0)
-                    {
-                        stationText.IsWrapped = false;
-                        stationText.SetText(statnText);
-                        panel.Width.Pixels = Math.Max(panel.Width.Pixels, stationText.MinWidth.Pixels+30);
-                        stationText.IsWrapped = true;
-                    }
+                    if (i != 0) statnText += ",\n";
+                    string stationName = Lang.GetMapObjectName(MapHelper.TileToLookup(id, Recipe.GetRequiredTileStyle(id)));
+                    statnText += stationName;
 
+                    stationTextBox.SetText(stationName);
+                    panel.Width.Pixels = Math.Max(panel.Width.Pixels, stationTextBox.MinWidth.Pixels + stationText.Left.Pixels + 20 + (i < stations.Count - 1 ? semicolonWidth : 0));
                 }
 
-                string visibleText = font.CreateWrappedText(statnText, stationText.Width.Pixels);
-                statnHeight = visibleText.Split('\n').Length * spacing;
+                statnLines = statnText.Split('\n').Length;
+                statnHeight = statnLines * spacing;
             }
+            atText.SetText(atTextString);
             stationText.SetText(statnText);
             panel.Height.Pixels = statnHeight + (TextureAssets.InventoryBack.Value.Width + ((rows == 0 ? 0 : (ingrRow.Length - 10) % rows + 1) * (TextureAssets.InventoryBack.Value.Height + 4))) * 0.5f + 10;
-            stationText.Top.Set(panel.GetInnerDimensions().Height - statnHeight*0.5f, 0f);
-
+            float top = lowestSlot;
+            atText.Top.Set(top, 0f);
+            stationText.Top.Set(top, 0f);
+            
             Vector2 pos = Vector2.Transform(Main.MouseScreen, Main.GameViewMatrix.TransformationMatrix);
 
             Left.Pixels = (pos.X + 10) / Main.UIScale;
@@ -118,6 +129,7 @@ namespace MechTransfer.UI
 
             base.Draw(spriteBatch);
 
+            lowestSlot = TextureAssets.InventoryBack.Value.Height * 0.5f * Main.UIScale + 10;
             float oldScale = Main.inventoryScale;
             Main.inventoryScale = 0.5f;
             ItemSlot.Draw(spriteBatch, fakeInv, ItemSlot.Context.InventoryItem, 10, new Vector2(Left.Pixels + 5, Top.Pixels + 30));
@@ -129,6 +141,7 @@ namespace MechTransfer.UI
                 int x = j % cols;
                 int y = j / cols;
                 ItemSlot.Draw(spriteBatch, ingrRow, ItemSlot.Context.InventoryItem, i, new Vector2(Left.Pixels + 5 + (x * 28)+5, Top.Pixels + 56 + (y * 28)+2));
+                lowestSlot = ((y+1) * 28) + TextureAssets.InventoryBack.Value.Height * 0.5f;
             }
             Main.inventoryScale = oldScale;
 
