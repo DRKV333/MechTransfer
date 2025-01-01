@@ -46,7 +46,7 @@ namespace MechTransfer.Tiles
             if (TryGetEntity(i, j, out TransferAssemblerTileEntity entity))
                 ModContent.GetInstance<UIModSystem>().assemblerHoverUI.Display(entity.Result, entity.Ingredients, entity.Stations, HoverText(entity), HoverColor(entity));
         }
-        //TODO consider opening a recipe select list
+
         public override bool RightClick(int i, int j)
         {
             if (!Main.LocalPlayer.HeldItem.IsAir)
