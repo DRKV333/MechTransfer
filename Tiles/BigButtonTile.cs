@@ -3,6 +3,7 @@ using MechTransfer.Tiles.Simple;
 using Microsoft.Xna.Framework;
 using System.IO;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -38,11 +39,10 @@ namespace MechTransfer.Tiles
 
         public override void MouseOver(int i, int j)
         {
-            // TODO
-            // Main.LocalPlayer.showItemIcon = true;
-            // Main.LocalPlayer.showItemIcon2 = PlaceItems[0].Item.type;
-            
-            Main.LocalPlayer.noThrow = 2;
+            Player player = Main.LocalPlayer;
+            player.cursorItemIconEnabled = true;
+            player.cursorItemIconID = PlaceItems[0].Type;
+            player.noThrow = 2;
         }
 
         public override bool RightClick(int i, int j)
@@ -63,8 +63,7 @@ namespace MechTransfer.Tiles
             }
 			ModContent.GetInstance<ButtonDelayWorld>().setPoint(topLeft);
 
-            // TODO: Figure out how to play sound.
-            // Main.PlaySound(SoundID.MenuTick);
+            SoundEngine.PlaySound(SoundID.MenuTick);
 
             return true;
         }

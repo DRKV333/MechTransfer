@@ -11,9 +11,9 @@ namespace MechTransfer.Tiles
     {
         public Item item = new Item();
 
-        public void SyncData()
+        public virtual void SyncData()
         {
-            if (Main.netMode == 1)
+            if (Main.netMode == NetmodeID.MultiplayerClient)
             {
                 ModPacket packet = NetRouter.GetPacketTo(ModContent.GetInstance<TransferFilterTileEntity>(), Mod);
                 packet.Write(ID);
@@ -29,9 +29,9 @@ namespace MechTransfer.Tiles
 
         public override void LoadData(TagCompound tag)
         {
-            if (tag.ContainsKey("Item"))
+            if (tag.ContainsKey("item"))
             {
-                item = ItemIO.Load((TagCompound)tag["Item"]);
+                item = ItemIO.Load((TagCompound)tag["item"]);
             }
             else if (tag.ContainsKey("ID"))
             {
@@ -54,9 +54,9 @@ namespace MechTransfer.Tiles
             NetRouter.AddHandler(this);
         }
 
-        public void HandlePacket(BinaryReader reader, int WhoAmI)
+        public virtual void HandlePacket(BinaryReader reader, int WhoAmI)
         {
-            if (Main.netMode != 2)
+            if (Main.netMode != NetmodeID.Server)
                 return;
 
             TransferFilterTileEntity FilterEntity = (TransferFilterTileEntity)ByID[reader.ReadInt32()];

@@ -7,8 +7,10 @@ namespace MechTransfer.UI
 {
     internal class UIModSystem : ModSystem
     {
-        private GameInterfaceLayer interfaceLayer;
+        private GameInterfaceLayer filterLayer;
+        private GameInterfaceLayer assemblerLayer;
         public FilterHoverUI filterHoverUI;
+        public AssemblerHoverUI assemblerHoverUI;
 
         public override void Load()
         {
@@ -17,10 +19,21 @@ namespace MechTransfer.UI
                 filterHoverUI = new FilterHoverUI();
                 filterHoverUI.Activate();
 
-                interfaceLayer = new LegacyGameInterfaceLayer("MechTransfer: UI",
+                filterLayer = new LegacyGameInterfaceLayer("MechTransfer: UI_Filter",
                                                                 delegate
                                                                 {
                                                                     filterHoverUI.Draw(Main.spriteBatch);
+                                                                    return true;
+                                                                },
+                                                                InterfaceScaleType.UI);
+
+                assemblerHoverUI = new AssemblerHoverUI();
+                assemblerHoverUI.Activate();
+
+                assemblerLayer = new LegacyGameInterfaceLayer("MechTransfer: UI_Assembler",
+                                                                delegate
+                                                                {
+                                                                    assemblerHoverUI.Draw(Main.spriteBatch);
                                                                     return true;
                                                                 },
                                                                 InterfaceScaleType.UI);
@@ -32,9 +45,10 @@ namespace MechTransfer.UI
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
             int index = layers.FindIndex(x => x.Name == "Vanilla: Mouse Text") + 1;
-            layers.Insert(index, interfaceLayer);
+            layers.Insert(index, filterLayer);
+            layers.Insert(index, assemblerLayer);
 
-            if (filterHoverUI.visible)
+            if (filterHoverUI.visible || assemblerHoverUI.visible)
             {
                 layers.Find(x => x.Name == "Vanilla: Interact Item Icon").Active = false;
             }

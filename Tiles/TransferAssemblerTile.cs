@@ -1,4 +1,5 @@
 ﻿using MechTransfer.Items;
+using MechTransfer.UI;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,17 +41,45 @@ namespace MechTransfer.Tiles
             TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.None, 0, 0);
             base.SetTileObjectData();
         }
+        public override void DisplayTooltip(int i, int j)
+        {
+            if (TryGetEntity(i, j, out TransferAssemblerTileEntity entity))
+                ModContent.GetInstance<UIModSystem>().assemblerHoverUI.Display(entity.Result, entity.Ingredients, entity.Stations, HoverText(entity), HoverColor(entity));
+        }
+
+        public override bool RightClick(int i, int j)
+        {
+            if (!Main.LocalPlayer.HeldItem.IsAir)
+            {
+                if (TryGetEntity(i, j, out TransferAssemblerTileEntity tileEntity))
+                {
+                    tileEntity.item.stack = 1;
+                    bool sameItem = tileEntity.item.type == Main.LocalPlayer.HeldItem.type;
+                    tileEntity.item = Main.LocalPlayer.HeldItem.Clone();
+                    if (sameItem)
+                    {
+                        tileEntity.SetNextRecipe();
+                    }
+                    else
+                    {
+                        tileEntity.SetRecipe();
+                    }
+                    tileEntity.SyncData();
+                    return true;
+                }
+            }
+            return false;
+        }
 
         public override void HitWire(int i, int j)
         {
-            if (Main.netMode == 1)
+            if (Main.netMode == NetmodeID.MultiplayerClient)
                 return;
 
-            TransferAssemblerTileEntity entity;
-            if (!TryGetEntity(i, j, out entity))
+            if (!TryGetEntity(i, j, out TransferAssemblerTileEntity entity))
                 return;
 
-            if (entity.item.IsAir || entity.stock.stack > 0)
+            if (entity.item.IsAir || entity.recipe is null || entity.stock.stack > 0)
                 return;
 
             inventory.Clear();
@@ -59,19 +88,7 @@ namespace MechTransfer.Tiles
                 inventory.RegisterContainer(c);
             }
 
-            bool foundRecipe = false;
-            for (int r = 0; r < Recipe.maxRecipes && !Main.recipe[r].createItem.IsAir; r++)
-            {
-                if (Main.recipe[r].createItem.type == entity.item.type)
-                {
-                    foundRecipe = true;
-                    if (TryMakeRecipe(Main.recipe[r], entity))
-                        break;
-                }
-            }
-
-            if (!foundRecipe)
-                entity.Status = TransferAssemblerTileEntity.StatusKind.NoRecipe;
+            TryMakeRecipe(entity.recipe, entity);
 
             inventory.Clear();
 
@@ -80,8 +97,7 @@ namespace MechTransfer.Tiles
 
         private bool TryMakeRecipe(Recipe recipe, TransferAssemblerTileEntity entity)
         {
-            bool alchemy;
-            if (!SearchStation(recipe, entity.Position.X, entity.Position.Y, out alchemy))
+            if (!SearchStation(recipe, entity.Position.X, entity.Position.Y, out bool alchemy))
             {
                 entity.Status = TransferAssemblerTileEntity.StatusKind.MissingStation;
                 return false;
@@ -104,7 +120,7 @@ namespace MechTransfer.Tiles
             {
                 // TODO:
                 // Not sure what to call instead of RecipeHooks.OnCraft and ItemLoader.OnCraft
-                // RecipeLoader.OnCraft maybe?
+                // RecipeLoader.OnCraft maybe? Nebula: yeah probably
             }
 
             entity.stock = clone;
@@ -118,17 +134,10 @@ namespace MechTransfer.Tiles
         {
             alchemy = false;
 
-            // TODO: It looks like tModLoader has a new Condition system for this.
-            // Vanilla recipes still use these needX fields, but they have been made inaccessible.
-            // Also, there are a few new ones in 1.4: needEverythingSeed, needGraveyardBiome
-            // The Conditions are tied to LocalPlayer, and there's like a million of them.
-            // So no fluid limitations, it would be too much effort.
+            // Conditions are tied to LocalPlayer, and there's like a million of them.
+            // We're gonna check them on recipe setup directly, so no work to do here besides station tiles.
 
             bool[] tileOk = new bool[recipe.requiredTile.Count];
-            // bool waterOk = !recipe.needWater;
-            // bool honeyOk = !recipe.needHoney;
-            // bool lavaOk = !recipe.needLava;
-            // bool snowOk = !recipe.needSnowBiome;
 
             for (int i = x - 5; i <= x + 5; i++)
             {
@@ -139,6 +148,7 @@ namespace MechTransfer.Tiles
                     {
                         for (int z = 0; z < recipe.requiredTile.Count && recipe.requiredTile[z] != -1; z++)
                         {
+                            
                             ModTile modTile = TileLoader.GetTile(tile.TileType);
 
                             if ((recipe.requiredTile[z] == tile.TileType) ||
@@ -158,21 +168,8 @@ namespace MechTransfer.Tiles
                             //can't access TileLoader.HookAdjTiles, so if a mod uses that, it won't work
                         }
                     }
-
-                    // if (tile != null && tile.LiquidAmount > 200)
-                    // {
-                    //     switch (tile.LiquidType)
-                    //     {
-                    //         case 0: waterOk = true; break;
-                    //         case 2: honeyOk = true; break;
-                    //         case 1: lavaOk = true; break;
-                    //     }
-                    // }
                 }
             }
-
-            // if (!waterOk || !honeyOk || !lavaOk || !snowOk)
-            //     return false;
 
             for (int i = 0; i < recipe.requiredTile.Count && recipe.requiredTile[i] != -1; i++)
             {

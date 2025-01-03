@@ -101,9 +101,9 @@ Items: {
 		DisplayName: Transfer Assembler
 		Tooltip:
 			'''
-			WIP
 			Crafts items automatically
-			Right click with item in hand to set filter
+			Right click with item in hand to set result and change recipe
+			Can only cycle through recipes whose requirements are met
 			'''
 	}
 

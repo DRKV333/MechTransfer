@@ -22,6 +22,7 @@ namespace MechTransfer.Tiles
         protected override void SetTileObjectData()
         {
             TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
+            TileObjectData.newTile.Origin = new Point16(1,1);
             TileObjectData.newTile.LavaDeath = false;
             TileObjectData.newTile.StyleHorizontal = true;
             TileObjectData.newTile.CoordinateHeights = new int[] { 16, 18 };
@@ -120,9 +121,10 @@ namespace MechTransfer.Tiles
             if (tile == null || !tile.HasTile)
                 return;
 
-            // TODO
-            // Main.LocalPlayer.showItemIcon2 = PlaceItems[GetDropKind(tile.TileFrameX, tile.TileFrameY)].item.type;
-            // Main.LocalPlayer.showItemIcon = true;
+            Player player = Main.LocalPlayer;
+            player.cursorItemIconEnabled = true;
+            player.cursorItemIconID = PlaceItems[GetDropKind(tile.TileFrameX, tile.TileFrameY)].Type;
+            player.noThrow = 2;
         }
 
         public override int GetDropKind(int Fx, int Fy)
