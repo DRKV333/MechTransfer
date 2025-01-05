@@ -10,7 +10,7 @@ namespace MechTransfer
 {
     internal class MechTransferAssemblerWorld : ModSystem
     {
-        private Texture2D pixel;
+        private Texture2D pixel = null;
 
         private Asset<Texture2D> transitionTop;
         private Asset<Texture2D> transitionBottom;
@@ -21,10 +21,6 @@ namespace MechTransfer
         {
             if (!Main.dedServ)
             {
-                // TODO: Figure out how we can create this on the main thread.
-                // pixel = new Texture2D(Main.graphics.GraphicsDevice, 1, 1);
-                // pixel.SetData(new Color[] { Color.White });
-
                 transitionTop = Mod.Assets.Request<Texture2D>("Tiles/Transitions/Top");
                 transitionBottom = Mod.Assets.Request<Texture2D>("Tiles/Transitions/Bottom");
                 transitionLeft = Mod.Assets.Request<Texture2D>("Tiles/Transitions/Left");
@@ -36,6 +32,12 @@ namespace MechTransfer
 
         public override void PostDrawTiles()
         {
+            if (pixel == null)
+            {
+                pixel = new Texture2D(Main.graphics.GraphicsDevice, 1, 1);
+                pixel.SetData(new Color[] { Color.White });
+            }
+
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, null, null, null, Main.GameViewMatrix.TransformationMatrix);
 
             //These should be recalculated for view space, but they don't really hurt anything like this, so...
@@ -79,7 +81,6 @@ namespace MechTransfer
 
         private void DrawRectFast(int left, int top, int height, int width)
         {
-            /*
             if (Main.LocalPlayer.gravDir == -1)
                 top = Main.screenHeight - top - height;
 
@@ -87,7 +88,6 @@ namespace MechTransfer
             Main.spriteBatch.Draw(pixel, new Rectangle(left, top + height, width, 2), null, Color.LightSeaGreen);
             Main.spriteBatch.Draw(pixel, new Rectangle(left, top, 2, height), null, Color.LightSeaGreen);
             Main.spriteBatch.Draw(pixel, new Rectangle(left + width, top, 2, height), null, Color.LightSeaGreen);
-            */
         }
 
         private void DrawTransition(int x, int y, Texture2D texture)
