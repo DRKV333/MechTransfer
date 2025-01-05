@@ -7,30 +7,31 @@ namespace MechTransfer.Items
     [Autoload(false)]
     public class SimplePrototypeItem : ModItem
     {
+        public override string Name { get; }
+        
         private readonly string param_name;
-        private readonly int param_place_type;
-        private readonly int param_place_style;
-        private readonly int param_width;
-        private readonly int param_height;
-        private readonly int param_value;
-        public override string Name => param_name;
+        private readonly int placeType;
+        private readonly int placeStyle;
+        private readonly int width;
+        private readonly int height;
+        private readonly int value;
 
         public SimplePrototypeItem(string name, int placeType, int width = 16, int height = 16, int placeStyle = 0, int value = 50000)
         {
-            param_name = name;
-            param_place_type = placeType;
-            param_width = width;
-            param_height = height;
-            param_place_style = placeStyle;
-            param_value = value;
+            Name = name;
+            this.placeType = placeType;
+            this.width = width;
+            this.height = height;
+            this.placeStyle = placeStyle;
+            this.value = value;
         }
 
         public override void SetDefaults()
         {
-            Item.DefaultToPlaceableTile(param_place_type, param_place_style);
-            Item.width = param_width;
-            Item.height = param_height;
-            Item.value = param_value;
+            Item.DefaultToPlaceableTile(placeType, placeStyle);
+            Item.width = width;
+            Item.height = height;
+            Item.value = value;
             Item.maxStack = Item.CommonMaxStack;
             Item.mech = true;
             Item.rare = ItemRarityID.Blue;
