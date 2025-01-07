@@ -13,4 +13,7 @@
   <ItemGroup>
     <Reference Include="..\ModAssemblies\MagicStorage_v0.6.*.dll" />
   </ItemGroup>
+  <ItemGroup>
+	<Reference Include="..\ModAssemblies\ImproveGame_v1.8.0.3.dll" />
+  </ItemGroup>
 </Project>
