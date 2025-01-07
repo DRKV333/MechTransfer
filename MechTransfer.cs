@@ -246,7 +246,7 @@ namespace MechTransfer
 
             //Extractinator
             ExtractinatorAdapter extractinatorAdapter = new ExtractinatorAdapter();
-            Call(registerAdapterReflection, extractinatorAdapter, new int[] { TileID.Extractinator });
+            Call(registerAdapterReflection, extractinatorAdapter, new int[] { TileID.Extractinator, TileID.ChlorophyteExtractinator });
 
             //Player interface
             PlayerInterfaceAdapter playerInterfaceAdapter = new PlayerInterfaceAdapter(this);
