@@ -446,12 +446,17 @@ namespace MechTransfer.ContainerAdapters
 
             int tempTargetX = Player.tileTargetX;
             Player.tileTargetX = x;
+            int tempTargetY = Player.tileTargetY;
+            Player.tileTargetY = y;
+
             ItemLoader.ExtractinatorUse(ref resultType, ref resultStack, extractType, extractinatorBlockType);
             if (resultType > 0)
             {
                 Item.NewItem(new EntitySource_TileInteraction(Main.LocalPlayer, x, y), x * 16, y * 16, 1, 1, resultType, resultStack, false, -1, false, false);
             }
 
+            Player.tileTargetX = tempTargetX;
+            Player.tileTargetY = tempTargetY;
         }
 
         public bool InjectItem(int x, int y, Item item)
