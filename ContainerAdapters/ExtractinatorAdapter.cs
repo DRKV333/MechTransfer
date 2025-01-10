@@ -18,7 +18,7 @@ namespace MechTransfer.ContainerAdapters
             int amberRate = 5000;
             int gemRate = 25;
             int gemAmberRate = 50;
-            int fossilRaete = -1;
+            int fossilRate = -1;
             int oldShoe = -1;
             int moss = -1;
             int coin = 1;
@@ -31,7 +31,7 @@ namespace MechTransfer.ContainerAdapters
                     amberRate /= 3;
                     gemRate *= 2;
                     gemAmberRate = 20;
-                    fossilRaete = 10;
+                    fossilRate = 10;
                     break;
                 /*
                 case 2:
@@ -40,7 +40,7 @@ namespace MechTransfer.ContainerAdapters
                     amberRate = -1;
                     gemRate = -1;
                     gemAmberRate = -1;
-                    fossilRaete = -1;
+                    fossilRate = -1;
                     oldShoe = 1;
                     coin = -1;
                     break;
@@ -51,7 +51,7 @@ namespace MechTransfer.ContainerAdapters
                     amberRate = -1;
                     gemRate = -1;
                     gemAmberRate = -1;
-                    fossilRaete = -1;
+                    fossilRate = -1;
                     oldShoe = -1;
                     coin = -1;
                     moss = 1;
@@ -60,7 +60,7 @@ namespace MechTransfer.ContainerAdapters
 
             int resultType;
             int resultStack = 1;
-            if (fossilRaete != -1 && Main.rand.NextBool(fossilRaete))
+            if (fossilRate != -1 && Main.rand.NextBool(fossilRate))
             {
                 resultType = 3380;
                 if (Main.rand.NextBool(5))
