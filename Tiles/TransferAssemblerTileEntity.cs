@@ -18,9 +18,9 @@ namespace MechTransfer.Tiles
 
         public Item Result => item;
         private List<Item> ingredients = null;
-        public List<Item> Ingredients => recipe is not null ? recipe.requiredItem : ingredients;
-        public List<int> Groups => recipe is not null ? recipe.acceptedGroups : [];
-        public List<int> Stations => recipe is not null ? recipe.requiredTile : [];
+        public List<Item> Ingredients => recipe != null ? recipe.requiredItem : ingredients;
+        public List<int> Groups => recipe != null ? recipe.acceptedGroups : [];
+        public List<int> Stations => recipe != null ? recipe.requiredTile : [];
 
         private int timer = 0;
 
@@ -55,18 +55,31 @@ namespace MechTransfer.Tiles
                     NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Position.X, Position.Y);
             }
         }
+
         public bool MatchRecipe(Recipe other)
         {
-            if (item.IsAir || Ingredients is null) return false;
-            if (recipe is not null) return recipe.Equals(other);
-            if (Result.type  != other.createItem.type)  return false;
-            if (Result.stack != other.createItem.stack) return false;
-            if (Ingredients.Count != other.requiredItem.Count) return false;
+            if (item.IsAir || Ingredients == null)
+                return false;
+            
+            if (recipe != null)
+                return recipe.Equals(other);
+            
+            if (Result.type != other.createItem.type ||
+                Result.stack != other.createItem.stack ||
+                Ingredients.Count != other.requiredItem.Count)
+            {
+                return false;
+            }
+            
             for (int i = 0; i < Ingredients.Count; i++)
             {
-                if (Ingredients[i].type  != other.requiredItem[i].type)  return false;
-                if (Ingredients[i].stack != other.requiredItem[i].stack) return false;
+                if (Ingredients[i].type != other.requiredItem[i].type ||
+                    Ingredients[i].stack != other.requiredItem[i].stack)
+                {
+                    return false;
+                }
             }
+
             return true;
         }
 
@@ -85,11 +98,12 @@ namespace MechTransfer.Tiles
                 Status = StatusKind.Ready;
                 return;
             }
-            else if (item.ModItem is not null && item.ModItem.Name == "UnloadedItem")
+            else if (item.ModItem != null && item.ModItem.Name == "UnloadedItem")
             {
                 Status = StatusKind.NoRecipe;
                 return;
             }
+
             Recipe firstRecipe = null; // we default to the first recipe in the list if the loop fails (mode 1 or higher)
             bool foundRecipe = false; // in mode 2 we need to first find the currently set recipe. Only when found we save the next valid recipe
             for (int r = 0; r < Recipe.maxRecipes && !Main.recipe[r].createItem.IsAir; r++)
@@ -109,7 +123,10 @@ namespace MechTransfer.Tiles
                     if (valid)
                     {
                         firstRecipe ??= currRecipe;
-                        if (mode == 0) break; //in mode 0, we found our first recipe so we end it here.
+                        
+                        if (mode == 0) //in mode 0, we found our first recipe so we end it here.
+                            break;
+                        
                         if (MatchRecipe(currRecipe))
                         {
                             if (mode == 1) //in mode 1, we found a match so we end it here
@@ -120,7 +137,7 @@ namespace MechTransfer.Tiles
                             }
                             foundRecipe = true; //in mode 2, we found our match so we remember this fact for later
                         }
-                        else if(foundRecipe) // in mode 2, we found a valid recipe after our match so we end it here
+                        else if (foundRecipe) // in mode 2, we found a valid recipe after our match so we end it here
                         {
                             recipe = currRecipe;
                             Status = StatusKind.Ready;
@@ -141,9 +158,12 @@ namespace MechTransfer.Tiles
                 recipe = null;
                 ingredients = null;
             }
+
             Status = StatusKind.NoRecipe;
         }
+
         public void ReloadRecipe() => SetRecipe(1);
+        
         public void SetNextRecipe() => SetRecipe(2);
 
         public override void SaveData(TagCompound tag)
@@ -156,13 +176,17 @@ namespace MechTransfer.Tiles
         public override void LoadData(TagCompound tag)
         {
             base.LoadData(tag);
+            
             if (tag.ContainsKey("ingrds"))
             {
                 ingredients = tag.Get<List<Item>>("ingrds");
                 ReloadRecipe();
             }
             else
+            {
                 Status = StatusKind.NoRecipe;
+            }
+
             stock = ItemIO.Load((TagCompound)tag["stck"]);
         }
 
@@ -172,11 +196,14 @@ namespace MechTransfer.Tiles
             writer.Write((byte)Status);
             writer.Write(MissingItemType);
             ItemIO.Send(stock, writer, true);
-            writer.Write(Ingredients is null ? -1 : Ingredients.Count);
-            if (Ingredients is not null)
+            writer.Write(Ingredients == null ? -1 : Ingredients.Count);
+
+            if (Ingredients != null)
             {
                 foreach (Item ingredient in Ingredients)
+                {
                     ItemIO.Send(ingredient, writer, true);
+                }
             }
         }
 
@@ -187,11 +214,14 @@ namespace MechTransfer.Tiles
             MissingItemType = reader.ReadInt32();
             stock = ItemIO.Receive(reader, true);
             List<Item> ingrds = [];
+
             int num = reader.ReadInt32();
             if (num >= 0)
             {
                 for (int i = 0; i < num; i++)
+                {
                     ingrds.Add(ItemIO.Receive(reader, true));
+                }
             }
             else
             {
@@ -208,8 +238,8 @@ namespace MechTransfer.Tiles
                 ModPacket packet = NetRouter.GetPacketTo(ModContent.GetInstance<TransferAssemblerTileEntity>(), Mod);
                 packet.Write(ID);
                 ItemIO.Send(item, packet);
-                packet.Write(Ingredients is null? -1 : Ingredients.Count);
-                if (Ingredients is not null)
+                packet.Write(Ingredients == null ? -1 : Ingredients.Count);
+                if (Ingredients != null)
                 {
                     foreach (Item ingredient in Ingredients)
                         ItemIO.Send(ingredient, packet);
@@ -226,17 +256,22 @@ namespace MechTransfer.Tiles
             TransferAssemblerTileEntity FilterEntity = (TransferAssemblerTileEntity)ByID[reader.ReadInt32()];
             FilterEntity.item = ItemIO.Receive(reader);
             List<Item> ingrds = [];
+
             int num = reader.ReadInt32();
             if (num >= 0)
             {
                 for (int i = 0; i < num; i++)
+                {
                     ingrds.Add(ItemIO.Receive(reader));
+                }
+
                 FilterEntity.ingredients = ingrds;
             }
             else
             {
                 FilterEntity.ingredients = null;
             }
+
             ReloadRecipe();
             NetMessage.SendData(MessageID.TileEntitySharing, -1, WhoAmI, null, FilterEntity.ID, FilterEntity.Position.X, FilterEntity.Position.Y);
         }

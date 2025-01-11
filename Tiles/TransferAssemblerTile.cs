@@ -79,7 +79,7 @@ namespace MechTransfer.Tiles
             if (!TryGetEntity(i, j, out TransferAssemblerTileEntity entity))
                 return;
 
-            if (entity.item.IsAir || entity.recipe is null || entity.stock.stack > 0)
+            if (entity.item.IsAir || entity.recipe == null || entity.stock.stack > 0)
                 return;
 
             inventory.Clear();
