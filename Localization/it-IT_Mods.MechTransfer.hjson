@@ -97,9 +97,9 @@ Items: {
 		DisplayName: Assemblatore di trasferimento
 		Tooltip:
 			'''
-			WIP
 			Fabbrica oggetti automaticamente
-			<right> con un oggetto in mano per impostare il filtro
+			Clic destro con un oggetto in mano per impostare il risultato e scegliere la ricetta
+			Puoi scegliere solo tra ricette per cui soddisfi i requisiti
 			'''
 	}
 
