@@ -1,3 +1,4 @@
+using ImproveGame.Content.Tiles;
 using MechTransfer.ContainerAdapters;
 using MechTransfer.Items;
 using MechTransfer.Tiles;
@@ -257,6 +258,13 @@ namespace MechTransfer
                 //Magic storage interface
                 MagicStorageInterfaceAdapter magicStorageInterfaceAdapter = new MagicStorageInterfaceAdapter();
                 Call(registerAdapterReflection, magicStorageInterfaceAdapter, new int[] { ModContent.TileType<MagicStorageInterfaceTile>() });
+            }
+
+            if(ModLoader.TryGetMod("ImproveGame", out _))
+            {
+                //Fargo's soul interface
+                QotAutoFisherAdapter qotAutoFisherAdapter = new QotAutoFisherAdapter();
+                Call(registerAdapterReflection, qotAutoFisherAdapter, new int[] { ModContent.TileType<Autofisher>() });
             }
         }
 
