@@ -1,0 +1,310 @@
+Items: {
+	PneumaticActuatorItem: {
+		DisplayName: Azionatore pneumatico
+		Tooltip: Usato per fabbricare dispositivi di trasferimento oggetti
+	}
+
+	BigButtonItem: {
+		DisplayName: Pulsante piccolo
+		Tooltip: ""
+	}
+
+	SmallButtonItem: {
+		DisplayName: Pulsante grande
+		Tooltip: ""
+	}
+
+	OmniTurretItem: {
+		DisplayName: Omni-torretta
+		Tooltip: Spara qualsiasi munizione standard
+	}
+
+	SuperOmniTurretItem: {
+		DisplayName: Omni-torretta super
+		Tooltip: Spara qualsiasi munizione standard
+	}
+
+	MatterProjectorItem: {
+		DisplayName: Proiettore di materia
+		Tooltip: Spara qualsiasi munizione standard molto, molto velocemente
+	}
+
+	TransferPipeItem: {
+		DisplayName: Tubo di trasferimento
+		Tooltip: Usato per connettere dispositivi di trasferimento
+	}
+
+	TransferExtractorItem: {
+		DisplayName: Estrattore di trasferimento
+		Tooltip: Estrae oggetti da casse adiacenti
+	}
+
+	StackExtractorItem: {
+		DisplayName: Estrattore di slot
+		Tooltip: Estrae un intero slot alla volta
+	}
+
+	TransferInletItem: {
+		DisplayName: Entrata di trasferimento
+		Tooltip: Raccoglie gli oggetti gettati su di esso
+	}
+
+	TransferFilterItem: {
+		DisplayName: Filtro di trasferimento (Lista bianca)
+		Tooltip:
+			'''
+			Mettilo in una linea di tubi di trasferimento
+			<right> con un oggetto in mano per impostare il filtro
+			'''
+	}
+
+	InverseTransferFilterItem: {
+		DisplayName: Filtro di trasferimento (Lista nera)
+		Tooltip: "{$TransferFilterItem.Tooltip}"
+	}
+
+	TransferGateItem: {
+		DisplayName: Porta di trasferimento
+		Tooltip: Mettilo in una linea di tubi di trasferimento per controllare il flusso di oggetti con dei cavi
+	}
+
+	TransferRelayItem: {
+		DisplayName: Rele' di trasferimento
+		Tooltip: Riceve oggetti, e li invia nuovamente
+	}
+
+	TransferInjectorItem: {
+		DisplayName: Iniettore di trasferimento
+		Tooltip: Injects items into adjacent chests
+	}
+
+	TransferOutletItem: {
+		DisplayName: Sbocco di trasferimento
+		Tooltip: Espelle oggetti
+	}
+
+	MagicStorageInterfaceItem: {
+		// DisplayName: Magic Storage Interface
+		// Tooltip: Allows you to inject and extract items from storage systems
+	}
+
+	PlayerInterfaceItem: {
+		DisplayName: Interfaccia per giocatori
+		Tooltip: Rende possibile interagire con gli oggetti nell'inventario di un giocatore
+	}
+
+	TransferAssemblerItem: {
+		DisplayName: Assemblatore di trasferimento
+		Tooltip:
+			'''
+			Fabbrica oggetti automaticamente
+			Clic destro con un oggetto in mano per impostare il risultato e scegliere la ricetta
+			Puoi scegliere solo tra ricette per cui soddisfi i requisiti
+			'''
+	}
+
+	FilterItem: {
+		DisplayName: Filtro per oggetti
+		Tooltip: Da usare in filtri di trasferimento
+	}
+
+	AnyFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Qualsiasi)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-GrayFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Rarita'-Grigio)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-WhiteFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Rarita'-Bianco)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-BlueFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Rarita'-Blu)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-GreenFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Rarita'-Verde)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-OrangeFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Rarita'-Arancione)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-LightRedFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Rarita'-Rosso Chiaro)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-PinkFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Rarita'-Rosa)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-LightPurpleFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Rarita'-Viola Chiaro)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-LimeFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Rarita'-Lime)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-YellowFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Rarita'-Giallo)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-CyanFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Rarita'-Ciano)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-RedFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Rarita'-Rosso)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-PurpleFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Rarita'-Viola)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-RainbowFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Rarita'-Arcobaleno)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	Rarity-AmberFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Rarita'-Ambra)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	TileFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Blocco)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	WallFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Muro)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	EquipableFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Equipaggiabile)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	ArmorFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Armatura)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	VanityFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Estetico)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	AccessoryFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Accessorio)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	DyeFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Colorante)"
+		EasterEggName: "{DisplayName}"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	AmmoFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Munizione)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	BaitFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Esca)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	MoneyFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Moneta)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	BagFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Borsa)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	ToolFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Attrezzo)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	WeaponFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Arma)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	MeleeFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Mischia)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	MagicFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Magico)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	RangedFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Tiro)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	SummonFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Evocazione)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	ThrownFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Lancio)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	ConsumableFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Consumabile)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	MaterialFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Materiale)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	PotionFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (Pozione)"
+		Tooltip: "{$Items.FilterItem.Tooltip}"
+	}
+
+	LivingHellstoneItem: {
+		DisplayName: Pietra infernale vivente
+		Tooltip: Divora qualsiasi oggetto al contatto, indipendentemente dalla rarita'
+	}
+}
+
+UI: {
+	Hover: {
+		NotSet: Non impostato
+		Generic: Filtro:
+		TransferFilterItem: Oggetto ammesso:
+		InverseTransferFilterItem: Oggetto bloccato:
+	}
+}

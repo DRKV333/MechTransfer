@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -9,13 +10,15 @@ namespace MechTransfer.ContainerAdapters
 {
     internal class ExtractinatorAdapter
     {
+        public const int ChlorophyteExtractinatorID = TileID.ChlorophyteExtractinator; 
+
         // TODO: Check if this needs to be updated.
         public void Extract(int x, int y, int extractType, int extractinatorBlockType)
         {
             int amberRate = 5000;
             int gemRate = 25;
             int gemAmberRate = 50;
-            int fossilRaete = -1;
+            int fossilRate = -1;
             int oldShoe = -1;
             int moss = -1;
             int coin = 1;
@@ -28,7 +31,7 @@ namespace MechTransfer.ContainerAdapters
                     amberRate /= 3;
                     gemRate *= 2;
                     gemAmberRate = 20;
-                    fossilRaete = 10;
+                    fossilRate = 10;
                     break;
                 /*
                 case 2:
@@ -37,7 +40,7 @@ namespace MechTransfer.ContainerAdapters
                     amberRate = -1;
                     gemRate = -1;
                     gemAmberRate = -1;
-                    fossilRaete = -1;
+                    fossilRate = -1;
                     oldShoe = 1;
                     coin = -1;
                     break;
@@ -48,7 +51,7 @@ namespace MechTransfer.ContainerAdapters
                     amberRate = -1;
                     gemRate = -1;
                     gemAmberRate = -1;
-                    fossilRaete = -1;
+                    fossilRate = -1;
                     oldShoe = -1;
                     coin = -1;
                     moss = 1;
@@ -57,7 +60,7 @@ namespace MechTransfer.ContainerAdapters
 
             int resultType;
             int resultStack = 1;
-            if (fossilRaete != -1 && Main.rand.NextBool(fossilRaete))
+            if (fossilRate != -1 && Main.rand.NextBool(fossilRate))
             {
                 resultType = 3380;
                 if (Main.rand.NextBool(5))
@@ -441,20 +444,39 @@ namespace MechTransfer.ContainerAdapters
                     resultStack += Main.rand.Next(0, 6);
             }
 
+            int tempTargetX = Player.tileTargetX;
+            Player.tileTargetX = x;
+            int tempTargetY = Player.tileTargetY;
+            Player.tileTargetY = y;
+
             ItemLoader.ExtractinatorUse(ref resultType, ref resultStack, extractType, extractinatorBlockType);
             if (resultType > 0)
             {
-                Item.NewItem(new EntitySource_TileInteraction(Main.LocalPlayer, x, y), x * 16, y * 16, 1, 1, resultType, resultStack, false, -1, false, false);
+                Item.NewItem(null, x * 16, y * 16, 1, 1, resultType, resultStack, false, -1, false, false);
             }
 
+            Player.tileTargetX = tempTargetX;
+            Player.tileTargetY = tempTargetY;
         }
 
         public bool InjectItem(int x, int y, Item item)
         {
             int extType = ItemID.Sets.ExtractinatorMode[item.type];
             int extTileType = Main.tile[x, y].TileType;
+            bool isChlExtractinator = extTileType == ChlorophyteExtractinatorID;
+            if (isChlExtractinator && 
+                ItemTrader.ChlorophyteExtractinator.TryGetTradeOption(item, out var option))
+            {
+                item.stack -= option.TakingItemStack;
+                if (item.stack <= 0)
+                    item.TurnToAir();
 
-            if (extType >= 0)
+                int itemType = option.GivingITemType;
+                int stack = option.GivingItemStack;
+                Item.NewItem(null, x * 16, y * 16, 1, 1, itemType, stack, noBroadcast: false, -1, false, false);
+                return true;
+            }
+            else if (extType >= 0)
             {
                 Extract(x, y, extType, extTileType);
                 item.stack -= 1;
@@ -462,7 +484,6 @@ namespace MechTransfer.ContainerAdapters
             }
             return false;
         }
-
 
         public IEnumerable<Tuple<Item, object>> EnumerateItems(int x, int y)
         {
