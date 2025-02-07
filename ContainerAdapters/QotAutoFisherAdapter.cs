@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Content.Tiles;
+using ImproveGame.Packets.NetAutofisher;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,9 @@ namespace MechTransfer.ContainerAdapters
     internal class QotAutoFisherAdapter
     {
         public const int BassSpeedingCap = 100;
+
+        //TODO: should we send a packet to the client to update the UI?
+        //Qot use NetSimplified lib to send packets
         public void TakeItem(int x, int y, object slot, int amount)
         {
             if (!TryGetTEAutofisher(x, y, out TEAutofisher teFisher))
@@ -31,7 +35,6 @@ namespace MechTransfer.ContainerAdapters
 
         }
 
-        //TODO: exclude bass for fish speed
         public IEnumerable<Tuple<Item, object>> EnumerateItems(int x, int y)
         {
             if (!TryGetTEAutofisher(x, y, out TEAutofisher teFisher))
