@@ -26,6 +26,7 @@ namespace MechTransfer
         private List<Action> simpleTileAddRecipequeue;
 
         private Mod modMagicStorage = null;
+        private Mod modImproveGame = null;
 
         public override object Call(params object[] args)
         {
@@ -141,6 +142,7 @@ namespace MechTransfer
         public override void Load()
         {
             ModLoader.TryGetMod("MagicStorage", out modMagicStorage);
+            ModLoader.TryGetMod("ImproveGame", out modImproveGame);
 
             Assembly asm = Assembly.GetExecutingAssembly();
             simpleTileAddRecipequeue = new List<Action>();
@@ -260,12 +262,18 @@ namespace MechTransfer
                 Call(registerAdapterReflection, magicStorageInterfaceAdapter, new int[] { ModContent.TileType<MagicStorageInterfaceTile>() });
             }
 
-            if(ModLoader.TryGetMod("ImproveGame", out _))
+            if(modImproveGame != null)
             {
-                //Fargo's soul interface
-                QotAutoFisherAdapter qotAutoFisherAdapter = new QotAutoFisherAdapter();
-                Call(registerAdapterReflection, qotAutoFisherAdapter, new int[] { ModContent.TileType<Autofisher>() });
+                //Qot fisher interface
+                LoadQotAutoFisherAdapter();
             }
+        }
+
+        [JITWhenModsEnabled("ImproveGame")]
+        private void LoadQotAutoFisherAdapter() 
+        {
+            QotAutoFisherAdapter qotAutoFisherAdapter = new QotAutoFisherAdapter();
+            Call(registerAdapterReflection, qotAutoFisherAdapter, new int[] { ModContent.TileType<Autofisher>() });
         }
 
         //This needs to be called from SetupRecipies, because chests are made in SetupContent.

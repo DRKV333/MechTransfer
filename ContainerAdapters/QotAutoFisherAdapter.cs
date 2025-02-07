@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace MechTransfer.ContainerAdapters
@@ -14,9 +15,10 @@ namespace MechTransfer.ContainerAdapters
     [JITWhenModsEnabled("ImproveGame")]
     internal class QotAutoFisherAdapter
     {
+        public const int BassSpeedingCap = 100;
         public void TakeItem(int x, int y, object slot, int amount)
         {
-            if(!TryGetTEAutofisher(x, y, out TEAutofisher teFisher))
+            if (!TryGetTEAutofisher(x, y, out TEAutofisher teFisher))
             {
                 return;
             }
@@ -28,6 +30,8 @@ namespace MechTransfer.ContainerAdapters
                 fishes[(int)slot] = new Item();
 
         }
+
+        //TODO: exclude bass for fish speed
         public IEnumerable<Tuple<Item, object>> EnumerateItems(int x, int y)
         {
             if (!TryGetTEAutofisher(x, y, out TEAutofisher teFisher))
@@ -36,12 +40,19 @@ namespace MechTransfer.ContainerAdapters
             }
             // maybe use reflection?
             Item[] fishes = teFisher.AsProxy().Fish;
+            int bassExists = 0;
 
             for (int i = 0; i < fishes.Length; i++)
             {
-                if (fishes[i].stack > 0)
+                Item fish = fishes[i];
+                if (fish.stack > 0)
                 {
-                    yield return new Tuple<Item, object>(fishes[i], (object)i);
+                    if(fish.type == ItemID.Bass && bassExists < BassSpeedingCap)
+                    {
+                        bassExists += fish.stack;
+                        continue;
+                    }
+                    yield return new Tuple<Item, object>(fish, i);
                 }
             }
         }
@@ -66,9 +77,9 @@ namespace MechTransfer.ContainerAdapters
                 item.stack--;
                 return true;
             }
-            else if(baitSlot.IsTheSameAs(item))
+            else if (baitSlot.IsTheSameAs(item))
             {
-                if (baitSlot.stack  < baitSlot.maxStack)
+                if (baitSlot.stack < baitSlot.maxStack)
                 {
                     baitSlot.stack++;
                     item.stack--;
@@ -78,19 +89,27 @@ namespace MechTransfer.ContainerAdapters
             return false;
         }
 
-        public bool TryGetTEAutofisher(int x, int y, out TEAutofisher teFisher) 
+        public static bool TryGetTEAutofisher(int x, int y, out TEAutofisher teFisher)
         {
 
             Tile tile = Main.tile[x, y];
-            Autofisher autofisher = ModContent.GetInstance<Autofisher>();
-
-            if ((tile == null) || (tile.TileType != autofisher.Type))
+            if (tile == null || !tile.HasTile)
             {
                 teFisher = null;
                 return false;
             }
 
-            Point16 position = new Point16(x - tile.TileFrameX / 18 / 2, y - tile.TileFrameY / 18 / 2);
+            int originX = x - (tile.TileFrameX % 36) / 18;
+            int originY = y - (tile.TileFrameY % 36) / 18;
+
+            Tile origin = Main.tile[originX, originY];
+            if (origin == null || !origin.HasTile)
+            {
+                teFisher = null;
+                return false;
+            }
+
+            Point16 position = new Point16(originX, originY);
             if (!TileEntity.ByPosition.TryGetValue(position, out TileEntity te) || te is not TEAutofisher fisher)
             {
                 teFisher = null;
@@ -100,23 +119,25 @@ namespace MechTransfer.ContainerAdapters
             teFisher = fisher;
             return true;
         }
+        
+        internal struct FisherProxy(TEAutofisher fisher)
+        {
+            public TEAutofisher Fisher { get; } = fisher;
+
+            public ref Item FishingPole => ref FisherProxyUtils.GetFishingPole(Fisher);
+
+            public ref Item Bait => ref FisherProxyUtils.GetBait(Fisher);
+
+            public ref Item Accessory => ref FisherProxyUtils.GetAccessory(Fisher);
+
+            public ref Item[] Fish => ref FisherProxyUtils.GetFish(Fisher);
+
+            public bool HasBait => Fisher.HasBait;
+        }
+
     }
 
-    public readonly struct FisherProxy(TEAutofisher fisher)
-    {
-        public TEAutofisher Fisher { get; } = fisher;
-
-        public ref Item FishingPole => ref FisherProxyUtils.GetFishingPole(Fisher);
-
-        public ref Item Bait => ref FisherProxyUtils.GetBait(Fisher);
-
-        public ref Item Accessory => ref FisherProxyUtils.GetAccessory(Fisher);
-
-        public ref Item[] Fish => ref FisherProxyUtils.GetFish(Fisher);
-
-        public bool HasBait => Fisher.HasBait;
-    }
-
+    [JITWhenModsEnabled("ImproveGame")]
     public static class FisherProxyUtils
     {
 
@@ -132,9 +153,9 @@ namespace MechTransfer.ContainerAdapters
         [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "fish")]
         public static extern ref Item[] GetFish(TEAutofisher fisher);
 
-        public static FisherProxy AsProxy(this TEAutofisher fisher)
+        internal static QotAutoFisherAdapter.FisherProxy AsProxy(this TEAutofisher fisher)
         {
-            return new FisherProxy(fisher);
+            return new QotAutoFisherAdapter.FisherProxy(fisher);
         }
     }
 }
