@@ -240,6 +240,10 @@ namespace MechTransfer
             WeaponRackAdapter weaponRackAdapter = new WeaponRackAdapter();
             Call(registerAdapterReflection, weaponRackAdapter, new int[] { TileID.WeaponsRack });
 
+            //tModLoader Weapon rack
+            WeaponRack2Adapter weaponRack2Adapter = new WeaponRack2Adapter();
+            Call(registerAdapterReflection, weaponRack2Adapter, new int[] { TileID.WeaponsRack2 });
+
             //Omni turret
             OmniTurretAdapter omniTurretAdapter = new OmniTurretAdapter(this);
             Call(registerAdapterReflection, omniTurretAdapter, new int[] { ModContent.TileType<OmniTurretTile>() });
