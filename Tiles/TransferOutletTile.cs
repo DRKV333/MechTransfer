@@ -35,14 +35,14 @@ namespace MechTransfer.Tiles
             {
                 for (int i = 0; i < item.stack; i++)
                 {
-                    int id = NPC.NewNPC(null, location.X * 16, location.Y * 16, item.makeNPC);
+                    int id = NPC.NewNPC(new MechTransferEntitySource(), location.X * 16, location.Y * 16, item.makeNPC);
                     Main.npc[id].velocity = Main.rand.NextVector2Circular(3f, 3f);
                     NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, id);
                 }
             }
             else
             {
-                int dropTarget = Item.NewItem(null, location.X * 16, location.Y * 16, 16, 16, item.type, item.stack, false, item.prefix);
+                int dropTarget = Item.NewItem(new MechTransferEntitySource(), location.X * 16, location.Y * 16, 16, 16, item.type, item.stack, false, item.prefix);
                 Main.item[dropTarget].velocity = Vector2.Zero;
             }
             item.stack = 0;

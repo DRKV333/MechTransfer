@@ -69,7 +69,7 @@ namespace MechTransfer.ContainerAdapters
 
             SoundEngine.PlaySound(SoundID.Item11, position);
 
-            Projectile proj = Main.projectile[Projectile.NewProjectile(null, position, direction * shootSpeed[style], item.shoot, baseDamage[style] * (1 + item.damage / 100), item.knockBack, Main.myPlayer)];
+            Projectile proj = Main.projectile[Projectile.NewProjectile(new MechTransferEntitySource(), position, direction * shootSpeed[style], item.shoot, baseDamage[style] * (1 + item.damage / 100), item.knockBack, Main.myPlayer)];
             proj.hostile = true;
 
             if (Main.netMode == 2)

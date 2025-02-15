@@ -54,7 +54,7 @@ namespace MechTransfer.ContainerAdapters
             velocityX *= velocity;
             velocityY *= velocity;
 
-            Projectile.NewProjectile(null, position.X, position.Y, velocityX, velocityY, ProjectileID.SnowBallFriendly, 35, 3.5f, Main.myPlayer, 0, 0);
+            Projectile.NewProjectile(new MechTransferEntitySource(), position.X, position.Y, velocityX, velocityY, ProjectileID.SnowBallFriendly, 35, 3.5f, Main.myPlayer, 0, 0);
 
             item.stack--;
             return true;

@@ -452,7 +452,7 @@ namespace MechTransfer.ContainerAdapters
             ItemLoader.ExtractinatorUse(ref resultType, ref resultStack, extractType, extractinatorBlockType);
             if (resultType > 0)
             {
-                Item.NewItem(null, x * 16, y * 16, 1, 1, resultType, resultStack, false, -1, false, false);
+                Item.NewItem(new MechTransferEntitySource(), x * 16, y * 16, 1, 1, resultType, resultStack, false, -1, false, false);
             }
 
             Player.tileTargetX = tempTargetX;
@@ -473,7 +473,7 @@ namespace MechTransfer.ContainerAdapters
 
                 int itemType = option.GivingITemType;
                 int stack = option.GivingItemStack;
-                Item.NewItem(null, x * 16, y * 16, 1, 1, itemType, stack, noBroadcast: false, -1, false, false);
+                Item.NewItem(new MechTransferEntitySource(), x * 16, y * 16, 1, 1, itemType, stack, noBroadcast: false, -1, false, false);
                 return true;
             }
             else if (extType >= 0)

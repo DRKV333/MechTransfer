@@ -67,7 +67,7 @@ namespace MechTransfer.Tiles.Simple
 
         protected virtual void DropItem(int i, int j, int Fx, int Fy)
         {
-            Item.NewItem(null, new Rectangle(i * 16, j * 16, 16, 16), PlaceItems[GetDropKind(Fx, Fy)].Item.type);
+            Item.NewItem(new EntitySource_TileBreak(i, j), new Rectangle(i * 16, j * 16, 16, 16), PlaceItems[GetDropKind(Fx, Fy)].Item.type);
         }
 
         public Point16 GetOrigin(int x, int y)
