@@ -187,7 +187,8 @@ namespace MechTransfer.Tiles
                 Status = StatusKind.NoRecipe;
             }
 
-            stock = ItemIO.Load((TagCompound)tag["stck"]);
+            if (tag.ContainsKey("stck"))
+                stock = ItemIO.Load((TagCompound)tag["stck"]);
         }
 
         public override void NetSend(BinaryWriter writer)
