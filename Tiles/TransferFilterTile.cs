@@ -1,4 +1,5 @@
 ﻿using MechTransfer.Items;
+using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
@@ -110,7 +111,10 @@ namespace MechTransfer.Tiles
             r2.Register();
 
             LoadBagFilter();
-            //LogFilterTets();
+
+            string logFilterTestsEnvVar = Environment.GetEnvironmentVariable("MECHTRANSFER_LOGFILTERTESTS");
+            if (logFilterTestsEnvVar != null && logFilterTestsEnvVar.Equals("TRUE", StringComparison.OrdinalIgnoreCase))
+                LogFilterTests();
         }
 
         private ItemFilterItem createFilter(string type, int recipeItem, ItemFilterItem.MatchConditionn condition)
@@ -251,14 +255,11 @@ namespace MechTransfer.Tiles
             }
         }
 
-        public void LogFilterTets()
+        private void LogFilterTests()
         {
             Mod.Logger.Debug("---BEGIN FILTER LISTING---");
             foreach (var item in filterItems)
             {
-				if (item.Value.Name != "BagFilterItem")
-				    continue;
-
 				Mod.Logger.Debug("----" + item.Value.Name);
                 foreach (Item testItem in ContentSamples.ItemsByType.Values)
                 {
