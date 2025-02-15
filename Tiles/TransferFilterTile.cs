@@ -182,7 +182,6 @@ namespace MechTransfer.Tiles
                 ItemID.HerbBag,
                 ItemID.CanOfWorms,
                 ItemID.Oyster,
-                ItemID.Pigronata,
 
                 ItemID.GoodieBag,
                 ItemID.Present,
