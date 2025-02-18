@@ -96,3 +96,7 @@ v1.7
 v1.7.1
 - Fixed a duplication glitch with the Transfer Assembler
 - Added MagicStorageExtra support
+
+v1.8
+- Ported to Terraria 1.4
+- Transfer Assembler now has recipe selection

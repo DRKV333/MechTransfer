@@ -1,0 +1,163 @@
+MechTransfer is a small mod, that adds various wire controlled devices to interact with items and move them between containers.
+
+The mod contains the following features:
+[list]
+    [*]Transferring items from one chest to another
+    [*]Dropping and picking up items
+    [*]Item sorting and detection
+    [*]Automatic crafting
+[/list]
+
+Below is a list of the added items and their functions.
+
+[h1]Pneumatic Actuator [img]https://i.imgur.com/3q5b3r9.png[/img][/h1]
+
+Sold by the mechanic for 50 silver. It is used to craft all of the other devices.​
+
+[h1]Transfer Extractor [img]https://i.imgur.com/hkiRwaU.png[/img][/h1]
+(1x Pneumatic Actuator + 1x Golden Key @ Workbench)
+
+Extracts items from adjacent containers and sends them to a receiving device.
+Triggering it with a wire will extract a single item.​
+
+[h1]Stack Extractor [img]https://i.imgur.com/8JeN2ty.png[/img][/h1]
+(1x Transfer Extractor + 10x Nanites @ Workbench)
+
+An upgraded version of the extractor, that can move a whole stack of items at a time.​
+
+[h1]Transfer Injector [img]https://i.imgur.com/8Dxqapb.png[/img][/h1]
+(1x Pneumatic Actuator + 1x Golden Key @ Workbench)
+
+Receives items and injects them into adjacent containers.
+Sends out a wire signal when it receives something.
+
+This picture illustrates how you can use an injector and an extractor to move items from one chest to another.
+[img]https://i.imgur.com/4WMK9os.png[/img]
+​
+You can also inject into and extract from a variety of different different kinds of containers.
+[img]https://i.imgur.com/Po0aBXp.png[/img]
+​
+Standard chests from any other mod should also work out of the box. If your mod has a custom item storage solution, you can use MechTransfer's Mod.Call() based API to set up an adapter for it. (More information available [url=https://github.com/DRKV333/MechTransfer/wiki/Adapter-extensibility]here[/url].)
+
+Support for Magic Storage is built into MechTransfer. (see Magic Storage Interface)​
+
+[h1]Transfer Pipe [img]https://i.imgur.com/C3rLPkP.png[/img][/h1]
+(1x Pneumatic Actuator + 1x Any Iron Bar @ Anvil)
+
+Connects receiving devices to sending devices at a distance.
+[img]https://i.imgur.com/wZpGz7Y.png[/img]
+
+[h1]Transfer Inlet [img]https://i.imgur.com/Wucj3Cr.png[/img][/h1]
+(1x Pneumatic Actuator + 1x Inlet Pump @ Workbench)
+
+Picks up items that land on top of it, and sends them away.
+It can also catch critters.
+​
+[h1]Transfer Outlet [img]https://i.imgur.com/HJ9sH3x.png[/img][/h1]
+(1x Pneumatic actuator + 1x Outlet pump @ Workbench)
+
+Receives items and drops them on the ground.
+
+[img]https://i.imgur.com/mrAVjHY.png[/img]
+
+[h1]Transfer Relay [img]https://i.imgur.com/s1eAve4.png[/img][/h1]
+(1x Pneumatic Actuator + 1x Any Pressure Plate @ Workbench)
+
+The back of the arrow acts as a receiver, the front acts as a sender. It receives items, and sends them out again.
+Outputs a wire signal when an item passes through it.
+
+The sending device will always connect to the first receiver in line. It will also skip any injectors, that can't inject due to lack of chest space.
+[img]https://i.imgur.com/7KGwUzH.png[/img]
+
+You can use relays to reroute items to a longer path.
+[img]https://i.imgur.com/uE3Hp3h.png[/img]
+
+Every relay will only receive once per transfer. This prevent things like this, from crashing the game.
+[img]https://i.imgur.com/XRdX0Bg.png[/img]
+
+[h1]Transfer Gate [img]https://i.imgur.com/fYdergx.png[/img][/h1]
+(1x Pneumatic Actuator + 1x Actuator @ Workbench)
+
+Acts just like a pipe, but can be toggle with a wire signal.
+
+[img]https://i.imgur.com/8D5Eaod.png[/img] [img]https://i.imgur.com/NAuMSfx.png[/img]
+
+[h1]Transfer Filter (Whitelist) [img]https://i.imgur.com/yUHCUj3.png[/img][/h1]
+(1x Pneumatic Actuator + 1x Actuator + 1x Item Frame @ Workbench)
+
+Also acts like a pipe, but it will only let one kind of item through.
+Right click on it with an item to set the filter.
+
+[img]https://i.imgur.com/xvJ8bh0.png[/img]
+
+[h1]Transfer Filter (Blacklist) [img]https://i.imgur.com/4m7pFSA.png[/img][/h1]
+(1x Pneumatic Actuator + 1x Actuator + 1xItem frame @ Workbench)
+
+A filter, that will let through any item, except for the one specified by right clicking.​
+
+[h1]Filter Items [img]https://i.imgur.com/iy1c7vM.png[/img][/h1]
+
+These items can be placed in filters to select a wider group of items. The base filter can be bought from the mechanic, you can use it to craft the other kinds of filter items.
+
+Currently available filter items: Rarity (various), Equipable, Armor, Vanity, Accessory, Dye, Ammo, Bait, Money, Bag, Tool, Consumable, Material, Potion, Tile, Wall.
+​
+[h1]Magic Storage Interface [img]https://i.imgur.com/jq2kiIx.png[/img][/h1]
+(1x Sorage Component + 1x Diamond + 1x Pneumatic Actuator @ Workbench)
+
+This device lets you interact with the items stored in a Magic Storage network. It acts as a storage component. You can access it using transfer extractors and injectors.
+
+[img]https://i.imgur.com/O9EHJPI.png[/img]
+
+[h1]Player Interface [img]https://i.imgur.com/oGBKhWi.png[/img][/h1]
+(1x Transfer Extractor + 1x Transfer Injector + 1x Mannequin + 10x Cog @ Workbench)
+
+This thing allows you to access the inventory of a player directly as a storage container. You can take items from it, or even change the player's equipment.
+​
+[img]https://i.imgur.com/qg5B644.gif[/img]
+
+[h1]Transfer Assembler [img]https://i.imgur.com/cyb6Mqo.png[/img][/h1]
+(1x Pneumatic Actuator + 10x Cog @ Workbench)
+
+Crafts items automagically. Place ingredients in an adjacent chest, place required crafting station(s) at a max 5 tile distance, activate with wire. You can set the item you want to craft the same way, as with the Transfer filter. The crafted products will be placed back into the chest.
+
+[img]https://i.imgur.com/PoeF5CM.png[/img]
+
+With these components, you can construct complex automatic material processing machines, such as this silt extractor:
+​
+[img]https://i.imgur.com/fxGXUEs.gif[/img]
+
+[h1]Omni Turret [img]https://i.imgur.com/J60o9KH.png[/img][/h1]
+(5x Pneumatic Actuator + 1x Illegal Gun Parts + 1x Dart Trap @ Workbench)
+
+[h1]Super Omni Turret [img]https://i.imgur.com/irWtTLt.png[/img][/h1]
+(1x Omni Turret + 10x Cog @ Workbench)
+
+[h1]Matter Projector [img]https://i.imgur.com/tHVUR3N.png[/img][/h1]
+(1x Super Omni Turret + 5x Vortex Fragment + 5x Luminite Bar @ Ancient Manipulator)
+
+The turrets can shoot any standard ammo, including every type of bullet and arrow, even modded ones. They can be rotated like vanilla cannons, by right clicking or via wire. The higher tier turrets do more damage and have a faster cool-down. The Matter projector has no cool-down.
+
+[img]https://i.imgur.com/fpM2eVq.png[/img]
+​
+[h1]Big Button [img]https://i.imgur.com/Jyk2xaI.png[/img][/h1]
+(1x Lever)
+
+[h1]Small Button [img]https://i.imgur.com/IycASLz.png[/img][/h1]
+(1x Switch)
+
+These buttons are functionally identical to vanilla levers/switches, but they look cooler.
+
+[img]https://i.imgur.com/YSgjl8G.gif[/img]
+
+Living Hellstone
+(5x Hellstone Bar + 5x Obsidian + 1x Lava Bucket @ Anvil)
+
+Destroys any item on contact, regardless of rarity.
+
+[img]https://i.imgur.com/41QHk2H.gif[/img]
+
+The source code and download are available on GitHub: [url=https://github.com/DRKV333/MechTransfer]DRKV333/MechTransfer[/url]
+
+Lastly, here's an automatic smelter, for (some) normal mode ores:
+
+[img]https://i.imgur.com/wm682Xf.png[/img] [img]https://i.imgur.com/Go7DYgs.png[/img]

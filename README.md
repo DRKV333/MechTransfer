@@ -27,3 +27,4 @@ Currently supported mods:
 - [@speeder](https://github.com/speeder) for the TModLoader 0.11.5 port
 - [@yut23](https://github.com/yut23) for the Assembler bugfix
 - [@Ahbahl](https://github.com/Ahbahl) for help with MagicStorageExtra support
+- [@MistressNebula](https://github.com/435THz) and [@Kadeanon](https://github.com/Kadeanon) for the Terraria 1.4 port
