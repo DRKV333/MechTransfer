@@ -1,314 +1,314 @@
 Items: {
 	PneumaticActuatorItem: {
-		DisplayName: " Пневматический привод"
-		Tooltip: " Используется в крафте устройств для перемещения предметов"
+		DisplayName: Пневматический привод
+		Tooltip: Используется для создания устройств перемещения предметов
 	}
 
 	BigButtonItem: {
-		DisplayName: " Большая кнопка"
+		DisplayName: Большая кнопка
 		Tooltip: ""
 	}
 
 	SmallButtonItem: {
-		DisplayName: " Маленькая кнопка"
+		DisplayName: Маленькая кнопка
 		Tooltip: ""
 	}
 
 	OmniTurretItem: {
-		DisplayName: " Всенаправленная турель"
-		Tooltip: " Стреляет любыми боеприпасами"
+		DisplayName: Всенаправленная турель
+		Tooltip: Стреляет любыми стандартными боеприпасами
 	}
 
 	SuperOmniTurretItem: {
-		DisplayName: " Ускоренная всенаправленная турель"
-		Tooltip: " Стреляет любыми боеприпасами"
+		DisplayName: Ускоренная всенаправленная турель
+		Tooltip: Стреляет любыми стандартными боеприпасами
 	}
 
 	MatterProjectorItem: {
-		DisplayName: " Материальный проэктор"
-		Tooltip: " Стреляет любыми боеприпасами очень, очень быстро"
+		DisplayName: Материальный проэктор
+		Tooltip: Стреляет любыми стандартными боеприпасами очень, очень быстро
 	}
 
 	TransferPipeItem: {
-		DisplayName: " Транспортная труба"
-		Tooltip: " Используется для подключения устройств для перемещения предметов"
+		DisplayName: Транспортная труба
+		Tooltip: Используется для подключения устройств перемещения предметов
 	}
 
 	TransferExtractorItem: {
-		DisplayName: " Извлекатель предметов"
-		Tooltip: " Извлекает предметы из рядом стоящих сундуков"
+		DisplayName: Извлекатель предметов
+		Tooltip: Извлекает предметы из рядом стоящих сундуков
 	}
 
 	StackExtractorItem: {
-		DisplayName: " Извлекатель стаков"
-		Tooltip: " Извлекает целый стак за раз"
+		DisplayName: Извлекатель стопок
+		Tooltip: Извлекает целые стопки за раз
 	}
 
 	TransferInletItem: {
-		DisplayName: " Воронка"
-		Tooltip: " Собирает упавшие вещи"
+		DisplayName: Воронка
+		Tooltip: Собирает упавшие вещи
 	}
 
 	TransferFilterItem: {
-		DisplayName: " Транспортный фильтр (белый список)"
+		DisplayName: Транспортный фильтр (белый список)
 		Tooltip:
 			'''
-			 Поставьте в транспортировочную линию для фильтрации предметов
-			ПКМ предметом в руке для настройки фильтра
+			Поставьте в транспортировочную линию для фильтрации предметов
+			Нажмите ПКМ предметом для настройки фильтра
 			'''
 	}
 
 	InverseTransferFilterItem: {
-		DisplayName: " Транспортный фильтр (чёрный список)"
+		DisplayName: Транспортный фильтр (чёрный список)
 		Tooltip:
 			'''
-			 Поставьте в транспортировочную линию для фильтрации предметов
-			ПКМ предметом в руке для настройки фильтра
+			Поставьте в транспортировочную линию для фильтрации предметов
+			Нажмите ПКМ предметом для настройки фильтра
 			'''
 	}
 
 	TransferGateItem: {
-		DisplayName: " Транспортный люк"
-		Tooltip: " Поставьте в транспортировочную линию для перекрытия перемещения претметов"
+		DisplayName: Транспортный люк
+		Tooltip: Поставьте в транспортировочную линию для перекрытия перемещения претметов
 	}
 
 	TransferRelayItem: {
-		DisplayName: " Транспортное реле"
-		Tooltip: " Передаёт предметы в одном направлении"
+		DisplayName: Транспортное реле
+		Tooltip: Передаёт предметы в одном направлении
 	}
 
 	TransferInjectorItem: {
-		DisplayName: " Транспортный инжектор"
-		Tooltip: " Передаёт предметы в рядом стоящие сундуки"
+		DisplayName: Транспортный инжектор
+		Tooltip: Передаёт предметы в рядом стоящие сундуки
 	}
 
 	TransferOutletItem: {
-		DisplayName: " Транспортный выбрасыватель"
-		Tooltip: " Выбрасывает предметы в мир"
+		DisplayName: Транспортный выбрасыватель
+		Tooltip: Выкидывает предметы
 	}
 
 	MagicStorageInterfaceItem: {
-		DisplayName: " Интерфейс для магического хранилища"
-		Tooltip: " Позволяет взаимодействовать с магическим хранилищем"
+		DisplayName: Интерфейс магического хранилища
+		Tooltip: Позволяет взаимодействовать с магическим хранилищем
 	}
 
 	PlayerInterfaceItem: {
-		DisplayName: " Интерфейс игрока"
-		Tooltip: " Позволяет взаимодействовать с инвентарём игрока"
+		DisplayName: Интерфейс игрока
+		Tooltip: Позволяет взаимодействовать с инвентарём игрока
 	}
 
 	TransferAssemblerItem: {
-		DisplayName: " Сборщик"
+		DisplayName: Сборщик
 		Tooltip:
 			'''
-				Работа в прогрессе
-			Автоматически создаёт вещи
-			ПКМ предметом в руке для настройки фильтра
+			Автоматически создаёт предметы
+			Нажмите ПКМ предметом, чтобы изменить итоговый продукт и задать рецепт
+			Можно переключаться только между теми рецептами, условия для которых выполнены
 			'''
 	}
 
 	FilterItem: {
-		DisplayName: " Предметный фильтр"
-		Tooltip: " Используется в транспортном фильтре"
+		DisplayName: Предметный фильтр
+		Tooltip: Используется в транспортном фильтре
 	}
 
 	AnyFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Все)"
-		// Tooltip: "{$Items.FilterItem.Tooltip}"
-	}
-
-	Rarity-GrayFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Редкость: Серая)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (все)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
+	Rarity-GrayFilterItem: {
+		DisplayName: "{$Items.FilterItem.DisplayName} (серая редкость)"
+		Tooltip: "{$Items.FilterItem.Tooltip}""
+	}
+
 	Rarity-WhiteFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Редкость: Белая)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (белая редкость)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	Rarity-BlueFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Редкость: Синяя)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (синяя редкость)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	Rarity-GreenFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Редкость: Зеленая)"
+		DisplayName: {$Items.FilterItem.DisplayName} (зелёная редкость)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	Rarity-OrangeFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Редкость: Оранжевая)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (оранжевая редкость)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	Rarity-LightRedFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Редкость: Светло-красная)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (светло-красная редкость)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	Rarity-PinkFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Редкость: Розовая)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (розовая редкость)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	Rarity-LightPurpleFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Редкость: Светло-фиолетовая)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (светло-фиолетовая редкость)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	Rarity-LimeFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Редкость: Лаймовая)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (лаймовая редкость)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	Rarity-YellowFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Редкость: Желтая)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (жёлтая редкость)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	Rarity-CyanFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Редкость: Бирюзовая)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (бирюзовая редкость)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	Rarity-RedFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Редкость: Красная)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (красная редкость)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	Rarity-PurpleFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Редкость: Фиолетовая)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (фиолетовая редкость)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	Rarity-RainbowFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Редкость: Радужная)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (радужная редкость)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	Rarity-AmberFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Редкость: Янтарная)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (янтарная редкость)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	TileFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Блок)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (блоки)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	WallFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Стена)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (стены)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	EquipableFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Надевается)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (экиперовка)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	ArmorFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Броня)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (броня)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	VanityFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Украшения)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (украшения)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	AccessoryFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Аксессуары)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (аксессуары)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	DyeFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Красители)"
-		EasterEggName: " {$Items.FilterItem.DisplayName} (Красители)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (красители)"
+		EasterEggName: "{$Items.FilterItem.DisplayName} (окрашения)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	AmmoFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Боеприпасы)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (боеприпасы)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	BaitFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Наживка)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (наживка)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	MoneyFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Монеты)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (монеты)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	BagFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Мешки с сокровищами)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (мешки с сокровищами)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	ToolFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Инструмент)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (инструменты)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	WeaponFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Оружие)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (оружие)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	MeleeFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Ближний бой)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (ближний бой)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	MagicFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Магическое оружие)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (магическое оружие)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	RangedFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Дистанционное оружие)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (стрелковое оружие)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	SummonFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Оружие призывателя)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (оружие призывателя)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	ThrownFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Оружие метателя)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (оружие метателя)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	ConsumableFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Расходуется)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (расходуемые предметы)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	MaterialFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Материал)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (материалы)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	PotionFilterItem: {
-		DisplayName: " {$Items.FilterItem.DisplayName} (Зелье)"
+		DisplayName: "{$Items.FilterItem.DisplayName} (зелья)"
 		Tooltip: "{$Items.FilterItem.Tooltip}"
 	}
 
 	LivingHellstoneItem: {
-		DisplayName: " Живой адский камень"
-		Tooltip: " Уничтожает любой предмет при контакте, независимо от редкости"
+		DisplayName: Живой адский камень
+		Tooltip: Уничтожает любой предмет при контакте, независимо от его редкости
 	}
 }
 
 UI: {
 	Hover: {
-		NotSet: " Не задано"
-		Generic: " Фильтр:"
-		TransferFilterItem: " Предметы разрешены:"
-		InverseTransferFilterItem: " Предметы блокируются:"
+		NotSet: Не задано
+		Generic: Фильтр:
+		TransferFilterItem: Разрешённые предметы:
+		InverseTransferFilterItem: Заблокированные предметы:
 	}
 }
